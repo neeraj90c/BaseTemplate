@@ -1,5 +1,5 @@
 ﻿<div class="d-flex align-items-center justify-content-between my-3" style="border-bottom:1px solid #CDD5E9">
-    <div class="main-heading">Tickets</div>
+    <div class="main-heading">Tickets - <h3 style="color: darkblue; display: inline-block;" id="TicketTypeTitle">Tickets Created but Not Assigned to anyone</h3></div>
     <button type="button" class="btn btn-primary btn-sm" onclick="Ticket.OpenCreateTicketModal()">Create New</button>
 </div>
 
@@ -138,25 +138,20 @@
     <div class="tab-pane fade show active" id="TabularViewDiv" role="tabpanel">
         <!--Tabs-->
         <div class="nav nav-tabs tra_tab" id="nav-tab" role="tablist" onmouseout="window.dispatchEvent(new Event('resize'));">
-            <a class="active" data-toggle="tab" href="#tab1" role="tab" aria-selected="true">Active Tickets</a>
-            <a class="InProgress" data-toggle="tab" href="#tab2" role="tab" aria-selected="true">In Progress Tickets</a>
-            <a data-toggle="tab" href="#tab3" role="tab" aria-selected="false">Closed Tickets</a>
+            <a class="active" data-toggle="tab" href="#tab1" role="tab" aria-selected="true" onclick="Ticket.ActiveTicketTabOnClick()">Active Tickets</a>
+            <a class="InProgress" data-toggle="tab" href="#tab2" role="tab" aria-selected="true" onclick="Ticket.InProgressTicketTabOnClick()">In Progress Tickets</a>
+            <a data-toggle="tab" href="#tab3" role="tab" aria-selected="false" onclick="Ticket.ClosedTicketTabOnClick()">Closed Tickets</a>
         </div>
 
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="tab1" role="tabpanel" style="padding-bottom: 50px;">
-                <div class="row">
-                    <div class="col-md-12">
-                        <h3 style="color:darkblue;">Tickets Created but Not Assigned to anyone</h3>
-                        <br />
-                    </div>
-                </div>
                 <div class="row">
                     <div style="bottom: 10px;" class="col-md-12">
                         <table id="ClientUserActiveTicketListTbl" class="table table-bordered com_table" style="width: 100%;">
                             <thead>
                                 <tr class="text-dark">
                                     <th style="border-left: 5px solid var(--orange-col); " scope="col">Sr No</th>
+                                    <th scope="col">Raised By</th>
                                     <th scope="col">Ticket No</th>
                                     <th scope="col">Title</th>
                                     <th scope="col">Target Date</th>
@@ -179,18 +174,13 @@
                 </div>
             </div>
             <div class="tab-pane fade" id="tab2" role="tabpanel">
-                <div class="row col-md-12">
-                    <div class="col-md-12">
-                        <h3 style="color:darkblue;">In Progress Tickets</h3>
-                        <br />
-                    </div>
-                </div>
                 <div class="row">
                     <div style="bottom: 10px;" class="col-md-12">
                         <table id="ClientUserInProgressTicketListTbl" class="table table-bordered com_table" style="width: 100%;">
                             <thead>
                                 <tr class="text-dark">
                                     <th style="border-left: 5px solid var(--orange-col);" scope="col">Sr No</th>
+                                    <th scope="col">Raised By</th>
                                     <th scope="col">Ticket No</th>
                                     <th scope="col">Title</th>
                                     <th scope="col">Target Date</th>
@@ -214,17 +204,12 @@
             </div>
             <div class="tab-pane fade" id="tab3" role="tabpanel">
                 <div class="row">
-                    <div class="col-md-12">
-                        <h3 style="color:darkblue;">Completed/Cancelled/Closed Tickets</h3>
-                        <br />
-                    </div>
-                </div>
-                <div class="row">
                     <div style="bottom: 10px;" class="col-md-12">
                         <table id="ClientUserClosedTicketListTbl" class="table table-bordered com_table" style="width: 100%;">
                             <thead>
                                 <tr class="text-dark">
                                     <th style="border-left: 5px solid var(--orange-col);" scope="col">Sr No</th>
+                                    <th scope="col">Raised By</th>
                                     <th scope="col">Ticket No</th>
                                     <th scope="col">Title</th>
                                     <th scope="col">Target Date</th>
