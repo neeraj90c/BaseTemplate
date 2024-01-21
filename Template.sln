@@ -29,6 +29,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DB.SQL", "DB.SQL", "{5833B8
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SupportDesk", "SupportDesk", "{F2CA4C07-151D-4512-BBA8-6D1D73131701}"
+	ProjectSection(SolutionItems) = preProject
+		E:\DB_BackUps\20240121.bak = E:\DB_BackUps\20240121.bak
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonAPI", "CommonAPI\CommonAPI.csproj", "{364C830B-439B-411B-A139-FE4748737D27}"
 EndProject
