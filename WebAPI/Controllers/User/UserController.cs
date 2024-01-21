@@ -40,6 +40,7 @@ namespace WebAPI.Controllers
         [HttpPost("auth")]
         public async Task<IActionResult> Auth([FromBody] DTO.UserLoginDTO userDTO, [FromServices] IJwtToken jwtToken)
         {
+            //var fullPwd = _encryptDecrypt.DecryptValue("e9bf1b45d0bd6adade427bc8c905c385");--"Ashish#$123
             _logger.LogInformation($" Application Web root Path : {_webHostEnvironment.WebRootPath}");
             SessionObj.WebRootPath = _webHostEnvironment.ContentRootPath;
             userDTO.Password = _encryptDecrypt.EncryptValue(userDTO.Password);

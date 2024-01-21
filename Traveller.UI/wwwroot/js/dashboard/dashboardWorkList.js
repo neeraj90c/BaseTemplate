@@ -109,23 +109,43 @@ function DashboardWorkList_OnSuccessCallBack(data) {
 
 
     Ticket.ClientWorkInProgressListTblDT  = $('#ClientWorkInProgressListTbl').DataTable({
-        columnDefs: [{ "width": "5%", "targets": [0, 0] }, { "width": "8%", "targets": [1, 2, 3, 5, 6, 7, 8, 9] }, { "width": "34%", "targets": [4] }]
+        columnDefs: [{ "width": "5%", "targets": [0, 0] }, { "width": "8%", "targets": [1, 2, 3, 5, 6, 7, 8, 9] }, { "width": "34%", "targets": [4] }],
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
     });
 
     Ticket.ClientAssignedToMeListTblDT = $('#ClientAssignedToMeListTbl').DataTable({
-        columnDefs: [{ "width": "5%", "targets": [0, 10] }, { "width": "8%", "targets": [1, 2, 3, 5, 6, 7, 8, 9] }, { "width": "34%", "targets": [4] }]
+        columnDefs: [{ "width": "5%", "targets": [0, 10] }, { "width": "8%", "targets": [1, 2, 3, 5, 6, 7, 8, 9] }, { "width": "34%", "targets": [4] }],
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
     });
 
     Ticket.ClientOpenTicketsListTblDT = $('#ClientOpenTicketsListTbl').DataTable({
-        columnDefs: [{ "width": "5%", "targets": [0, 10] }, { "width": "8%", "targets": [1, 2, 3, 5, 6, 7, 8, 9] }, { "width": "34%", "targets": [4] }]
+        columnDefs: [{ "width": "5%", "targets": [0, 10] }, { "width": "8%", "targets": [1, 2, 3, 5, 6, 7, 8, 9] }, { "width": "34%", "targets": [4] }],
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
     });
 
     Ticket.ClientClosedTicketsListTblDT = $('#ClientClosedTicketsListTbl').DataTable({
-        columnDefs: [{ "width": "5%", "targets": [0, 10] }, { "width": "8%", "targets": [1, 2, 3, 5, 6, 7, 8, 9] }, { "width": "34%", "targets": [4] }]
+        columnDefs: [{ "width": "5%", "targets": [0, 10] }, { "width": "8%", "targets": [1, 2, 3, 5, 6, 7, 8, 9] }, { "width": "34%", "targets": [4] }],
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
     });
 
     Ticket.ClientAssignedToOthersListTblDT = $('#ClientAssignedToOthersListTbl').DataTable({
-        columnDefs: [{ "width": "5%", "targets": [0, 10] }, { "width": "8%", "targets": [1, 2, 3, 5, 6, 7, 8, 9] }, { "width": "34%", "targets": [4] }]
+        columnDefs: [{ "width": "5%", "targets": [0, 10] }, { "width": "8%", "targets": [1, 2, 3, 5, 6, 7, 8, 9] }, { "width": "34%", "targets": [4] }],
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
     });
 
 }
@@ -138,13 +158,13 @@ DashboardWorkList.BindClientUserTicketList = function (tbody, ticketData) {
             + '                <td class="dtr-control sorting_1" style="border-left: 5px solid #' + Util.WCColors[i] + ';">' + (i + 1).toString() + '</td>'
             + '                <td>' + ticketData[i].raisedBy + '</td>'
             + '                <td>' + ticketData[i].ticketId + '</td>'
-            + '                <td>' + (new Date(ticketData[i].createdOn).toLocaleDateString("en-US")) + '</td>'
+            + '                <td>' + (new Date(ticketData[i].createdOn).toLocaleDateString("en-GB")) + '</td>'
             + '                <td title="' + ticketData[i].title + '" >' + ticketData[i].title + '</td>'
             + '                <td>' + ticketData[i].assignedToName + '</td>'
             + '                <td>' + ticketData[i].ticketStatus + '</td>'
             + '                <td title="' + ticketData[i].companyName + '" >' + ticketData[i].companyCode + '</td>'
-            + '                <td>' + (new Date(ticketData[i].targetDate).toLocaleDateString("en-US")) + '</td>'
-            + '                <td>' + (new Date(ticketData[i].modifiedOn).toLocaleDateString("en-US")) + '</td>'
+            + '                <td>' + (new Date(ticketData[i].targetDate).toLocaleDateString("en-GB")) + '</td>'
+            + '                <td>' + (new Date(ticketData[i].modifiedOn).toLocaleDateString("en-GB")) + '</td>'
             + '                <td class="text-center">'
             + '                    <div class="btn-group dots_dropdown">'
             + '                        <button type="button" class="dropdown-toggle" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">'
@@ -246,6 +266,24 @@ DashboardWorkList.LoadDefaultDates = function () {
     var today = date.getFullYear() + "-" + (month) + "-" + (day);
     $("#ClosedTicketsEndDate").val(today);
 }
+
+//#region User Worklist Tab Header OnClick
+DashboardWorkList.InProgressTicketTabOnClick = function () {
+    document.getElementById("UserWorklistTypeTitle").innerHTML = "Work in Progress";
+}
+DashboardWorkList.AssignedToMeTicketTabOnClick = function () {
+    document.getElementById("UserWorklistTypeTitle").innerHTML = "Assigned to Me";
+}
+DashboardWorkList.OpenTicketTabOnClick = function () {
+    document.getElementById("UserWorklistTypeTitle").innerHTML = "Open Tickets";
+}
+DashboardWorkList.ClosedTicketTabOnClick = function () {
+    document.getElementById("UserWorklistTypeTitle").innerHTML = "Closed Tickets";
+}
+DashboardWorkList.AssignedToOthersTicketTabOnClick = function () {
+    document.getElementById("UserWorklistTypeTitle").innerHTML = "Assigned to Others";
+}
+//#endregion
 
 
 

@@ -81,15 +81,27 @@ function Ticket_OnSuccessCallBack(data) {
 
 
     Ticket.ClientUserActiveTicketListTblDT = $('#ClientUserActiveTicketListTbl').DataTable({
-        columnDefs: [{ "width": "5%", "targets": [0, 7] }, { "width": "10%", "targets": [1, 3, 4, 5, 6] }, { "width": "40%", "targets": [2] }]
+        columnDefs: [{ "width": "5%", "targets": [0, 9] }, { "width": "10%", "targets": [1, 2, 4, 5, 6, 7, 8] }, { "width": "20%", "targets": [3] }],
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
     });
 
     Ticket.ClientUserInProgressTicketListTbl = $('#ClientUserInProgressTicketListTbl').DataTable({
-        columnDefs: [{ "width": "5%", "targets": [0, 7] }, { "width": "10%", "targets": [1, 3, 4, 5, 6] }, { "width": "40%", "targets": [2] }]
+        columnDefs: [{ "width": "5%", "targets": [0, 9] }, { "width": "10%", "targets": [1, 2, 4, 5, 6, 7, 8] }, { "width": "20%", "targets": [3] }],
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
     });
 
     Ticket.ClientUserClosedTicketListTbl = $('#ClientUserClosedTicketListTbl').DataTable({
-        columnDefs: [{ "width": "5%", "targets": [0, 7] }, { "width": "10%", "targets": [1, 3, 4, 5, 6] }, { "width": "40%", "targets": [2] }]
+        columnDefs: [{ "width": "5%", "targets": [0, 9] }, { "width": "10%", "targets": [1, 2, 4, 5, 6, 7, 8] }, { "width": "20%", "targets": [3] }],
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
     });
 }
 function Ticket_OnErrorCallBack(data) {
@@ -101,13 +113,14 @@ Ticket.BindClientUserTicketList = function (tbody, ticketData) {
         clickEventData.ticketId = ticketData[i].ticketId;
         var RowHtml = ('<tr>'
             + '                <td class="dtr-control sorting_1" style="border-left: 5px solid #' + Util.WCColors[i] + ';">' + (i + 1).toString() + '</td>'
+            + '                <td>' + ticketData[i].raisedBy + '</td>'
             + '                <td>' + ticketData[i].ticketId + '</td>'
             + '                <td>' + ticketData[i].title + '</td>'
-            + '                <td>' + (new Date(ticketData[i].targetDate).toLocaleDateString("en-US")) + '</td>'
-            + '                <td>' + (new Date(ticketData[i].createdOn).toLocaleDateString("en-US")) + '</td>'
+            + '                <td>' + (new Date(ticketData[i].targetDate).toLocaleDateString("en-GB")) + '</td>'
+            + '                <td>' + (new Date(ticketData[i].createdOn).toLocaleDateString("en-GB")) + '</td>'
             + '                <td>' + ticketData[i].ticketStatus + '</td>'
             + '                <td>' + ticketData[i].assignedToName + '</td>'
-            + '                <td>' + (new Date(ticketData[i].modifiedOn).toLocaleDateString("en-US")) + '</td>'
+            + '                <td>' + (new Date(ticketData[i].modifiedOn).toLocaleDateString("en-GB")) + '</td>'
             + '                <td class="text-center">'
             + '                    <div class="btn-group dots_dropdown">'
             + '                        <button type="button" class="dropdown-toggle" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">'
@@ -321,5 +334,17 @@ Ticket.ValidateData = function (ticketData) {
         validated = false;
     }
     return validated;
+}
+//#endregion
+
+//#region Ticket Tab Header OnClick
+Ticket.ActiveTicketTabOnClick = function () {
+    document.getElementById("TicketTypeTitle").innerHTML = "Tickets Created but Not Assigned to anyone";
+}
+Ticket.InProgressTicketTabOnClick = function () {
+    document.getElementById("TicketTypeTitle").innerHTML = "In Progress Tickets";
+}
+Ticket.ClosedTicketTabOnClick = function () {
+    document.getElementById("TicketTypeTitle").innerHTML = "Completed/Cancelled/Closed Tickets";
 }
 //#endregion
