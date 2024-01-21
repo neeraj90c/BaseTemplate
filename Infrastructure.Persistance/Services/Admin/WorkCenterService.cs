@@ -12,7 +12,7 @@ using Dapper;
 using Application.DTOs.Admin;
 using Application.Interfaces.Admin;
 
-namespace Infrastructure.Persistance.Services.Traveler
+namespace Infrastructure.Persistance.Services
 {
     public class WorkCenterService : DABase, IWorkCenter
     {

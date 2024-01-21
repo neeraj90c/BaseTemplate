@@ -7,7 +7,6 @@ using Infrastructure.Persistance.Services;
 using Infrastructure.Persistance.Services.Admin;
 using Infrastructure.Persistance.Services.Common;
 using Infrastructure.Persistance.Services.SupportDesk;
-using Infrastructure.Persistance.Services.Traveler;
 using Infrastructure.Persistance.Services.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;

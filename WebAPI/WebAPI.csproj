@@ -5,7 +5,6 @@
     <UserSecretsId>8ae443e0-f398-4b99-9dba-ac9b81f75df9</UserSecretsId>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
-    <ApplicationInsightsResourceId>/subscriptions/486a2978-5d16-4cc2-bb3a-def4bf7d7c3f/resourceGroups/app_monitoring/providers/microsoft.insights/components/traveler_v2_poc</ApplicationInsightsResourceId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
