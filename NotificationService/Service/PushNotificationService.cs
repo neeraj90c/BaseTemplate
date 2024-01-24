@@ -68,7 +68,7 @@ namespace NotificationService.Service
                 {
                     connection.Query<PushNotificationDTO>(SP_NotificationMaster_UpdateStatus, new
                     {
-                        typNotificationMaster = pushNotificationList.AsTableValuedParameter("dbo.typNotificationMaster")
+                        typNotificationMaster = pushNotificationList.AsTableValuedParameter("ann.typNotificationMaster")
                     },
                          commandType: CommandType.StoredProcedure);
 
@@ -88,7 +88,7 @@ namespace NotificationService.Service
                 {
                     connection.Query<PushNotificationDTO>(SP_NotificationMaster_Insert, new
                     {
-                        typNotificationMaster = pushNotificationList.AsTableValuedParameter("dbo.typNotificationMaster")
+                        typNotificationMaster = pushNotificationList.AsTableValuedParameter("ann.typNotificationMaster")
                     },
                          commandType: CommandType.StoredProcedure);
 

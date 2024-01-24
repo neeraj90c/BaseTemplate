@@ -37,6 +37,7 @@ namespace NotificationService.Model
         public string Passwrd { get; set; }
         public string DBName { get; set; }
         public string ServiceVariables { get; set; }
+        public int EmailConfigId { get; set; }
 
     }
     public class ServiceMasterList
