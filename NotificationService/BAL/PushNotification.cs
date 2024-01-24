@@ -101,11 +101,11 @@ namespace NotificationService.BAL
         {
             try
             {
-                EmailConfigurationDTO emailConfigurationDTO = new EmailConfigurationDTO();
-                emailConfigurationDTO = _emailConfig.EmailConfigList.FirstOrDefault();
 
                 foreach (PushNotificationDTO item in pushNotificationList.NotificationList)
                 {
+                    EmailConfigurationDTO emailConfigurationDTO = new EmailConfigurationDTO();
+                    emailConfigurationDTO = _emailConfig.EmailConfigList.FirstOrDefault(e => e.EmailConfigId == item.EmailConfigId);
                     item.Passwrd = encryptDecryptService.DecryptValue(item.Passwrd);
                     SendEmail(item, emailConfigurationDTO);
                     RunPostSendAction(item);
@@ -249,6 +249,7 @@ namespace NotificationService.BAL
                 typNotificationMaster.Columns.Add("PostSendDataSourceDef");
                 typNotificationMaster.Columns.Add("DBConnId");
                 typNotificationMaster.Columns.Add("CreatedBy");
+                typNotificationMaster.Columns.Add("EmailConfigId");
             }
             catch (Exception ex)
             {

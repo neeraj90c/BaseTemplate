@@ -19,7 +19,7 @@ namespace NotificationService.Common
 
             Stream messageStream = new MemoryStream();
 
-            byte[] keyBytes = Encoding.Unicode.GetBytes("Systel#$0312");
+            byte[] keyBytes = Encoding.Unicode.GetBytes("VNC#$240101");
             Stream keyStream = new MemoryStream(keyBytes);
 
             ExtractMessageFromBitmap(bitmap, keyStream, ref messageStream);

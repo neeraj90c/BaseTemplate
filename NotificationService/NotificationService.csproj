@@ -50,39 +50,39 @@
   <ItemGroup>
     <Reference Include="CrystalDecisions.CrystalReports.Design, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>E:\DLLs\CrystalReportsDll\CrystalDecisions.CrystalReports.Design.dll</HintPath>
+      <HintPath>..\..\pprivate\CrystalReportsDll\CrystalReportsDll\CrystalDecisions.CrystalReports.Design.dll</HintPath>
     </Reference>
     <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>E:\DLLs\CrystalReportsDll\CrystalDecisions.CrystalReports.Engine.dll</HintPath>
+      <HintPath>..\..\pprivate\CrystalReportsDll\CrystalReportsDll\CrystalDecisions.CrystalReports.Engine.dll</HintPath>
     </Reference>
     <Reference Include="CrystalDecisions.Data.AdoDotNetInterop, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>E:\DLLs\CrystalReportsDll\CrystalDecisions.Data.AdoDotNetInterop.dll</HintPath>
+      <HintPath>..\..\pprivate\CrystalReportsDll\CrystalReportsDll\CrystalDecisions.Data.AdoDotNetInterop.dll</HintPath>
     </Reference>
     <Reference Include="CrystalDecisions.ReportAppServer.DataSetConversion, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>E:\DLLs\CrystalReportsDll\CrystalDecisions.ReportAppServer.DataSetConversion.dll</HintPath>
+      <HintPath>..\..\pprivate\CrystalReportsDll\CrystalReportsDll\CrystalDecisions.ReportAppServer.DataSetConversion.dll</HintPath>
     </Reference>
     <Reference Include="CrystalDecisions.ReportSource, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>E:\DLLs\CrystalReportsDll\CrystalDecisions.ReportSource.dll</HintPath>
+      <HintPath>..\..\pprivate\CrystalReportsDll\CrystalReportsDll\CrystalDecisions.ReportSource.dll</HintPath>
     </Reference>
     <Reference Include="CrystalDecisions.Shared, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>E:\DLLs\CrystalReportsDll\CrystalDecisions.Shared.dll</HintPath>
+      <HintPath>..\..\pprivate\CrystalReportsDll\CrystalReportsDll\CrystalDecisions.Shared.dll</HintPath>
     </Reference>
     <Reference Include="CrystalDecisions.VSDesigner, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>E:\DLLs\CrystalReportsDll\CrystalDecisions.VSDesigner.dll</HintPath>
+      <HintPath>..\..\pprivate\CrystalReportsDll\CrystalReportsDll\CrystalDecisions.VSDesigner.dll</HintPath>
     </Reference>
     <Reference Include="CrystalDecisions.Web, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>E:\DLLs\CrystalReportsDll\CrystalDecisions.Web.dll</HintPath>
+      <HintPath>..\..\pprivate\CrystalReportsDll\CrystalReportsDll\CrystalDecisions.Web.dll</HintPath>
     </Reference>
     <Reference Include="CrystalDecisions.Windows.Forms, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>E:\DLLs\CrystalReportsDll\CrystalDecisions.Windows.Forms.dll</HintPath>
+      <HintPath>..\..\pprivate\CrystalReportsDll\CrystalReportsDll\CrystalDecisions.Windows.Forms.dll</HintPath>
     </Reference>
     <Reference Include="Dapper, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Dapper.2.1.15\lib\net461\Dapper.dll</HintPath>
