@@ -1,10 +1,12 @@
 using PushNotification;
 using PushNotifications.Forms;
+using System.Configuration;
 
 namespace PushNotifications
 {
     internal static class Program
     {
+
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
@@ -14,7 +16,10 @@ namespace PushNotifications
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new ServiceList());
+            StartupService startupService = new StartupService();
+            startupService.OnServiceStart();
+            //Application.Run(new ServiceList());
+            Application.Run(new AlertService());
         }
     }
 }

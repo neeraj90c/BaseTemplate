@@ -9,11 +9,18 @@ namespace PushNotification.Model
 {
     public class SchedularConfigDTO
     {
-        public string SchedularName { get; set; }
-        public string SchedularCode { get; set; }
-        public string SchedularDesc { get; set; }
-        public int FrequencyInMins { get; set; }
-        public string SchedularType { get; set; }
+        public int SchedularId { get; set;}
+        public string IName   { get; set;}
+        public string ICode { get; set;}
+        public string IDesc   { get; set;}
+        public int FrequencyInMinutes { get; set;}
+        public string SchedularType   { get; set;}
+        public int? IsActive { get; set;}
+        public int? IsDeleted   { get; set;}
+    }
 
+    public class SchedularList
+    {
+        public IEnumerable<SchedularConfigDTO> schedularList {  get; set;}
     }
 }

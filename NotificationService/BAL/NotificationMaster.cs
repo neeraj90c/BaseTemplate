@@ -132,7 +132,7 @@ namespace NotificationService.BAL
                     newRow["PostSendDataSourceType"] = serviceMasterDTO.PostSendDataSourceType;
                     newRow["PostSendDataSourceDef"] = ReplaceVariables(serviceMasterDTO.PostSendDataSourceDef, row, keyValuePairs);
                     newRow["DBConnId"] = serviceMasterDTO.DBConnId;
-                    newRow["EmailConfigId"] = serviceMasterDTO.EmailConfigId;
+                    newRow["AlertConfigId"] = serviceMasterDTO.AlertConfigId;
 
 
                     serviceMasterDTO.OutputFileName = ReplaceVariables(serviceMasterDTO.OutputFileName, row, keyValuePairs);
