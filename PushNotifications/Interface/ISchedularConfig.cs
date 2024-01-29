@@ -9,6 +9,8 @@ namespace PushNotification.Interface
 {
     public interface ISchedularConfig
     {
-        void CreateSchedular(SchedularConfigDTO schedularConfig);
+        public SchedularList AlertsSchedularGetALL();
+        public SchedularList CreateAlertsSchedular(SchedularConfigDTO schedularConfigDTO);
+
     }
 }

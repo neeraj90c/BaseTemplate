@@ -6,17 +6,29 @@ using System.Threading.Tasks;
 
 namespace PushNotification.Model
 {
-    public class EmailConfigDTO
+    public class EmailConfigurationDTO
     {
-        public string ConnectionName { get; set; }
-        public string Description { get; set; }
-        public string Host { get; set; }
-        public string Port { get; set; }
-        public string From { get; set; }
-        public string Password { get; set; }
+        public int EmailConfigId { get; set; }
+        public string IName { get; set; }
+        public string IDesc { get; set; }
+        public string IPort { get; set; }
+        public string IHost { get; set; }
+        public string IFrom { get; set; }
+        public string IPassword { get; set; }
+        public bool IEnableSsl { get; set; }
+        public bool IsBodyHtml { get; set; }
         public bool IsActive { get; set; }
+        public int IsDeleted { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public string ModifiedBy { get; set; }
+        public DateTime ModifiedOn { get; set; }
+        public int ActionUser { get; set; }
 
-
+    }
+    public class EmailConfigurationList
+    {
+        public IEnumerable<EmailConfigurationDTO> emailConfigList { get; set; }
     }
 
 }

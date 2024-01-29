@@ -94,6 +94,7 @@ namespace NotificationService
             {
                 logging.LogError("Exception occured at the root level " + DateTime.Now + Environment.NewLine + ex.Message);
             }
+
         }
     }
 }
