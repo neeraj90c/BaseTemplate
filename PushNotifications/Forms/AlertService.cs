@@ -22,8 +22,9 @@ namespace PushNotifications.Forms
         ConnectionConfigService _connectionConfig = new ConnectionConfigService();
         AlertMasterService _alertMasterService = new AlertMasterService();
         SchedularService _schedularService = new SchedularService();
-        AlertServiceMasterDTO alertServiceMaster = new AlertServiceMasterDTO();
         SchedularList schedularListAll = new SchedularList();
+
+
 
 
         public AlertService()
@@ -42,31 +43,32 @@ namespace PushNotifications.Forms
                 EmailDataGrid.DataSource = emailConfigListContainer.emailConfigList;
                 ConnectionListDataGrid.DataSource = connectionConfig.connectionList;
 
-                ASMAlertConfigType.DataSource = emailConfigListContainer.emailConfigList;
-                ASMAlertConfigType.DisplayMember = "IFrom";
-                ASMAlertConfigType.ValueMember = "EmailConfigId";
-
-                ASMConnection.DataSource = connectionConfig.connectionList;
-                ASMConnection.DisplayMember = "ConnName";
-                ASMConnection.ValueMember = "DBConnId";
-
-
 
                 schedularListAll = _schedularService.AlertsSchedularGetALL();
                 SchedularListGRIDView.DataSource = schedularListAll.schedularList;
 
-                ASMSchedular.DataSource = schedularListAll.schedularList;
-                ASMSchedular.ValueMember = "SchedularId";
-                ASMSchedular.DisplayMember = "IName";
-                GlobalSchedularComboBox.DataSource = schedularListAll.schedularList;
-                GlobalSchedularComboBox.DisplayMember = "IName";
-                GlobalSchedularComboBox.ValueMember = "SchedularId";
+
 
                 var result = _alertMasterService.AlertMasterServiceGetAll();
                 ServiceListDataGrid.DataSource = result.alertServiceList;
-                GlobalSchedularSName.DataSource = result.alertServiceList;
-                GlobalSchedularSName.DisplayMember = "Title";
-                GlobalSchedularSName.ValueMember = "ServiceId";
+                foreach (DataGridViewRow row in ServiceListDataGrid.Rows)
+                {
+                    Console.WriteLine(row);
+
+                    // Assuming "IsActive" is the name of the column containing the status
+                    var cellValue = row.Cells["IsActive"].Value.ToString();
+
+                    if (cellValue == "1")
+                    {
+                        row.DefaultCellStyle.BackColor = System.Drawing.Color.Green;
+                    }
+                    else
+                    {
+                        // If "IsActive" is not 1, set a default background color (e.g., white)
+                        row.DefaultCellStyle.ForeColor = System.Drawing.Color.White;
+                    }
+                }
+
 
 
             }
@@ -169,56 +171,6 @@ namespace PushNotifications.Forms
             CIsActiveCheckbox.Checked = false;
         }
 
-        private void SaveASMEmailDetails_Click(object sender, EventArgs e)
-        {
-            alertServiceMaster.EmailTo = ASMEmailTo.Text;
-            alertServiceMaster.CCTo = ASMCc.Text;
-            alertServiceMaster.BccTo = ASMBcc.Text;
-            alertServiceMaster.ASubject = ASMEmailSubject.Text;
-            alertServiceMaster.ABody = ASMEmailBody.Text;
-            alertServiceMaster.HasAttachment = ASMAttachment.Checked ? 1 : 0;
-            alertServiceMaster.AttachmentType = ASMAttachType.Text;
-            alertServiceMaster.AttachmentPath = ASMAttachPath.Text;
-            alertServiceMaster.AttachmentFileType = ASMAttachFileType.Text;
-            alertServiceMaster.OutputFileName = ASMFileOutput.Text;
-            AlertServiceTabs.SelectedTab = tabPage5;
-        }
-        private void SaveASMEmailConfiguration_Click(object sender, EventArgs e)
-        {
-
-            alertServiceMaster.Title = ASMTitle.Text;
-            alertServiceMaster.SDesc = ASMDesc.Text;
-            alertServiceMaster.AlertType = ASMAlertType.Text;
-            alertServiceMaster.AlertConfigId = Convert.ToInt32(ASMAlertConfigType.SelectedValue);
-            alertServiceMaster.DBConnid = Convert.ToInt32(ASMConnection.SelectedValue);
-            alertServiceMaster.DataSourceType = ASMDataSourceType.Text;
-            alertServiceMaster.DataSourceDef = ASMDataSourceDef.Text;
-            alertServiceMaster.PostSendDataSourceType = ASMPostSendDataSourceType.Text;
-            alertServiceMaster.PostSendDataSourceDef = ASMPostSendDataSourceDef.Text;
-            ASAlertServiceName.Text = ASMTitle.Text;
-            AlertServiceTabs.SelectedTab = tabPage8;
-        }
-        private void SaveAlertServiceButton_Click(object sender, EventArgs e)
-        {
-            AlertServiceMapping alertServiceMapping = new AlertServiceMapping();
-            alertServiceMapping.varInstance = ASVariableInstance.Text;
-            alertServiceMapping.varValue = ASVariableValue.Text;
-            alertServiceMapping.varType = ASVariableType.Text;
-            alertServiceMapping.StartDate = ASStartDate.Value;
-            alertServiceMapping.EndDate = ASEndDate.Value;
-            alertServiceMapping.DailyStart = ASDailyStartDate.Value;
-            alertServiceMapping.DailyEnd = ASDailyEndDate.Value;
-            alertServiceMaster.SchedularId = Convert.ToInt32(ASMSchedular.SelectedValue);
-            try
-            {
-                _alertMasterService.AlertMasterServiceInsert(alertServiceMaster, alertServiceMapping);
-                MessageBox.Show("Email Service Added Successfully!");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("There was an error!," + ex.Message);
-            }
-        }
 
         private void SaveSchedularButton_Click(object sender, EventArgs e)
         {
@@ -229,34 +181,42 @@ namespace PushNotifications.Forms
             schedularConfigDTO.IDesc = SSCodeTextBox.Text;
             schedularConfigDTO.FrequencyInMinutes = Convert.ToInt32(SSFrequencyTextBox.Text);
             schedularConfigDTO.SchedularType = SSTypeComboBox.Text;
-            schedularConfigDTO.IsActive = SSActiveCheckbox.Checked ? 1 : 0;
+            schedularConfigDTO.IsActive = SSActiveCheckbox.Checked;
+
             SchedularList result = _schedularService.CreateAlertsSchedular(schedularConfigDTO);
             SchedularListGRIDView.DataSource = result.schedularList;
+
+
             MessageBox.Show("Schedular saved successfully");
         }
 
-        private void SaveGlobalSchedular_Click(object sender, EventArgs e)
+
+
+        private void AddAlertServiceButton_Click(object sender, EventArgs e)
         {
-            AlertServiceMapping alertServiceMapping = new AlertServiceMapping();
+            AlertServiceForm form = new AlertServiceForm();
+            form.ShowDialog();
+        }
 
-            alertServiceMapping.ServiceId = Convert.ToInt32(GlobalSchedularSName.SelectedValue);
-            alertServiceMapping.SchedularId = Convert.ToInt32(GlobalSchedularComboBox.SelectedValue);
-            alertServiceMapping.StartDate = GlobalStartOn.Value;
-            alertServiceMapping.EndDate = GlobalEndOn.Value;
-            alertServiceMapping.DailyStart = GlobalDailyStartOn.Value;
-            alertServiceMapping.DailyEnd = GlobalDailyEndOn.Value;
-            alertServiceMapping.varInstance = GlobalVarInstance.Text;
-            alertServiceMapping.varValue = GlobalVarValue.Text;
-            alertServiceMapping.varType = GlobalVarType.Text;
+        private void EditAlertServiceButton_Click(object sender, EventArgs e)
+        {
+            AlertServiceForm form = new AlertServiceForm();
+            form.ShowDialog();
+        }
 
-            try
+
+
+        private void ServiceListDataGrid_SelectionChanged(object sender, EventArgs e)
+        {
+            if (ServiceListDataGrid.SelectedRows.Count > 0)
             {
-                _alertMasterService.AlertSchedularMapInsert(alertServiceMapping);
-                MessageBox.Show("Schedular saved successfully");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("There was an error!," + ex.Message);
+                // Get the data from the selected row
+                DataGridViewRow selectedRow = ServiceListDataGrid.SelectedRows[0];
+                int id = Convert.ToInt32(selectedRow.Cells["ServiceId"].Value);
+                string name = selectedRow.Cells["Title"].Value.ToString();
+
+                // Display or process the selected data
+                MessageBox.Show($"Selected Row: ID = {id}, Name = {name}");
             }
         }
     }

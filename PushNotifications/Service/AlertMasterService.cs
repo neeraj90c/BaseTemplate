@@ -17,46 +17,58 @@ namespace PushNotifications.Service
         private const string SP_AdvancedAlertsServiceMaster_INSERT = "ann.AdvancedAlertsServiceMaster_INSERT";
         private const string SP_AlertsServiceMaster_GetAll = "ann.AlertsServiceMaster_GetAll";
         private const string SP_AlertsServiceSchedular_INSERT = "ann.AlertsServiceSchedular_INSERT";
+        private const string SP_AlertsServiceVariables_CRUD = "ann.AlertsServiceVariables_CRUD";
+        private const string SP_AlertsServiceMaster_ReadById = "ann.AlertsServiceMaster_ReadById";
 
 
-        public void AlertMasterServiceInsert(AlertServiceMasterDTO alertServiceMasterDTO, AlertServiceMapping alertServiceMapping)
+        public AlertServiceMasterDTO AlertMasterServiceInsert(AlertServiceMasterDTO alertServiceMasterDTO)
         {
-            SqlConnection connection = new SqlConnection(SessionObject.DBConn);
-            {
-               connection.Query(SP_AdvancedAlertsServiceMaster_INSERT, new
-                {
-                    ServiceId = 0,
-                    Title = alertServiceMasterDTO.Title,
-                    SDesc = alertServiceMasterDTO.SDesc,
-                    AlertType = alertServiceMasterDTO.AlertType,
-                    HasAttachment = alertServiceMasterDTO.HasAttachment,
-                    AttachmentType = alertServiceMasterDTO.AttachmentType,
-                    AttachmentPath = alertServiceMasterDTO.AttachmentPath,
-                    AttachmentFileType = alertServiceMasterDTO.AttachmentFileType,
-                    OutputFileName = alertServiceMasterDTO.OutputFileName,
-                    DataSourceType = alertServiceMasterDTO.DataSourceType,
-                    DataSourceDef = alertServiceMasterDTO.DataSourceDef,
-                    PostSendDataSourceType = alertServiceMasterDTO.PostSendDataSourceType,
-                    PostSendDataSourceDef = alertServiceMasterDTO.PostSendDataSourceDef,
-                    EmailTo = alertServiceMasterDTO.EmailTo,
-                    CCTo = alertServiceMasterDTO.CCTo,
-                    BccTo = alertServiceMasterDTO.BccTo,
-                    ASubject = alertServiceMasterDTO.ASubject,
-                    ABody = alertServiceMasterDTO.ABody,
-                    DBConnid = alertServiceMasterDTO.DBConnid,
-                    AlertConfigId = alertServiceMasterDTO.AlertConfigId,
-                    SchedularId = alertServiceMasterDTO.SchedularId,
-                    ActionUser = 0,
-                    StartsFrom = alertServiceMapping.StartDate,
-                    EndsOn = alertServiceMapping.EndDate,
-                    DailyStartOn = alertServiceMapping.DailyStart,
-                    DailyEndsOn = alertServiceMapping.DailyEnd,
-                    VarInstance = alertServiceMapping.varInstance,
-                    VarValue = alertServiceMapping.varValue,
-                    VarType = alertServiceMapping.varType
+            AlertServiceMasterDTO response = new AlertServiceMasterDTO();
 
-                }, commandType: CommandType.StoredProcedure);
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(SessionObject.DBConn))
+                {
+                    response = connection.QuerySingle<AlertServiceMasterDTO>(SP_AdvancedAlertsServiceMaster_INSERT, new
+                    {
+                        ServiceId = 0,
+                        Title = alertServiceMasterDTO.Title,
+                        SDesc = alertServiceMasterDTO.SDesc,
+                        AlertType = alertServiceMasterDTO.AlertType,
+                        HasAttachment = alertServiceMasterDTO.HasAttachment,
+                        AttachmentType = alertServiceMasterDTO.AttachmentType,
+                        AttachmentPath = alertServiceMasterDTO.AttachmentPath,
+                        AttachmentFileType = alertServiceMasterDTO.AttachmentFileType,
+                        OutputFileName = alertServiceMasterDTO.OutputFileName,
+                        DataSourceType = alertServiceMasterDTO.DataSourceType,
+                        DataSourceDef = alertServiceMasterDTO.DataSourceDef,
+                        PostSendDataSourceType = alertServiceMasterDTO.PostSendDataSourceType,
+                        PostSendDataSourceDef = alertServiceMasterDTO.PostSendDataSourceDef,
+                        EmailTo = alertServiceMasterDTO.EmailTo,
+                        CCTo = alertServiceMasterDTO.CCTo,
+                        BccTo = alertServiceMasterDTO.BccTo,
+                        ASubject = alertServiceMasterDTO.ASubject,
+                        ABody = alertServiceMasterDTO.ABody,
+                        DBConnid = alertServiceMasterDTO.DBConnid,
+                        AlertConfigId = alertServiceMasterDTO.AlertConfigId,
+                        SchedularId = alertServiceMasterDTO.SchedularId,
+                        ActionUser = 0,
+                        StartsFrom = alertServiceMasterDTO.StartDate,
+                        EndsOn = alertServiceMasterDTO.EndDate,
+                        DailyStartOn = alertServiceMasterDTO.DailyStart,
+                        DailyEndsOn = alertServiceMasterDTO.DailyEnd,
+
+                    }, commandType: CommandType.StoredProcedure);
+
+
+                }
             }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return response;
 
             
         }
@@ -72,24 +84,45 @@ namespace PushNotifications.Service
             return response;
         }
 
-        public void AlertSchedularMapInsert(AlertServiceMapping alertServiceMapping)
+        public AlertVariableList AlertVariableCRUD(AlertVariableMapping alertVariableMapping)
         {
-            SqlConnection connection = new SqlConnection(SessionObject.DBConn);
-            connection.Query(SP_AlertsServiceSchedular_INSERT,new
+            
+            AlertVariableList result = new AlertVariableList();
+
+            using (SqlConnection connection = new SqlConnection(SessionObject.DBConn))
             {
-                ServiceId = alertServiceMapping.ServiceId,
-                SchedularId = alertServiceMapping.SchedularId,
-                StartsFrom = alertServiceMapping.StartDate,
-                EndsOn = alertServiceMapping.EndDate,
-                DailyStartOn = alertServiceMapping.DailyStart,
-                DailyEndsOn = alertServiceMapping.DailyEnd,
-                VarInstance = alertServiceMapping.varInstance,
-                VarValue = alertServiceMapping.varValue,
-                VarType = alertServiceMapping.varType,
-                ActionUser = 0
+                    result.list = connection.Query<AlertVariableMapping>(SP_AlertsServiceVariables_CRUD, new
+                    {
+                        VariableId = alertVariableMapping.VariableId,
+                        ServiceId = alertVariableMapping.ServiceId,
+                        VarInstance = alertVariableMapping.VarInstance,
+                        VarValue = alertVariableMapping.VarValue,
+                        VarType = alertVariableMapping.VarType,
+                        IsActive = alertVariableMapping.IsActive,
+                        IsDeleted = alertVariableMapping.IsDeleted,
+                        ActionUser = alertVariableMapping.ActionUser
+
+                    }, commandType: CommandType.StoredProcedure);
+
+            }
+            return result;
+        }
+
+        public AlertServiceMasterDTO AlertMasterServiceReadByID( int serviceId)
+        {
+            AlertServiceMasterDTO alertServiceMasterDTO = new AlertServiceMasterDTO();
+            AlertServiceMasterDTO response = new AlertServiceMasterDTO();
+
+            SqlConnection connection = new SqlConnection(SessionObject.DBConn);
+            response = connection.QuerySingle<AlertServiceMasterDTO>(SP_AlertsServiceMaster_ReadById, new
+            {
+                ServiceId = serviceId
             } ,commandType: CommandType.StoredProcedure);
 
+            return response;
         }
+
+
 
     }
 
