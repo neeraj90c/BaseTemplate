@@ -24,6 +24,7 @@ namespace PushNotifications.Forms
         AlertMasterService _alertMasterService = new AlertMasterService();
         SchedularService _schedularService = new SchedularService();
         SchedularList schedularListAll = new SchedularList();
+        public int AlertServiceId;
 
 
 
@@ -121,13 +122,9 @@ namespace PushNotifications.Forms
         {
             if (ServiceListDataGrid.SelectedRows.Count > 0)
             {
-                // Get the data from the selected row
                 DataGridViewRow selectedRow = ServiceListDataGrid.SelectedRows[0];
                 int id = Convert.ToInt32(selectedRow.Cells["ServiceId"].Value);
-                string name = selectedRow.Cells["Title"].Value.ToString();
-
-                // Display or process the selected data
-                MessageBox.Show($"Selected Row: ID = {id}, Name = {name}");
+                AlertServiceId = id;
             }
         }
 
@@ -139,7 +136,7 @@ namespace PushNotifications.Forms
 
         private void EditAlertServiceButton_Click(object sender, EventArgs e)
         {
-            AlertServiceForm form = new AlertServiceForm();
+            AlertServiceForm form = new AlertServiceForm(AlertServiceId);
             form.ShowDialog();
         }
 

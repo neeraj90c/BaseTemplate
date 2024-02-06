@@ -19,6 +19,7 @@ namespace PushNotifications.Service
         private const string SP_AlertsServiceSchedular_INSERT = "ann.AlertsServiceSchedular_INSERT";
         private const string SP_AlertsServiceVariables_CRUD = "ann.AlertsServiceVariables_CRUD";
         private const string SP_AlertsServiceMaster_ReadById = "ann.AlertsServiceMaster_ReadById";
+        private const string SP_AlertsServiceVariables_ReadByAlertServiceId = "ann.AlertsServiceVariables_ReadByAlertServiceId";
 
 
         public AlertServiceMasterDTO AlertMasterServiceInsert(AlertServiceMasterDTO alertServiceMasterDTO)
@@ -31,7 +32,7 @@ namespace PushNotifications.Service
                 {
                     response = connection.QuerySingle<AlertServiceMasterDTO>(SP_AdvancedAlertsServiceMaster_INSERT, new
                     {
-                        ServiceId = 0,
+                        ServiceId = alertServiceMasterDTO.ServiceId,
                         Title = alertServiceMasterDTO.Title,
                         SDesc = alertServiceMasterDTO.SDesc,
                         AlertType = alertServiceMasterDTO.AlertType,
@@ -122,6 +123,17 @@ namespace PushNotifications.Service
             return response;
         }
 
+        public AlertVariableList AlertVariableReadById(int serviceId)
+        {
+            AlertVariableList response = new AlertVariableList();
+            SqlConnection connection = new SqlConnection(SessionObject.DBConn);
+            response.list = connection.Query<AlertVariableMapping>(SP_AlertsServiceVariables_ReadByAlertServiceId, new
+            {
+                ServiceId = serviceId
+            }, commandType: CommandType.StoredProcedure);
+
+            return response;
+        }
 
 
     }

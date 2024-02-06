@@ -39,6 +39,14 @@ namespace PushNotifications.Forms
             VariablesDataGRID.CellContentClick += VariablesDataGRID_CellContentClick;
         }
 
+        public AlertServiceForm(int alertId)
+        {
+            InitializeComponent();
+            //LoadAllConfig();
+            VariablesDataGRID.CellContentClick += VariablesDataGRID_CellContentClick;
+            LoadDetailsById(alertId);
+        }
+
         private void LoadAllConfig()
         {
             EmailConfigurationList emailConfigListContainer = _emailConfigService.GetEmailConfigDetails();
@@ -63,6 +71,7 @@ namespace PushNotifications.Forms
 
         private void SaveEmailConfigAll_Click(object sender, EventArgs e)
         {
+            alertServiceMaster.ServiceId = 0;
             alertServiceMaster.EmailTo = ASMEmailTo.Text;
             alertServiceMaster.CCTo = ASMCc.Text;
             alertServiceMaster.BccTo = ASMBcc.Text;
@@ -176,5 +185,60 @@ namespace PushNotifications.Forms
             }
         }
 
+        private void LoadDetailsById(int ServiceId)
+        {
+            AlertServiceMasterDTO alertServiceMasterDTO = new AlertServiceMasterDTO();
+            AlertVariableList alertVariableList = new AlertVariableList();
+
+            alertServiceMasterDTO = _alertMasterService.AlertMasterServiceReadByID(ServiceId);
+
+
+            alertServiceMasterDTO.ServiceId = 0;
+            ASMEmailTo.Text = alertServiceMasterDTO.EmailTo;
+            ASMCc.Text = alertServiceMasterDTO.CCTo;
+            ASMBcc.Text = alertServiceMasterDTO.BccTo;
+            ASMEmailSubject.Text = alertServiceMasterDTO.ASubject;
+            ASMEmailBody.Text = alertServiceMasterDTO.ABody;
+            ASMAttachment.Checked = alertServiceMasterDTO.HasAttachment == 1  ? true : false;
+            ASMAttachType.Text = alertServiceMasterDTO.AttachmentType;
+            ASMAttachPath.Text = alertServiceMasterDTO.AttachmentPath;
+            ASMAttachFileType.Text = alertServiceMasterDTO.AttachmentFileType;
+            ASMFileOutput.Text = alertServiceMasterDTO.OutputFileName;
+            ASMTitle.Text = alertServiceMasterDTO.Title;
+            ASMDesc.Text = alertServiceMasterDTO.SDesc;
+            ASMAlertType.Text = alertServiceMasterDTO.AlertType;
+            ASMAlertConfigType.SelectedValue = alertServiceMasterDTO.AlertConfigId;
+            ASMConnection.SelectedValue = alertServiceMasterDTO.DBConnid;
+
+            //alertServiceMasterDTO.AlertConfigId = Convert.ToInt32(ASMAlertConfigType.SelectedValue);
+            //alertServiceMasterDTO.DBConnid = Convert.ToInt32(ASMConnection.SelectedValue);
+            ASMDataSourceType.Text = alertServiceMasterDTO.DataSourceType;
+            ASMDataSourceDef.Text = alertServiceMasterDTO.DataSourceDef;
+            ASMPostSendDataSourceType.Text = alertServiceMasterDTO.PostSendDataSourceType;
+            ASMPostSendDataSourceDef.Text = alertServiceMasterDTO.PostSendDataSourceDef;
+            //ASStartDate.Value = (DateTime)alertServiceMasterDTO.StartDate;
+            //ASEndDate.Value = (DateTime)alertServiceMasterDTO.EndDate;
+            //ASDailyStartDate.Value = (DateTime)alertServiceMasterDTO.DailyStart;
+            //ASDailyEndDate.Value = (DateTime)alertServiceMasterDTO.DailyEnd;
+            ASMSchedular.SelectedValue = alertServiceMasterDTO.SchedularId;
+            //alertServiceMasterDTO.SchedularId = Convert.ToInt32(ASMSchedular.SelectedValue);
+
+
+            ConnectionList connectionConfig = _connectionConfig.GetConnectionList();
+            ASMConnection.DataSource = connectionConfig.connectionList;
+            ASMConnection.DisplayMember = "ConnName";
+            ASMConnection.ValueMember = "DBConnId";
+
+            alertVariableList = _alertMasterService.AlertVariableReadById(ServiceId);
+
+            VariablesDataGRID.DataSource = alertVariableList.list;
+
+
+        }
+
+        
+
     }
+
+ 
 }
