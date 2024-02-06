@@ -596,25 +596,25 @@
             // VariablesDataGRID
             // 
             VariablesDataGRID.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            VariablesDataGRID.Location = new Point(32, 69);
+            VariablesDataGRID.Location = new Point(6, 35);
             VariablesDataGRID.Name = "VariablesDataGRID";
             VariablesDataGRID.RowTemplate.Height = 25;
-            VariablesDataGRID.Size = new Size(528, 284);
+            VariablesDataGRID.Size = new Size(936, 441);
             VariablesDataGRID.TabIndex = 69;
             // 
             // SaveEmailConfigAll
             // 
-            SaveEmailConfigAll.Location = new Point(407, 359);
+            SaveEmailConfigAll.Location = new Point(824, 482);
             SaveEmailConfigAll.Name = "SaveEmailConfigAll";
             SaveEmailConfigAll.Size = new Size(118, 23);
             SaveEmailConfigAll.TabIndex = 68;
-            SaveEmailConfigAll.Text = "save service";
+            SaveEmailConfigAll.Text = "Save Service";
             SaveEmailConfigAll.UseVisualStyleBackColor = true;
             SaveEmailConfigAll.Click += SaveEmailConfigAll_Click;
             // 
             // AddVariablesButton
             // 
-            AddVariablesButton.Location = new Point(363, 40);
+            AddVariablesButton.Location = new Point(859, 6);
             AddVariablesButton.Name = "AddVariablesButton";
             AddVariablesButton.Size = new Size(83, 23);
             AddVariablesButton.TabIndex = 67;

@@ -22,7 +22,7 @@ namespace PushNotifications.Forms
         AlertMasterService _alertMasterService = new AlertMasterService();
         ConnectionConfigService _connectionConfig = new ConnectionConfigService();
         SchedularService _schedularService = new SchedularService();
-
+        AlertService alertService = new AlertService();
 
 
         SchedularList schedularListAll = new SchedularList();
@@ -111,18 +111,18 @@ namespace PushNotifications.Forms
                         }
                         catch (Exception ex)
                         {
+                            
                             MessageBox.Show("There was some error with" + " " + item.VarInstance + ", error: " + ex.Message);
                         }
                     }
                 }
+                alertService.LoadServiceListDetails();
+                MessageBox.Show("Alert added successfully");
             }
             catch (Exception ex)
             {
                 MessageBox.Show("There was some error with" + ex.Message);
             }
-
-
-
         }
 
         private void AddVariablesButton_Click(object sender, EventArgs e)
@@ -175,9 +175,6 @@ namespace PushNotifications.Forms
                 }
             }
         }
-
-
-
 
     }
 }

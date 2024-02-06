@@ -1,4 +1,5 @@
 ﻿using Common;
+using Org.BouncyCastle.Asn1.Cmp;
 using PushNotification.Interface;
 using PushNotification.Model;
 using PushNotification.Service;
@@ -36,40 +37,10 @@ namespace PushNotifications.Forms
         {
             try
             {
-                EmailConfigurationList emailConfigListContainer = emailConfigService.GetEmailConfigDetails();
-                ConnectionList connectionConfig = _connectionConfig.GetConnectionList();
-
-
-                EmailDataGrid.DataSource = emailConfigListContainer.emailConfigList;
-                ConnectionListDataGrid.DataSource = connectionConfig.connectionList;
-
-
-                schedularListAll = _schedularService.AlertsSchedularGetALL();
-                SchedularListGRIDView.DataSource = schedularListAll.schedularList;
-
-
-
-                var result = _alertMasterService.AlertMasterServiceGetAll();
-                ServiceListDataGrid.DataSource = result.alertServiceList;
-                foreach (DataGridViewRow row in ServiceListDataGrid.Rows)
-                {
-                    Console.WriteLine(row);
-
-                    // Assuming "IsActive" is the name of the column containing the status
-                    var cellValue = row.Cells["IsActive"].Value.ToString();
-
-                    if (cellValue == "1")
-                    {
-                        row.DefaultCellStyle.BackColor = System.Drawing.Color.Green;
-                    }
-                    else
-                    {
-                        // If "IsActive" is not 1, set a default background color (e.g., white)
-                        row.DefaultCellStyle.ForeColor = System.Drawing.Color.White;
-                    }
-                }
-
-
+                LoadServiceListDetails();
+                LoadEmailDetails();
+                LoadDBConnectionDetails();
+                LoadSchedularDetails();
 
             }
             catch (Exception ex)
@@ -79,132 +50,72 @@ namespace PushNotifications.Forms
         }
 
 
-        private void saveEmailButton_Click_1(object sender, EventArgs e)
+        public void LoadEmailDetails()
         {
-            try
+
+            EmailConfigurationList emailConfigListContainer = emailConfigService.GetEmailConfigDetails();
+            EmailDataGrid.DataSource = emailConfigListContainer.emailConfigList;
+            EmailDataGrid.CellFormatting += EmailDataGrid_CellFormatting;
+        }
+
+        private void EmailDataGrid_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+
+        }
+
+        public void LoadDBConnectionDetails()
+        {
+            ConnectionList connectionConfig = _connectionConfig.GetConnectionList();
+            ConnectionListDataGrid.CellFormatting += ConnectionListDataGrid_CellFormatting;
+            ConnectionListDataGrid.DataSource = connectionConfig.connectionList;
+        }
+
+        private void ConnectionListDataGrid_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < ConnectionListDataGrid.Rows.Count && ConnectionListDataGrid.Columns[e.ColumnIndex].Name == "IsActive")
             {
-                // Create an instance of EmailConfigDTO and populate its properties from the input fields
-                EmailConfigurationDTO emailConfig = new EmailConfigurationDTO
+                int isActiveValue = Convert.ToInt32(ConnectionListDataGrid[e.ColumnIndex, e.RowIndex].Value);
+
+                // Check if the current row is visible on the screen
+                if (ConnectionListDataGrid.Rows[e.RowIndex].Displayed)
                 {
-                    IName = IName.Text,
-                    IDesc = IDesc.Text,
-                    IHost = IHost.Text,
-                    IFrom = IEmail.Text,
-                    IPassword = _encryptDecryptService.EncryptValue(IPassword.Text),
-                    IPort = IPort.Text,
-                    IsActive = IsActive.Checked,
-                    IEnableSsl = EnableSSL.Checked,
-                    IsBodyHtml = HtmlBody.Checked
-                };
-
-                // Call the EmailConfigService to insert the email configuration into the database
-                _emailConfig = emailConfigService.InsertEmailConfig(emailConfig);
-                EmailDataGrid.DataSource = _emailConfig.emailConfigList;
-
-
-
-                MessageBox.Show("Email configuration saved successfully");
-                ClearEmailConfigInputFields();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: " + ex.Message);
+                    // Check the value of IsActive and set the row color accordingly
+                    if (isActiveValue == 0)
+                    {
+                        ConnectionListDataGrid.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Salmon;
+                        ConnectionListDataGrid.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.Black;
+                    }
+                    else
+                    {
+                        // Reset the row color if IsActive is not 0
+                        ConnectionListDataGrid.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightGreen;
+                        ConnectionListDataGrid.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.Black;
+                    }
+                }
             }
         }
 
-
-        private void ClearEmailConfigInputFields()
+        public void LoadSchedularDetails()
         {
-            // Assuming IName, IDesc, IHost, IEmail, IPassword, IPort are TextBox controls
-            IName.Text = "";
-            IDesc.Text = "";
-            IHost.Text = "";
-            IEmail.Text = "";
-            IPassword.Text = "";
-            IPort.Text = "";
-
-            // Assuming IsActive, EnableSSL, HtmlBody are CheckBox controls
-            IsActive.Checked = false;
-            EnableSSL.Checked = false;
-            HtmlBody.Checked = false;
+            schedularListAll = _schedularService.AlertsSchedularGetALL();
+            SchedularListGRIDView.CellFormatting += SchedularListGRIDView_CellFormatting;
+            SchedularListGRIDView.DataSource = schedularListAll.schedularList;
         }
 
-        private void SaveConnectionButton_Click(object sender, EventArgs e)
+        private void SchedularListGRIDView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            ConnectionList result = new ConnectionList();
-            try
-            {
-                ConnectionConfigDTO connectionConfigDTO = new ConnectionConfigDTO
-                {
-                    ConnName = CNameTextBox.Text,
-                    DBName = CDBNameTextBox.Text,
-                    ServerName = SNameTextBox.Text,
-                    UserName = CUNameTextBox.Text,
-                    Passwrd = _encryptDecryptService.EncryptValue(DBPassTextBox.Text),
-                    IsActive = CIsActiveCheckbox.Checked,
-                    ActionUser = 0,
-                    DBConnId = 0
 
-                };
-
-                result = _connectionConfig.ConnectionConfigInsert(connectionConfigDTO);
-
-                ConnectionListDataGrid.DataSource = result.connectionList;
-                MessageBox.Show("Connection configuration saved successfully");
-                ClearConnectionConfigInputFields();
-
-
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: " + ex.Message);
-            }
-        }
-        private void ClearConnectionConfigInputFields()
-        {
-            CNameTextBox.Text = "";
-            CDBNameTextBox.Text = "";
-            SNameTextBox.Text = "";
-            CUNameTextBox.Text = "";
-            DBPassTextBox.Text = "";
-            CIsActiveCheckbox.Checked = false;
         }
 
-
-        private void SaveSchedularButton_Click(object sender, EventArgs e)
+        public void LoadServiceListDetails()
         {
-            SchedularConfigDTO schedularConfigDTO = new SchedularConfigDTO();
-
-            schedularConfigDTO.IName = SSNameTextBox.Text;
-            schedularConfigDTO.ICode = SSCodeTextBox.Text;
-            schedularConfigDTO.IDesc = SSCodeTextBox.Text;
-            schedularConfigDTO.FrequencyInMinutes = Convert.ToInt32(SSFrequencyTextBox.Text);
-            schedularConfigDTO.SchedularType = SSTypeComboBox.Text;
-            schedularConfigDTO.IsActive = SSActiveCheckbox.Checked;
-
-            SchedularList result = _schedularService.CreateAlertsSchedular(schedularConfigDTO);
-            SchedularListGRIDView.DataSource = result.schedularList;
-
-
-            MessageBox.Show("Schedular saved successfully");
+            var result = _alertMasterService.AlertMasterServiceGetAll();
+            //ServiceListDataGrid.CellFormatting += ServiceListDataGrid_CellFormatting;
+            ServiceListDataGrid.DataSource = result.alertServiceList;
+            //ServiceListDataGrid.CellPainting += ServiceListDataGrid_CellPainting;
+            //ServiceListDataGrid.RowPrePaint += ServiceListDataGrid_RowPrePaint;
+            //ServiceListDataGrid.RowPostPaint += ServiceListDataGrid_RowPostPaint;
         }
-
-
-
-        private void AddAlertServiceButton_Click(object sender, EventArgs e)
-        {
-            AlertServiceForm form = new AlertServiceForm();
-            form.ShowDialog();
-        }
-
-        private void EditAlertServiceButton_Click(object sender, EventArgs e)
-        {
-            AlertServiceForm form = new AlertServiceForm();
-            form.ShowDialog();
-        }
-
-
 
         private void ServiceListDataGrid_SelectionChanged(object sender, EventArgs e)
         {
@@ -218,6 +129,54 @@ namespace PushNotifications.Forms
                 // Display or process the selected data
                 MessageBox.Show($"Selected Row: ID = {id}, Name = {name}");
             }
+        }
+
+        private void AddAlertServiceButton_Click(object sender, EventArgs e)
+        {
+            AlertServiceForm form = new AlertServiceForm();
+            form.ShowDialog();
+        }
+
+        private void EditAlertServiceButton_Click(object sender, EventArgs e)
+        {
+            AlertServiceForm form = new AlertServiceForm();
+            form.ShowDialog();
+        }
+
+        private void AddEmailButton_Click(object sender, EventArgs e)
+        {
+            EmailConfigForms form = new EmailConfigForms();
+            form.ShowDialog();
+        }
+
+        private void EmailEditButton_Click(object sender, EventArgs e)
+        {
+            EmailConfigForms form = new EmailConfigForms();
+            form.ShowDialog();
+        }
+
+        private void DBConnectionAddButton_Click(object sender, EventArgs e)
+        {
+            DBConnectionForm form = new DBConnectionForm();
+            form.ShowDialog();
+        }
+
+        private void DBConnectionEditButton_Click(object sender, EventArgs e)
+        {
+            DBConnectionForm form = new DBConnectionForm();
+            form.ShowDialog();
+        }
+
+        private void SchedularEditButton_Click(object sender, EventArgs e)
+        {
+            SchedularServiceForms form = new SchedularServiceForms();
+            form.ShowDialog();
+        }
+
+        private void SchedularAddButton_Click(object sender, EventArgs e)
+        {
+            SchedularServiceForms form = new SchedularServiceForms();
+            form.ShowDialog();
         }
     }
 }

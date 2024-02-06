@@ -43,7 +43,7 @@
             SaveAllVariablesButton.Name = "SaveAllVariablesButton";
             SaveAllVariablesButton.Size = new Size(136, 23);
             SaveAllVariablesButton.TabIndex = 71;
-            SaveAllVariablesButton.Text = "Save Service";
+            SaveAllVariablesButton.Text = "Add Variables";
             SaveAllVariablesButton.UseVisualStyleBackColor = true;
             SaveAllVariablesButton.Click += SaveAllVariablesButton_Click;
             // 
