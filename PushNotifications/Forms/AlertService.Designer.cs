@@ -159,6 +159,7 @@ namespace PushNotifications.Forms
             EmailDataGrid.RowTemplate.Height = 25;
             EmailDataGrid.Size = new Size(941, 389);
             EmailDataGrid.TabIndex = 18;
+            EmailDataGrid.SelectionChanged += EmailDataGrid_SelectionChanged;
             // 
             // tabPage3
             // 
@@ -201,6 +202,7 @@ namespace PushNotifications.Forms
             ConnectionListDataGrid.RowTemplate.Height = 25;
             ConnectionListDataGrid.Size = new Size(941, 389);
             ConnectionListDataGrid.TabIndex = 12;
+            ConnectionListDataGrid.SelectionChanged += ConnectionListDataGrid_SelectionChanged;
             // 
             // tabPage7
             // 

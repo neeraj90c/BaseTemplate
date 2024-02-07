@@ -20,6 +20,7 @@ public class EmailConfigService : IEmailConfig
         {
             response.emailConfigList = connection.Query<EmailConfigurationDTO>(SP_EmailConfig_CRUD,new
             {
+                EmailConfigId = emailConfig.EmailConfigId,
                 IName = emailConfig.IName,
                 IDesc = emailConfig.IDesc,
                 IHost = emailConfig.IHost,

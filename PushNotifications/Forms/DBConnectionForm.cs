@@ -27,6 +27,12 @@ namespace PushNotifications.Forms
             InitializeComponent();
         }
 
+        public DBConnectionForm(ConnectionConfigDTO connectionConfigDTO)
+        {
+            InitializeComponent();
+            LoadDetailsById(connectionConfigDTO);
+        }
+
         private void SaveConnectionButton_Click(object sender, EventArgs e)
         {
             ConnectionList result = new ConnectionList();
@@ -67,6 +73,16 @@ namespace PushNotifications.Forms
             CUNameTextBox.Text = "";
             DBPassTextBox.Text = "";
             CIsActiveCheckbox.Checked = false;
+        }
+        
+        private void LoadDetailsById(ConnectionConfigDTO connectionConfigDTO)
+        {
+            CNameTextBox.Text = connectionConfigDTO.ConnName;
+            CDBNameTextBox.Text = connectionConfigDTO.DBName;
+            SNameTextBox.Text = connectionConfigDTO.ServerName;
+            CUNameTextBox.Text = connectionConfigDTO.UserName;
+            DBPassTextBox.Text = connectionConfigDTO.Passwrd;
+            CIsActiveCheckbox.Checked = connectionConfigDTO.IsActive;
         }
     }
 }

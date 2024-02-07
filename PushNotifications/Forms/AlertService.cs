@@ -24,7 +24,11 @@ namespace PushNotifications.Forms
         AlertMasterService _alertMasterService = new AlertMasterService();
         SchedularService _schedularService = new SchedularService();
         SchedularList schedularListAll = new SchedularList();
+        EmailConfigurationDTO emailConfigurationDTO = new EmailConfigurationDTO();
+        ConnectionConfigDTO connectionConfigDTO = new ConnectionConfigDTO();
+
         public int AlertServiceId;
+        public int EmailConfigId;
 
 
 
@@ -33,6 +37,9 @@ namespace PushNotifications.Forms
         {
             InitializeComponent();
             LoadAllConfig();
+
+            EditAlertServiceButton.Enabled = false;
+            EmailEditButton.Enabled = false;
         }
         private void LoadAllConfig()
         {
@@ -56,7 +63,7 @@ namespace PushNotifications.Forms
 
             EmailConfigurationList emailConfigListContainer = emailConfigService.GetEmailConfigDetails();
             EmailDataGrid.DataSource = emailConfigListContainer.emailConfigList;
-            EmailDataGrid.CellFormatting += EmailDataGrid_CellFormatting;
+            //EmailDataGrid.CellFormatting += EmailDataGrid_CellFormatting;
         }
 
         private void EmailDataGrid_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -108,6 +115,8 @@ namespace PushNotifications.Forms
 
         }
 
+
+
         public void LoadServiceListDetails()
         {
             var result = _alertMasterService.AlertMasterServiceGetAll();
@@ -125,6 +134,7 @@ namespace PushNotifications.Forms
                 DataGridViewRow selectedRow = ServiceListDataGrid.SelectedRows[0];
                 int id = Convert.ToInt32(selectedRow.Cells["ServiceId"].Value);
                 AlertServiceId = id;
+                EditAlertServiceButton.Enabled = AlertServiceId > 0 || AlertServiceId != 0;
             }
         }
 
@@ -140,6 +150,28 @@ namespace PushNotifications.Forms
             form.ShowDialog();
         }
 
+
+
+
+        private void EmailDataGrid_SelectionChanged(object sender, EventArgs e)
+        {
+            if (EmailDataGrid.SelectedRows.Count > 0)
+            {
+                DataGridViewRow selectedRow = EmailDataGrid.SelectedRows[0];
+                emailConfigurationDTO.EmailConfigId = Convert.ToInt32(selectedRow.Cells["EmailConfigId"].Value);
+                emailConfigurationDTO.IName = Convert.ToString(selectedRow.Cells["IName"].Value);
+                emailConfigurationDTO.IDesc = Convert.ToString(selectedRow.Cells["IDesc"].Value);
+                emailConfigurationDTO.IPort = Convert.ToString(selectedRow.Cells["IPort"].Value);
+                emailConfigurationDTO.IHost = Convert.ToString(selectedRow.Cells["IHost"].Value);
+                emailConfigurationDTO.IFrom = Convert.ToString(selectedRow.Cells["IFrom"].Value);
+                emailConfigurationDTO.IPassword = Convert.ToString(selectedRow.Cells["IPassword"].Value);
+                emailConfigurationDTO.IEnableSsl = Convert.ToInt32(selectedRow.Cells["IEnableSsl"].Value) == 1 ? true : false;
+                emailConfigurationDTO.IsBodyHtml = Convert.ToInt32(selectedRow.Cells["IsBodyHtml"].Value) == 1 ? true : false;
+                emailConfigurationDTO.IsActive = Convert.ToInt32(selectedRow.Cells["IsActive"].Value) == 1 ? true : false;
+
+                EmailEditButton.Enabled = emailConfigurationDTO.EmailConfigId > 0 || emailConfigurationDTO.EmailConfigId != 0;
+            }
+        }
         private void AddEmailButton_Click(object sender, EventArgs e)
         {
             EmailConfigForms form = new EmailConfigForms();
@@ -148,10 +180,28 @@ namespace PushNotifications.Forms
 
         private void EmailEditButton_Click(object sender, EventArgs e)
         {
-            EmailConfigForms form = new EmailConfigForms();
+            EmailConfigForms form = new EmailConfigForms(emailConfigurationDTO);
             form.ShowDialog();
         }
 
+
+
+        private void ConnectionListDataGrid_SelectionChanged(object sender, EventArgs e)
+        {
+            if (ConnectionListDataGrid.SelectedRows.Count > 0)
+            {
+                DataGridViewRow selectedRow = ConnectionListDataGrid.SelectedRows[0];
+                connectionConfigDTO.DBConnId = Convert.ToInt32(selectedRow.Cells["DBConnId"].Value);
+                connectionConfigDTO.ConnName = Convert.ToString(selectedRow.Cells["ConnName"].Value);
+                connectionConfigDTO.ServerName = Convert.ToString(selectedRow.Cells["ServerName"].Value);
+                connectionConfigDTO.UserName = Convert.ToString(selectedRow.Cells["UserName"].Value);
+                connectionConfigDTO.Passwrd = Convert.ToString(selectedRow.Cells["Passwrd"].Value);
+                connectionConfigDTO.DBName = Convert.ToString(selectedRow.Cells["DBName"].Value);
+                connectionConfigDTO.IsActive = Convert.ToInt32(selectedRow.Cells["IsActive"].Value) == 1 ? true : false;
+                connectionConfigDTO.ActionUser = Convert.ToInt32(selectedRow.Cells["ActionUser"].Value);
+    }
+                
+        }
         private void DBConnectionAddButton_Click(object sender, EventArgs e)
         {
             DBConnectionForm form = new DBConnectionForm();
@@ -160,9 +210,13 @@ namespace PushNotifications.Forms
 
         private void DBConnectionEditButton_Click(object sender, EventArgs e)
         {
-            DBConnectionForm form = new DBConnectionForm();
+            DBConnectionForm form = new DBConnectionForm(connectionConfigDTO);
             form.ShowDialog();
         }
+
+
+
+
 
         private void SchedularEditButton_Click(object sender, EventArgs e)
         {
@@ -175,5 +229,7 @@ namespace PushNotifications.Forms
             SchedularServiceForms form = new SchedularServiceForms();
             form.ShowDialog();
         }
+
+
     }
 }

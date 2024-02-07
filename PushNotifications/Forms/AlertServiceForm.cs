@@ -190,6 +190,21 @@ namespace PushNotifications.Forms
             AlertServiceMasterDTO alertServiceMasterDTO = new AlertServiceMasterDTO();
             AlertVariableList alertVariableList = new AlertVariableList();
 
+            EmailConfigurationList emailConfigListContainer = _emailConfigService.GetEmailConfigDetails();
+            ASMAlertConfigType.DataSource = emailConfigListContainer.emailConfigList;
+            ASMAlertConfigType.DisplayMember = "IName";
+            ASMAlertConfigType.ValueMember = "EmailConfigId";
+
+            ConnectionList connectionConfig = _connectionConfig.GetConnectionList();
+            ASMConnection.DataSource = connectionConfig.connectionList;
+            ASMConnection.DisplayMember = "ConnName";
+            ASMConnection.ValueMember = "DBConnId";
+
+            schedularListAll = _schedularService.AlertsSchedularGetALL();
+            ASMSchedular.DataSource = schedularListAll.schedularList;
+            ASMSchedular.ValueMember = "SchedularId";
+            ASMSchedular.DisplayMember = "IName";
+
             alertServiceMasterDTO = _alertMasterService.AlertMasterServiceReadByID(ServiceId);
 
 
@@ -207,27 +222,28 @@ namespace PushNotifications.Forms
             ASMTitle.Text = alertServiceMasterDTO.Title;
             ASMDesc.Text = alertServiceMasterDTO.SDesc;
             ASMAlertType.Text = alertServiceMasterDTO.AlertType;
-            ASMAlertConfigType.SelectedValue = alertServiceMasterDTO.AlertConfigId;
-            ASMConnection.SelectedValue = alertServiceMasterDTO.DBConnid;
-
+            //ASMAlertConfigType.SelectedValue = alertServiceMasterDTO.AlertConfigId;
+            ASMAlertConfigType.SelectedItem = alertServiceMasterDTO.AlertConfigId;
+            //ASMConnection.SelectedValue = alertServiceMasterDTO.DBConnid;
+            ASMConnection.SelectedItem = alertServiceMasterDTO.DBConnid;
             //alertServiceMasterDTO.AlertConfigId = Convert.ToInt32(ASMAlertConfigType.SelectedValue);
             //alertServiceMasterDTO.DBConnid = Convert.ToInt32(ASMConnection.SelectedValue);
             ASMDataSourceType.Text = alertServiceMasterDTO.DataSourceType;
             ASMDataSourceDef.Text = alertServiceMasterDTO.DataSourceDef;
             ASMPostSendDataSourceType.Text = alertServiceMasterDTO.PostSendDataSourceType;
             ASMPostSendDataSourceDef.Text = alertServiceMasterDTO.PostSendDataSourceDef;
-            //ASStartDate.Value = (DateTime)alertServiceMasterDTO.StartDate;
-            //ASEndDate.Value = (DateTime)alertServiceMasterDTO.EndDate;
-            //ASDailyStartDate.Value = (DateTime)alertServiceMasterDTO.DailyStart;
-            //ASDailyEndDate.Value = (DateTime)alertServiceMasterDTO.DailyEnd;
-            ASMSchedular.SelectedValue = alertServiceMasterDTO.SchedularId;
-            //alertServiceMasterDTO.SchedularId = Convert.ToInt32(ASMSchedular.SelectedValue);
+
+            ASStartDate.Value = alertServiceMasterDTO.StartDate ?? DateTime.Now;
+            ASEndDate.Value = alertServiceMasterDTO.EndDate ?? DateTime.Now;
+            ASDailyStartDate.Value = alertServiceMasterDTO.DailyStart ?? DateTime.Now;
+            ASDailyEndDate.Value = alertServiceMasterDTO.DailyEnd ?? DateTime.Now;
+
+            //ASMSchedular.SelectedValue = alertServiceMasterDTO.SchedularId;
+            ASMSchedular.SelectedItem = alertServiceMasterDTO.SchedularId;
+            
 
 
-            ConnectionList connectionConfig = _connectionConfig.GetConnectionList();
-            ASMConnection.DataSource = connectionConfig.connectionList;
-            ASMConnection.DisplayMember = "ConnName";
-            ASMConnection.ValueMember = "DBConnId";
+
 
             alertVariableList = _alertMasterService.AlertVariableReadById(ServiceId);
 

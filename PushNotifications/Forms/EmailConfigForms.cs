@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+//using static PushNotifications.Forms.AlertService.Designer;
 
 namespace PushNotifications.Forms
 {
@@ -18,12 +19,19 @@ namespace PushNotifications.Forms
         private readonly EmailConfigService emailConfigService = new EmailConfigService();
         EmailConfigurationList _emailConfig = new EmailConfigurationList();
         AlertService alertService = new AlertService();
+        public int EmailConfigId = 0;
 
 
 
         public EmailConfigForms()
         {
             InitializeComponent();
+        }
+
+        public EmailConfigForms(EmailConfigurationDTO emailConfigurationDTO)
+        {
+            InitializeComponent();
+            LoadEmailConfigDetails(emailConfigurationDTO);
         }
 
 
@@ -36,6 +44,7 @@ namespace PushNotifications.Forms
                 // Create an instance of EmailConfigDTO and populate its properties from the input fields
                 EmailConfigurationDTO emailConfig = new EmailConfigurationDTO
                 {
+                    EmailConfigId = EmailConfigId != 0 ? EmailConfigId : 0,
                     IName = IName.Text,
                     IDesc = IDesc.Text,
                     IHost = IHost.Text,
@@ -49,12 +58,11 @@ namespace PushNotifications.Forms
 
                 // Call the EmailConfigService to insert the email configuration into the database
                 _emailConfig = emailConfigService.InsertEmailConfig(emailConfig);
-                //EmailDataGrid.DataSource = _emailConfig.emailConfigList;
 
-
-                alertService.LoadEmailDetails();
                 MessageBox.Show("Email configuration saved successfully");
                 ClearEmailConfigInputFields();
+                alertService.LoadEmailDetails();
+
             }
             catch (Exception ex)
             {
@@ -79,5 +87,19 @@ namespace PushNotifications.Forms
             HtmlBody.Checked = false;
         }
 
+        private void LoadEmailConfigDetails(EmailConfigurationDTO emailConfigurationDTO)
+        {
+            EmailConfigId = emailConfigurationDTO.EmailConfigId;
+            IName.Text = emailConfigurationDTO.IName;
+            IDesc.Text = emailConfigurationDTO.IDesc;
+            IHost.Text = emailConfigurationDTO.IHost;
+            IEmail.Text = emailConfigurationDTO.IFrom;
+            
+            IPort.Text = emailConfigurationDTO.IPort;
+            IsActive.Checked = emailConfigurationDTO.IsActive;
+            EnableSSL.Checked = emailConfigurationDTO.IEnableSsl;
+            HtmlBody.Checked = emailConfigurationDTO.IsBodyHtml;
+        }
     }
+
 }
