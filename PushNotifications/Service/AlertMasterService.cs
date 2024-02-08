@@ -20,6 +20,7 @@ namespace PushNotifications.Service
         private const string SP_AlertsServiceVariables_CRUD = "ann.AlertsServiceVariables_CRUD";
         private const string SP_AlertsServiceMaster_ReadById = "ann.AlertsServiceMaster_ReadById";
         private const string SP_AlertsServiceVariables_ReadByAlertServiceId = "ann.AlertsServiceVariables_ReadByAlertServiceId";
+        private const string SP_AdvancedAlertsServiceMaster_Delete = "ann.AdvancedAlertsServiceMaster_Delete";
 
 
         public AlertServiceMasterDTO AlertMasterServiceInsert(AlertServiceMasterDTO alertServiceMasterDTO)
@@ -133,6 +134,16 @@ namespace PushNotifications.Service
             }, commandType: CommandType.StoredProcedure);
 
             return response;
+        }
+
+        public void AlertServiceDelete(int serviceId)
+        {
+            SqlConnection connection = new SqlConnection(SessionObject.DBConn);
+            connection.Query<AlertVariableMapping>(SP_AdvancedAlertsServiceMaster_Delete, new
+            {
+                ServiceId = serviceId
+            }, commandType: CommandType.StoredProcedure);
+
         }
 
 

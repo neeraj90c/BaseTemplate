@@ -18,19 +18,21 @@ namespace PushNotifications.Forms
         private readonly EncryptDecryptService _encryptDecryptService = new EncryptDecryptService();
         private readonly EmailConfigService emailConfigService = new EmailConfigService();
         EmailConfigurationList _emailConfig = new EmailConfigurationList();
-        AlertService alertService = new AlertService();
+        private AlertService _alertService;
         public int EmailConfigId = 0;
 
 
 
-        public EmailConfigForms()
+        public EmailConfigForms(AlertService alertService)
         {
             InitializeComponent();
+            _alertService = alertService;
         }
 
-        public EmailConfigForms(EmailConfigurationDTO emailConfigurationDTO)
+        public EmailConfigForms(AlertService alertService,EmailConfigurationDTO emailConfigurationDTO)
         {
             InitializeComponent();
+            _alertService = alertService;
             LoadEmailConfigDetails(emailConfigurationDTO);
         }
 
@@ -61,7 +63,7 @@ namespace PushNotifications.Forms
 
                 MessageBox.Show("Email configuration saved successfully");
                 ClearEmailConfigInputFields();
-                alertService.LoadEmailDetails();
+                _alertService.LoadEmailDetails();
 
             }
             catch (Exception ex)

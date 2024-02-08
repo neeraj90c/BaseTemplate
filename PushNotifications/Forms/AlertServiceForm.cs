@@ -22,8 +22,8 @@ namespace PushNotifications.Forms
         AlertMasterService _alertMasterService = new AlertMasterService();
         ConnectionConfigService _connectionConfig = new ConnectionConfigService();
         SchedularService _schedularService = new SchedularService();
-        AlertService alertService = new AlertService();
-
+        private AlertService _alertService;
+        private int AlertServiceId;
 
         SchedularList schedularListAll = new SchedularList();
         private List<AlertVariableMapping> _alertVariablesList = new List<AlertVariableMapping>();
@@ -32,17 +32,19 @@ namespace PushNotifications.Forms
 
 
 
-        public AlertServiceForm()
+        public AlertServiceForm(AlertService alertService)
         {
             InitializeComponent();
+            _alertService = alertService;
             LoadAllConfig();
             VariablesDataGRID.CellContentClick += VariablesDataGRID_CellContentClick;
         }
 
-        public AlertServiceForm(int alertId)
+        public AlertServiceForm(AlertService alertService,int alertId)
         {
             InitializeComponent();
             //LoadAllConfig();
+            _alertService = alertService;
             VariablesDataGRID.CellContentClick += VariablesDataGRID_CellContentClick;
             LoadDetailsById(alertId);
         }
@@ -71,7 +73,7 @@ namespace PushNotifications.Forms
 
         private void SaveEmailConfigAll_Click(object sender, EventArgs e)
         {
-            alertServiceMaster.ServiceId = 0;
+            alertServiceMaster.ServiceId = AlertServiceId != 0 ? AlertServiceId : 0;
             alertServiceMaster.EmailTo = ASMEmailTo.Text;
             alertServiceMaster.CCTo = ASMCc.Text;
             alertServiceMaster.BccTo = ASMBcc.Text;
@@ -125,7 +127,7 @@ namespace PushNotifications.Forms
                         }
                     }
                 }
-                alertService.LoadServiceListDetails();
+                _alertService.LoadServiceListDetails();
                 MessageBox.Show("Alert added successfully");
             }
             catch (Exception ex)
@@ -208,7 +210,7 @@ namespace PushNotifications.Forms
             alertServiceMasterDTO = _alertMasterService.AlertMasterServiceReadByID(ServiceId);
 
 
-            alertServiceMasterDTO.ServiceId = 0;
+            AlertServiceId = alertServiceMasterDTO.ServiceId;
             ASMEmailTo.Text = alertServiceMasterDTO.EmailTo;
             ASMCc.Text = alertServiceMasterDTO.CCTo;
             ASMBcc.Text = alertServiceMasterDTO.BccTo;

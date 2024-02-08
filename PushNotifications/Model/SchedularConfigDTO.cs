@@ -17,6 +17,7 @@ namespace PushNotification.Model
         public string SchedularType   { get; set;}
         public bool IsActive { get; set;}
         public int? IsDeleted   { get; set;}
+        public int? ActionUser {  get; set;}
     }
 
     public class SchedularList

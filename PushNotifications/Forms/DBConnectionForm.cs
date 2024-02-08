@@ -19,17 +19,21 @@ namespace PushNotifications.Forms
     {
         private readonly EncryptDecryptService _encryptDecryptService = new EncryptDecryptService();
         ConnectionConfigService _connectionConfig = new ConnectionConfigService();
-        AlertService alertService = new AlertService();
+        AlertService _alertService;
+        private ConnectionConfigDTO _connectionConfigDTO;
 
 
-        public DBConnectionForm()
+        public DBConnectionForm(AlertService alertService)
         {
             InitializeComponent();
+            _alertService = alertService;
         }
 
-        public DBConnectionForm(ConnectionConfigDTO connectionConfigDTO)
+        public DBConnectionForm(AlertService alertService,ConnectionConfigDTO connectionConfigDTO)
         {
             InitializeComponent();
+            _alertService = alertService;
+            _connectionConfigDTO = connectionConfigDTO;
             LoadDetailsById(connectionConfigDTO);
         }
 
@@ -40,20 +44,20 @@ namespace PushNotifications.Forms
             {
                 ConnectionConfigDTO connectionConfigDTO = new ConnectionConfigDTO
                 {
+                    DBConnId = _connectionConfigDTO.DBConnId != 0 ? _connectionConfigDTO.DBConnId : 0,
                     ConnName = CNameTextBox.Text,
                     DBName = CDBNameTextBox.Text,
                     ServerName = SNameTextBox.Text,
                     UserName = CUNameTextBox.Text,
                     Passwrd = _encryptDecryptService.EncryptValue(DBPassTextBox.Text),
                     IsActive = CIsActiveCheckbox.Checked,
-                    ActionUser = 0,
-                    DBConnId = 0
+                    ActionUser = 0
                 };
 
                 result = _connectionConfig.ConnectionConfigInsert(connectionConfigDTO);
 
 
-                alertService.LoadDBConnectionDetails();
+                _alertService.LoadDBConnectionDetails();
                 MessageBox.Show("Connection configuration saved successfully");
                 ClearConnectionConfigInputFields();
 

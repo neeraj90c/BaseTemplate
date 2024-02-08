@@ -33,18 +33,22 @@ namespace PushNotifications.Forms
             components = new System.ComponentModel.Container();
             AlertMasterServiceTab = new TabControl();
             tabPage2 = new TabPage();
+            DeleteAlertService = new Button();
             EditAlertServiceButton = new Button();
             AddAlertServiceButton = new Button();
             ServiceListDataGrid = new DataGridView();
             tabPage1 = new TabPage();
+            EmailConfigDeleteButton = new Button();
             AddEmailButton = new Button();
             EmailEditButton = new Button();
             EmailDataGrid = new DataGridView();
             tabPage3 = new TabPage();
+            DeleteDBConnectionButton = new Button();
             DBConnectionEditButton = new Button();
             DBConnectionAddButton = new Button();
             ConnectionListDataGrid = new DataGridView();
             tabPage7 = new TabPage();
+            DeleteSchedularServiceButton = new Button();
             SchedularEditButton = new Button();
             SchedularAddButton = new Button();
             SchedularListGRIDView = new DataGridView();
@@ -77,6 +81,7 @@ namespace PushNotifications.Forms
             // 
             // tabPage2
             // 
+            tabPage2.Controls.Add(DeleteAlertService);
             tabPage2.Controls.Add(EditAlertServiceButton);
             tabPage2.Controls.Add(AddAlertServiceButton);
             tabPage2.Controls.Add(ServiceListDataGrid);
@@ -88,9 +93,19 @@ namespace PushNotifications.Forms
             tabPage2.Text = "Service List";
             tabPage2.UseVisualStyleBackColor = true;
             // 
+            // DeleteAlertService
+            // 
+            DeleteAlertService.Location = new Point(871, 6);
+            DeleteAlertService.Name = "DeleteAlertService";
+            DeleteAlertService.Size = new Size(75, 23);
+            DeleteAlertService.TabIndex = 2;
+            DeleteAlertService.Text = "Delete";
+            DeleteAlertService.UseVisualStyleBackColor = true;
+            DeleteAlertService.Click += DeleteAlertService_Click;
+            // 
             // EditAlertServiceButton
             // 
-            EditAlertServiceButton.Location = new Point(871, 6);
+            EditAlertServiceButton.Location = new Point(790, 6);
             EditAlertServiceButton.Name = "EditAlertServiceButton";
             EditAlertServiceButton.Size = new Size(75, 23);
             EditAlertServiceButton.TabIndex = 1;
@@ -100,7 +115,7 @@ namespace PushNotifications.Forms
             // 
             // AddAlertServiceButton
             // 
-            AddAlertServiceButton.Location = new Point(790, 6);
+            AddAlertServiceButton.Location = new Point(709, 6);
             AddAlertServiceButton.Name = "AddAlertServiceButton";
             AddAlertServiceButton.Size = new Size(75, 23);
             AddAlertServiceButton.TabIndex = 1;
@@ -120,6 +135,7 @@ namespace PushNotifications.Forms
             // 
             // tabPage1
             // 
+            tabPage1.Controls.Add(EmailConfigDeleteButton);
             tabPage1.Controls.Add(AddEmailButton);
             tabPage1.Controls.Add(EmailEditButton);
             tabPage1.Controls.Add(EmailDataGrid);
@@ -131,9 +147,19 @@ namespace PushNotifications.Forms
             tabPage1.Text = "EmailConfig";
             tabPage1.UseVisualStyleBackColor = true;
             // 
+            // EmailConfigDeleteButton
+            // 
+            EmailConfigDeleteButton.Location = new Point(872, 6);
+            EmailConfigDeleteButton.Name = "EmailConfigDeleteButton";
+            EmailConfigDeleteButton.Size = new Size(75, 23);
+            EmailConfigDeleteButton.TabIndex = 20;
+            EmailConfigDeleteButton.Text = "Delete";
+            EmailConfigDeleteButton.UseVisualStyleBackColor = true;
+            EmailConfigDeleteButton.Click += EmailConfigDeleteButton_Click;
+            // 
             // AddEmailButton
             // 
-            AddEmailButton.Location = new Point(791, 6);
+            AddEmailButton.Location = new Point(710, 6);
             AddEmailButton.Name = "AddEmailButton";
             AddEmailButton.Size = new Size(75, 23);
             AddEmailButton.TabIndex = 19;
@@ -143,7 +169,7 @@ namespace PushNotifications.Forms
             // 
             // EmailEditButton
             // 
-            EmailEditButton.Location = new Point(872, 6);
+            EmailEditButton.Location = new Point(791, 6);
             EmailEditButton.Name = "EmailEditButton";
             EmailEditButton.Size = new Size(75, 23);
             EmailEditButton.TabIndex = 19;
@@ -163,6 +189,7 @@ namespace PushNotifications.Forms
             // 
             // tabPage3
             // 
+            tabPage3.Controls.Add(DeleteDBConnectionButton);
             tabPage3.Controls.Add(DBConnectionEditButton);
             tabPage3.Controls.Add(DBConnectionAddButton);
             tabPage3.Controls.Add(ConnectionListDataGrid);
@@ -174,9 +201,19 @@ namespace PushNotifications.Forms
             tabPage3.Text = "DBConnection";
             tabPage3.UseVisualStyleBackColor = true;
             // 
+            // DeleteDBConnectionButton
+            // 
+            DeleteDBConnectionButton.Location = new Point(872, 6);
+            DeleteDBConnectionButton.Name = "DeleteDBConnectionButton";
+            DeleteDBConnectionButton.Size = new Size(75, 23);
+            DeleteDBConnectionButton.TabIndex = 14;
+            DeleteDBConnectionButton.Text = "Delete";
+            DeleteDBConnectionButton.UseVisualStyleBackColor = true;
+            DeleteDBConnectionButton.Click += DeleteDBConnectionButton_Click;
+            // 
             // DBConnectionEditButton
             // 
-            DBConnectionEditButton.Location = new Point(872, 6);
+            DBConnectionEditButton.Location = new Point(791, 6);
             DBConnectionEditButton.Name = "DBConnectionEditButton";
             DBConnectionEditButton.Size = new Size(75, 23);
             DBConnectionEditButton.TabIndex = 13;
@@ -186,7 +223,7 @@ namespace PushNotifications.Forms
             // 
             // DBConnectionAddButton
             // 
-            DBConnectionAddButton.Location = new Point(791, 6);
+            DBConnectionAddButton.Location = new Point(710, 6);
             DBConnectionAddButton.Name = "DBConnectionAddButton";
             DBConnectionAddButton.Size = new Size(75, 23);
             DBConnectionAddButton.TabIndex = 13;
@@ -206,6 +243,7 @@ namespace PushNotifications.Forms
             // 
             // tabPage7
             // 
+            tabPage7.Controls.Add(DeleteSchedularServiceButton);
             tabPage7.Controls.Add(SchedularEditButton);
             tabPage7.Controls.Add(SchedularAddButton);
             tabPage7.Controls.Add(SchedularListGRIDView);
@@ -217,9 +255,19 @@ namespace PushNotifications.Forms
             tabPage7.Text = "SchedularService";
             tabPage7.UseVisualStyleBackColor = true;
             // 
+            // DeleteSchedularServiceButton
+            // 
+            DeleteSchedularServiceButton.Location = new Point(872, 6);
+            DeleteSchedularServiceButton.Name = "DeleteSchedularServiceButton";
+            DeleteSchedularServiceButton.Size = new Size(75, 23);
+            DeleteSchedularServiceButton.TabIndex = 7;
+            DeleteSchedularServiceButton.Text = "Delete";
+            DeleteSchedularServiceButton.UseVisualStyleBackColor = true;
+            DeleteSchedularServiceButton.Click += DeleteSchedularServiceButton_Click;
+            // 
             // SchedularEditButton
             // 
-            SchedularEditButton.Location = new Point(872, 6);
+            SchedularEditButton.Location = new Point(791, 6);
             SchedularEditButton.Name = "SchedularEditButton";
             SchedularEditButton.Size = new Size(75, 23);
             SchedularEditButton.TabIndex = 6;
@@ -229,7 +277,7 @@ namespace PushNotifications.Forms
             // 
             // SchedularAddButton
             // 
-            SchedularAddButton.Location = new Point(791, 6);
+            SchedularAddButton.Location = new Point(710, 6);
             SchedularAddButton.Name = "SchedularAddButton";
             SchedularAddButton.Size = new Size(75, 23);
             SchedularAddButton.TabIndex = 6;
@@ -245,6 +293,7 @@ namespace PushNotifications.Forms
             SchedularListGRIDView.RowTemplate.Height = 25;
             SchedularListGRIDView.Size = new Size(941, 389);
             SchedularListGRIDView.TabIndex = 5;
+            SchedularListGRIDView.SelectionChanged += SchedularListGRIDView_SelectionChanged;
             // 
             // closeModal
             // 
@@ -308,5 +357,9 @@ namespace PushNotifications.Forms
         private Button DBConnectionAddButton;
         private Button SchedularEditButton;
         private Button SchedularAddButton;
+        private Button DeleteAlertService;
+        private Button EmailConfigDeleteButton;
+        private Button DeleteDBConnectionButton;
+        private Button DeleteSchedularServiceButton;
     }
 }
