@@ -9,9 +9,14 @@ namespace PushNotifications.Interface
 {
     public interface IAlertMasterService
     {
-        public void AlertMasterServiceInsert(AlertServiceMasterDTO alertServiceMasterDTO, AlertServiceMapping alertServiceMapping);
+        public AlertServiceMasterDTO AlertMasterServiceInsert(AlertServiceMasterDTO alertServiceMasterDTO);
         public AlertServiceList AlertMasterServiceGetAll();
-        public void AlertSchedularMapInsert(AlertServiceMapping alertServiceMapping);
+        public AlertVariableList AlertVariableCRUD(AlertVariableMapping alertVariableMapping);
+        public AlertServiceMasterDTO AlertMasterServiceReadByID(int serviceId);
+
+
+
+        //public void AlertSchedularMapInsert(AlertServiceMapping alertServiceMapping);
 
 
 

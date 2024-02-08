@@ -19,6 +19,7 @@ namespace PushNotification.Service
         
         private const string SP_AlertsServiceSchedular_GetAll = "ann.AlertsServiceSchedular_GetAll";
         private const string SP_AlertSchedular_CRUD = "ann.AlertsSchedular_CRUD";
+        private const string SP_AlertSchedular_Delete = "ann.AlertsSchedular_Delete";
 
         public SchedularList AlertsSchedularGetALL()
         {
@@ -51,6 +52,20 @@ namespace PushNotification.Service
             }
             return response;
         }
+        public void DeleteSchedular(SchedularConfigDTO schedularConfigDTO)
+        {
+            using(SqlConnection connection = new SqlConnection(SessionObject.DBConn))
+            {
+                connection.Query<SchedularConfigDTO>(SP_AlertSchedular_Delete, new
+                {
+                    SchedularId = schedularConfigDTO.SchedularId,
+                    ActionUser = schedularConfigDTO.ActionUser
+
+                }, commandType: CommandType.StoredProcedure);
+            }
+        }
+
+
 
 
     }

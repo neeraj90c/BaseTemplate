@@ -1,4 +1,5 @@
 ﻿using Common;
+using Org.BouncyCastle.Asn1.Cmp;
 using PushNotification.Interface;
 using PushNotification.Model;
 using PushNotification.Service;
@@ -22,52 +23,39 @@ namespace PushNotifications.Forms
         ConnectionConfigService _connectionConfig = new ConnectionConfigService();
         AlertMasterService _alertMasterService = new AlertMasterService();
         SchedularService _schedularService = new SchedularService();
-        AlertServiceMasterDTO alertServiceMaster = new AlertServiceMasterDTO();
         SchedularList schedularListAll = new SchedularList();
+        EmailConfigurationDTO emailConfigurationDTO = new EmailConfigurationDTO();
+        ConnectionConfigDTO connectionConfigDTO = new ConnectionConfigDTO();
+        SchedularConfigDTO schedularConfigDTO = new SchedularConfigDTO();
+
+        public int AlertServiceId;
+        public int EmailConfigId;
+
+
 
 
         public AlertService()
         {
             InitializeComponent();
             LoadAllConfig();
+
+            EditAlertServiceButton.Enabled = false;
+            EmailEditButton.Enabled = false;
+            DBConnectionEditButton.Enabled = false;
+            SchedularEditButton.Enabled = false;
+            DeleteAlertService.Enabled = false;
+            EmailConfigDeleteButton.Enabled = false;
+            DeleteDBConnectionButton.Enabled = false;
+            DeleteSchedularServiceButton.Enabled = false;
         }
         private void LoadAllConfig()
         {
             try
             {
-                EmailConfigurationList emailConfigListContainer = emailConfigService.GetEmailConfigDetails();
-                ConnectionList connectionConfig = _connectionConfig.GetConnectionList();
-
-
-                EmailDataGrid.DataSource = emailConfigListContainer.emailConfigList;
-                ConnectionListDataGrid.DataSource = connectionConfig.connectionList;
-
-                ASMAlertConfigType.DataSource = emailConfigListContainer.emailConfigList;
-                ASMAlertConfigType.DisplayMember = "IFrom";
-                ASMAlertConfigType.ValueMember = "EmailConfigId";
-
-                ASMConnection.DataSource = connectionConfig.connectionList;
-                ASMConnection.DisplayMember = "ConnName";
-                ASMConnection.ValueMember = "DBConnId";
-
-
-
-                schedularListAll = _schedularService.AlertsSchedularGetALL();
-                SchedularListGRIDView.DataSource = schedularListAll.schedularList;
-
-                ASMSchedular.DataSource = schedularListAll.schedularList;
-                ASMSchedular.ValueMember = "SchedularId";
-                ASMSchedular.DisplayMember = "IName";
-                GlobalSchedularComboBox.DataSource = schedularListAll.schedularList;
-                GlobalSchedularComboBox.DisplayMember = "IName";
-                GlobalSchedularComboBox.ValueMember = "SchedularId";
-
-                var result = _alertMasterService.AlertMasterServiceGetAll();
-                ServiceListDataGrid.DataSource = result.alertServiceList;
-                GlobalSchedularSName.DataSource = result.alertServiceList;
-                GlobalSchedularSName.DisplayMember = "Title";
-                GlobalSchedularSName.ValueMember = "ServiceId";
-
+                LoadServiceListDetails();
+                LoadEmailDetails();
+                LoadDBConnectionDetails();
+                LoadSchedularDetails();
 
             }
             catch (Exception ex)
@@ -77,186 +65,260 @@ namespace PushNotifications.Forms
         }
 
 
-        private void saveEmailButton_Click_1(object sender, EventArgs e)
+
+
+        private void EmailDataGrid_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            try
+
+        }
+        private void ConnectionListDataGrid_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < ConnectionListDataGrid.Rows.Count && ConnectionListDataGrid.Columns[e.ColumnIndex].Name == "IsActive")
             {
-                // Create an instance of EmailConfigDTO and populate its properties from the input fields
-                EmailConfigurationDTO emailConfig = new EmailConfigurationDTO
+                int isActiveValue = Convert.ToInt32(ConnectionListDataGrid[e.ColumnIndex, e.RowIndex].Value);
+
+                // Check if the current row is visible on the screen
+                if (ConnectionListDataGrid.Rows[e.RowIndex].Displayed)
                 {
-                    IName = IName.Text,
-                    IDesc = IDesc.Text,
-                    IHost = IHost.Text,
-                    IFrom = IEmail.Text,
-                    IPassword = _encryptDecryptService.EncryptValue(IPassword.Text),
-                    IPort = IPort.Text,
-                    IsActive = IsActive.Checked,
-                    IEnableSsl = EnableSSL.Checked,
-                    IsBodyHtml = HtmlBody.Checked
-                };
-
-                // Call the EmailConfigService to insert the email configuration into the database
-                _emailConfig = emailConfigService.InsertEmailConfig(emailConfig);
-                EmailDataGrid.DataSource = _emailConfig.emailConfigList;
-
-
-
-                MessageBox.Show("Email configuration saved successfully");
-                ClearEmailConfigInputFields();
+                    // Check the value of IsActive and set the row color accordingly
+                    if (isActiveValue == 0)
+                    {
+                        ConnectionListDataGrid.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Salmon;
+                        ConnectionListDataGrid.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.Black;
+                    }
+                    else
+                    {
+                        // Reset the row color if IsActive is not 0
+                        ConnectionListDataGrid.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightGreen;
+                        ConnectionListDataGrid.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.Black;
+                    }
+                }
             }
-            catch (Exception ex)
+        }
+        private void SchedularListGRIDView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+
+        }
+
+
+
+        public void LoadServiceListDetails()
+        {
+            AlertServiceList result = _alertMasterService.AlertMasterServiceGetAll();
+            //ServiceListDataGrid.CellFormatting += ServiceListDataGrid_CellFormatting;
+            ServiceListDataGrid.DataSource = result.alertServiceList;
+            //ServiceListDataGrid.CellPainting += ServiceListDataGrid_CellPainting;
+            //ServiceListDataGrid.RowPrePaint += ServiceListDataGrid_RowPrePaint;
+            //ServiceListDataGrid.RowPostPaint += ServiceListDataGrid_RowPostPaint;
+        }
+        private void ServiceListDataGrid_SelectionChanged(object sender, EventArgs e)
+        {
+            if (ServiceListDataGrid.SelectedRows.Count > 0)
             {
-                MessageBox.Show("Error: " + ex.Message);
+                DataGridViewRow selectedRow = ServiceListDataGrid.SelectedRows[0];
+                int id = Convert.ToInt32(selectedRow.Cells["ServiceId"].Value);
+                AlertServiceId = id;
+                EditAlertServiceButton.Enabled = AlertServiceId > 0 || AlertServiceId != 0;
+                DeleteAlertService.Enabled = AlertServiceId > 0 || AlertServiceId != 0;
+            }
+        }
+        private void AddAlertServiceButton_Click(object sender, EventArgs e)
+        {
+            AlertServiceForm form = new AlertServiceForm(this);
+            form.ShowDialog();
+        }
+        private void EditAlertServiceButton_Click(object sender, EventArgs e)
+        {
+            AlertServiceForm form = new AlertServiceForm(this, AlertServiceId);
+            form.ShowDialog();
+        }
+        private void DeleteAlertService_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Are you sure you want to delete this alert service?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
+            {
+                _alertMasterService.AlertServiceDelete(AlertServiceId);
+
+                MessageBox.Show("Alert service deleted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LoadServiceListDetails();
             }
         }
 
 
-        private void ClearEmailConfigInputFields()
-        {
-            // Assuming IName, IDesc, IHost, IEmail, IPassword, IPort are TextBox controls
-            IName.Text = "";
-            IDesc.Text = "";
-            IHost.Text = "";
-            IEmail.Text = "";
-            IPassword.Text = "";
-            IPort.Text = "";
 
-            // Assuming IsActive, EnableSSL, HtmlBody are CheckBox controls
-            IsActive.Checked = false;
-            EnableSSL.Checked = false;
-            HtmlBody.Checked = false;
+        public void LoadEmailDetails()
+        {
+
+            EmailConfigurationList emailConfigListContainer = emailConfigService.GetEmailConfigDetails();
+            EmailDataGrid.DataSource = emailConfigListContainer.emailConfigList;
+            //EmailDataGrid.CellFormatting += EmailDataGrid_CellFormatting;
         }
-
-        private void SaveConnectionButton_Click(object sender, EventArgs e)
+        private void EmailDataGrid_SelectionChanged(object sender, EventArgs e)
         {
-            ConnectionList result = new ConnectionList();
-            try
+            if (EmailDataGrid.SelectedRows.Count > 0)
             {
-                ConnectionConfigDTO connectionConfigDTO = new ConnectionConfigDTO
+                DataGridViewRow selectedRow = EmailDataGrid.SelectedRows[0];
+                emailConfigurationDTO.EmailConfigId = Convert.ToInt32(selectedRow.Cells["EmailConfigId"].Value);
+                emailConfigurationDTO.IName = Convert.ToString(selectedRow.Cells["IName"].Value);
+                emailConfigurationDTO.IDesc = Convert.ToString(selectedRow.Cells["IDesc"].Value);
+                emailConfigurationDTO.IPort = Convert.ToString(selectedRow.Cells["IPort"].Value);
+                emailConfigurationDTO.IHost = Convert.ToString(selectedRow.Cells["IHost"].Value);
+                emailConfigurationDTO.IFrom = Convert.ToString(selectedRow.Cells["IFrom"].Value);
+                emailConfigurationDTO.IPassword = Convert.ToString(selectedRow.Cells["IPassword"].Value);
+                emailConfigurationDTO.IEnableSsl = Convert.ToInt32(selectedRow.Cells["IEnableSsl"].Value) == 1 ? true : false;
+                emailConfigurationDTO.IsBodyHtml = Convert.ToInt32(selectedRow.Cells["IsBodyHtml"].Value) == 1 ? true : false;
+                emailConfigurationDTO.IsActive = Convert.ToInt32(selectedRow.Cells["IsActive"].Value) == 1 ? true : false;
+
+                EmailEditButton.Enabled = emailConfigurationDTO.EmailConfigId > 0 || emailConfigurationDTO.EmailConfigId != 0;
+                EmailConfigDeleteButton.Enabled = emailConfigurationDTO.EmailConfigId > 0 || emailConfigurationDTO.EmailConfigId != 0;
+            }
+        }
+        private void AddEmailButton_Click(object sender, EventArgs e)
+        {
+            EmailConfigForms form = new EmailConfigForms(this);
+            form.ShowDialog();
+        }
+        private void EmailEditButton_Click(object sender, EventArgs e)
+        {
+            EmailConfigForms form = new EmailConfigForms(this, emailConfigurationDTO);
+            form.ShowDialog();
+        }
+        private void EmailConfigDeleteButton_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Are you sure you want to delete this email configuration?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
+            {
+                int emailConfigId = emailConfigurationDTO.EmailConfigId;
+                int ActionUser = 0;
+
+                try
                 {
-                    ConnName = CNameTextBox.Text,
-                    DBName = CDBNameTextBox.Text,
-                    ServerName = SNameTextBox.Text,
-                    UserName = CUNameTextBox.Text,
-                    Passwrd = _encryptDecryptService.EncryptValue(DBPassTextBox.Text),
-                    IsActive = CIsActiveCheckbox.Checked,
-                    ActionUser = 0,
-                    DBConnId = 0
 
-                };
-
-                result = _connectionConfig.ConnectionConfigInsert(connectionConfigDTO);
-
-                ConnectionListDataGrid.DataSource = result.connectionList;
-                MessageBox.Show("Connection configuration saved successfully");
-                ClearConnectionConfigInputFields();
-
-
+                    emailConfigService.EmailConfigDelete(emailConfigId, ActionUser);
+                    LoadEmailDetails();
+                    MessageBox.Show("Email configuration deleted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("There was some error : " + ex.Message);
+                }
 
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: " + ex.Message);
-            }
-        }
-        private void ClearConnectionConfigInputFields()
-        {
-            CNameTextBox.Text = "";
-            CDBNameTextBox.Text = "";
-            SNameTextBox.Text = "";
-            CUNameTextBox.Text = "";
-            DBPassTextBox.Text = "";
-            CIsActiveCheckbox.Checked = false;
         }
 
-        private void SaveASMEmailDetails_Click(object sender, EventArgs e)
-        {
-            alertServiceMaster.EmailTo = ASMEmailTo.Text;
-            alertServiceMaster.CCTo = ASMCc.Text;
-            alertServiceMaster.BccTo = ASMBcc.Text;
-            alertServiceMaster.ASubject = ASMEmailSubject.Text;
-            alertServiceMaster.ABody = ASMEmailBody.Text;
-            alertServiceMaster.HasAttachment = ASMAttachment.Checked ? 1 : 0;
-            alertServiceMaster.AttachmentType = ASMAttachType.Text;
-            alertServiceMaster.AttachmentPath = ASMAttachPath.Text;
-            alertServiceMaster.AttachmentFileType = ASMAttachFileType.Text;
-            alertServiceMaster.OutputFileName = ASMFileOutput.Text;
-            AlertServiceTabs.SelectedTab = tabPage5;
-        }
-        private void SaveASMEmailConfiguration_Click(object sender, EventArgs e)
-        {
 
-            alertServiceMaster.Title = ASMTitle.Text;
-            alertServiceMaster.SDesc = ASMDesc.Text;
-            alertServiceMaster.AlertType = ASMAlertType.Text;
-            alertServiceMaster.AlertConfigId = Convert.ToInt32(ASMAlertConfigType.SelectedValue);
-            alertServiceMaster.DBConnid = Convert.ToInt32(ASMConnection.SelectedValue);
-            alertServiceMaster.DataSourceType = ASMDataSourceType.Text;
-            alertServiceMaster.DataSourceDef = ASMDataSourceDef.Text;
-            alertServiceMaster.PostSendDataSourceType = ASMPostSendDataSourceType.Text;
-            alertServiceMaster.PostSendDataSourceDef = ASMPostSendDataSourceDef.Text;
-            ASAlertServiceName.Text = ASMTitle.Text;
-            AlertServiceTabs.SelectedTab = tabPage8;
-        }
-        private void SaveAlertServiceButton_Click(object sender, EventArgs e)
+
+        public void LoadDBConnectionDetails()
         {
-            AlertServiceMapping alertServiceMapping = new AlertServiceMapping();
-            alertServiceMapping.varInstance = ASVariableInstance.Text;
-            alertServiceMapping.varValue = ASVariableValue.Text;
-            alertServiceMapping.varType = ASVariableType.Text;
-            alertServiceMapping.StartDate = ASStartDate.Value;
-            alertServiceMapping.EndDate = ASEndDate.Value;
-            alertServiceMapping.DailyStart = ASDailyStartDate.Value;
-            alertServiceMapping.DailyEnd = ASDailyEndDate.Value;
-            alertServiceMaster.SchedularId = Convert.ToInt32(ASMSchedular.SelectedValue);
-            try
+            ConnectionList connectionConfig = _connectionConfig.GetConnectionList();
+            ConnectionListDataGrid.CellFormatting += ConnectionListDataGrid_CellFormatting;
+            ConnectionListDataGrid.DataSource = connectionConfig.connectionList;
+        }
+        private void ConnectionListDataGrid_SelectionChanged(object sender, EventArgs e)
+        {
+            if (ConnectionListDataGrid.SelectedRows.Count > 0)
             {
-                _alertMasterService.AlertMasterServiceInsert(alertServiceMaster, alertServiceMapping);
-                MessageBox.Show("Email Service Added Successfully!");
+                DataGridViewRow selectedRow = ConnectionListDataGrid.SelectedRows[0];
+                connectionConfigDTO.DBConnId = Convert.ToInt32(selectedRow.Cells["DBConnId"].Value);
+                connectionConfigDTO.ConnName = Convert.ToString(selectedRow.Cells["ConnName"].Value);
+                connectionConfigDTO.ServerName = Convert.ToString(selectedRow.Cells["ServerName"].Value);
+                connectionConfigDTO.UserName = Convert.ToString(selectedRow.Cells["UserName"].Value);
+                connectionConfigDTO.Passwrd = Convert.ToString(selectedRow.Cells["Passwrd"].Value);
+                connectionConfigDTO.DBName = Convert.ToString(selectedRow.Cells["DBName"].Value);
+                connectionConfigDTO.IsActive = Convert.ToInt32(selectedRow.Cells["IsActive"].Value) == 1 ? true : false;
+                connectionConfigDTO.ActionUser = Convert.ToInt32(selectedRow.Cells["ActionUser"].Value);
             }
-            catch (Exception ex)
+            DBConnectionEditButton.Enabled = connectionConfigDTO.DBConnId > 0 || connectionConfigDTO.DBConnId != 0;
+            DeleteDBConnectionButton.Enabled = connectionConfigDTO.DBConnId > 0 || connectionConfigDTO.DBConnId != 0;
+        }
+        private void DBConnectionAddButton_Click(object sender, EventArgs e)
+        {
+            DBConnectionForm form = new DBConnectionForm(this);
+            form.ShowDialog();
+        }
+        private void DBConnectionEditButton_Click(object sender, EventArgs e)
+        {
+            DBConnectionForm form = new DBConnectionForm(this, connectionConfigDTO);
+            form.ShowDialog();
+        }
+        private void DeleteDBConnectionButton_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Are you sure you want to delete this DB configuration?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
             {
-                MessageBox.Show("There was an error!," + ex.Message);
+                connectionConfigDTO.ActionUser = 0;
+
+                try
+                {
+
+                    _connectionConfig.DeleteDBConfig(connectionConfigDTO);
+                    LoadDBConnectionDetails();
+                    MessageBox.Show("Email configuration deleted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("There was some error : " + ex.Message);
+                }
+
             }
         }
 
-        private void SaveSchedularButton_Click(object sender, EventArgs e)
-        {
-            SchedularConfigDTO schedularConfigDTO = new SchedularConfigDTO();
 
-            schedularConfigDTO.IName = SSNameTextBox.Text;
-            schedularConfigDTO.ICode = SSCodeTextBox.Text;
-            schedularConfigDTO.IDesc = SSCodeTextBox.Text;
-            schedularConfigDTO.FrequencyInMinutes = Convert.ToInt32(SSFrequencyTextBox.Text);
-            schedularConfigDTO.SchedularType = SSTypeComboBox.Text;
-            schedularConfigDTO.IsActive = SSActiveCheckbox.Checked ? 1 : 0;
-            SchedularList result = _schedularService.CreateAlertsSchedular(schedularConfigDTO);
-            SchedularListGRIDView.DataSource = result.schedularList;
-            MessageBox.Show("Schedular saved successfully");
+        public void LoadSchedularDetails()
+        {
+            schedularListAll = _schedularService.AlertsSchedularGetALL();
+            SchedularListGRIDView.CellFormatting += SchedularListGRIDView_CellFormatting;
+            SchedularListGRIDView.DataSource = schedularListAll.schedularList;
         }
-
-        private void SaveGlobalSchedular_Click(object sender, EventArgs e)
+        private void SchedularListGRIDView_SelectionChanged(object sender, EventArgs e)
         {
-            AlertServiceMapping alertServiceMapping = new AlertServiceMapping();
-
-            alertServiceMapping.ServiceId = Convert.ToInt32(GlobalSchedularSName.SelectedValue);
-            alertServiceMapping.SchedularId = Convert.ToInt32(GlobalSchedularComboBox.SelectedValue);
-            alertServiceMapping.StartDate = GlobalStartOn.Value;
-            alertServiceMapping.EndDate = GlobalEndOn.Value;
-            alertServiceMapping.DailyStart = GlobalDailyStartOn.Value;
-            alertServiceMapping.DailyEnd = GlobalDailyEndOn.Value;
-            alertServiceMapping.varInstance = GlobalVarInstance.Text;
-            alertServiceMapping.varValue = GlobalVarValue.Text;
-            alertServiceMapping.varType = GlobalVarType.Text;
-
-            try
+            if (SchedularListGRIDView.SelectedRows.Count > 0)
             {
-                _alertMasterService.AlertSchedularMapInsert(alertServiceMapping);
-                MessageBox.Show("Schedular saved successfully");
+                DataGridViewRow selectedRow = SchedularListGRIDView.SelectedRows[0];
+
+                schedularConfigDTO.SchedularId = Convert.ToInt32(selectedRow.Cells["SchedularId"].Value);
+                schedularConfigDTO.IName = Convert.ToString(selectedRow.Cells["IName"].Value);
+                schedularConfigDTO.ICode = Convert.ToString(selectedRow.Cells["ICode"].Value);
+                schedularConfigDTO.IDesc = Convert.ToString(selectedRow.Cells["IDesc"].Value);
+                schedularConfigDTO.FrequencyInMinutes = Convert.ToInt32(selectedRow.Cells["FrequencyInMinutes"].Value);
+                schedularConfigDTO.SchedularType = Convert.ToString(selectedRow.Cells["SchedularType"].Value);
+                schedularConfigDTO.IsActive = Convert.ToInt32(selectedRow.Cells["IsActive"].Value) == 1 ? true : false;
+                schedularConfigDTO.IsDeleted = Convert.ToInt32(selectedRow.Cells["IsDeleted"].Value);
             }
-            catch (Exception ex)
+            SchedularEditButton.Enabled = schedularConfigDTO.SchedularId > 0 || schedularConfigDTO.SchedularId != 0;
+            DeleteSchedularServiceButton.Enabled = schedularConfigDTO.SchedularId > 0 || schedularConfigDTO.SchedularId != 0;
+        }
+        private void SchedularEditButton_Click(object sender, EventArgs e)
+        {
+            SchedularServiceForms form = new SchedularServiceForms(this, schedularConfigDTO);
+            form.ShowDialog();
+        }
+        private void SchedularAddButton_Click(object sender, EventArgs e)
+        {
+            SchedularServiceForms form = new SchedularServiceForms(this);
+            form.ShowDialog();
+        }
+        private void DeleteSchedularServiceButton_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Are you sure you want to delete this Schedular?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
             {
-                MessageBox.Show("There was an error!," + ex.Message);
+                schedularConfigDTO.ActionUser = 0;
+                try
+                {
+                    _schedularService.DeleteSchedular(schedularConfigDTO);
+                    LoadSchedularDetails();
+                    MessageBox.Show("Schedular deleted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("There was some error : " + ex.Message);
+                }
             }
         }
     }

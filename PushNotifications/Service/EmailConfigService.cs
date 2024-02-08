@@ -6,11 +6,13 @@ using System.Data.Common;
 using System.Configuration;
 using PushNotifications;
 using Dapper;
+using MiNET.Blocks;
 
 public class EmailConfigService : IEmailConfig
 {
     private const string SP_GetEmailConfigDetails = "ann.GetEmailConfigDetails";
     private const string SP_EmailConfig_CRUD = "ann.EmailConfig_CRUD";
+    private const string SP_EmailConfig_Delete = "ann.EmailConfig_Delete";
 
     public EmailConfigurationList InsertEmailConfig(EmailConfigurationDTO emailConfig)
     {
@@ -20,6 +22,7 @@ public class EmailConfigService : IEmailConfig
         {
             response.emailConfigList = connection.Query<EmailConfigurationDTO>(SP_EmailConfig_CRUD,new
             {
+                EmailConfigId = emailConfig.EmailConfigId,
                 IName = emailConfig.IName,
                 IDesc = emailConfig.IDesc,
                 IHost = emailConfig.IHost,
@@ -51,5 +54,26 @@ public class EmailConfigService : IEmailConfig
         return response;
     }
 
-    
+    public void EmailConfigDelete(int emailConfigId, int actionUser)
+    {
+        try
+        {
+            using (SqlConnection connection = new SqlConnection(SessionObject.DBConn))
+            {
+                connection.Query<EmailConfigurationDTO>(SP_EmailConfig_Delete, new
+                {
+                    EmailConfigId = emailConfigId,
+                    ActionUser = actionUser
+
+                } ,commandType: CommandType.StoredProcedure);
+
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("there was some error : " + ex.Message);
+        }
+    }
+
+
 }

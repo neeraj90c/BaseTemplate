@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MiNET.Entities.Passive;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,6 +34,10 @@ namespace PushNotifications.Model
         public int AlertConfigId { get; set; }
         public int SchedularId { get; set; }
         public int IsActive { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public DateTime? DailyStart { get; set; }
+        public DateTime? DailyEnd { get; set; }
     }
 
     public class AlertServiceList
@@ -40,17 +45,31 @@ namespace PushNotifications.Model
         public IEnumerable<AlertServiceMasterDTO> alertServiceList { get; set; }
     }
 
-    public class AlertServiceMapping
+    public class AlertSchedularMapping
     {
-        public int? ServiceId {  get; set; }
-        public int? SchedularId { get; set; }
-        public string? varInstance{get;set;}
-        public string? varValue {get;set;}
-        public string? varType {get;set;}
-        public DateTime? StartDate{get;set;}
-        public DateTime? EndDate {get;set;}
-        public DateTime? DailyStart{get;set;}
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public DateTime? DailyStart { get; set; }
         public DateTime? DailyEnd { get; set; }
+
+    }
+
+    public class AlertVariableMapping
+    {
+        public int? VariableId {  get; set; }
+        public int? ServiceId { get; set; }
+        public int? SchedularId { get; set; }
+        public string? VarInstance { get; set; }
+        public string? VarValue { get; set; }
+        public string? VarType { get; set; }
+        public int? IsActive { get; set; }
+        public int? IsDeleted {  get; set; }
+        public int? ActionUser {  get; set; }
+
+    }
+    public class AlertVariableList
+    {
+        public IEnumerable<AlertVariableMapping> list { get; set; }
     }
 
 }
