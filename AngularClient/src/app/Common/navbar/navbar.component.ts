@@ -15,23 +15,10 @@ import { MenuDataItem, ParentMenu } from 'src/app/interface/ManageMenuDTO';
 })
 export class NavbarComponent {
 
-
   constructor(private router: Router, private serverService: ServerService, public _commonService: CommonService, private el: ElementRef, public _userService: UserService, private loaderService: LoaderService, private renderer: Renderer2) { }
 
-  AppVersion = environment.appVersion;
   User = this._userService.User()
   parentMenu: ParentMenu[] = []
-  isDisabled = false
-  @ViewChild('searchInput', { static: false }) searchInput!: ElementRef;
-  showSearchList = true;
-  searchnotfound = false;
-
-  @HostListener('document:click', ['$event'])
-  onClick(event: Event) {
-    if (this.showSearchList && event.target !== this.searchInput.nativeElement) {
-      this.showSearchList = false;
-    }
-  }
 
   ngOnInit(): void {
     this.serverService.validateToken().subscribe({
@@ -93,16 +80,6 @@ export class NavbarComponent {
   }
 
 
-  // menuOpened = false
-  // MainBody_OnClick() {
-  //   const menuBarCollapsed = document.querySelectorAll(".sidebar.toggled");
-  //   const body = document.querySelectorAll("#page-top")
-  //   body[0].classList.remove("sidebar-toggled")
-  //   menuBarCollapsed[0].classList.remove("toggled")
-  //   this.menuOpened = !this.menuOpened
-  //   console.log(this.menuOpened)
-  // }
-
   menuBarCollapsed = false;
 
   toggleProperties() {
@@ -122,76 +99,15 @@ export class NavbarComponent {
   }
 
 
-  SearchResult: GlobalSearchDTO[] = []
-  Query: GlobalSearchDTO = {
-    filteredText: '',
-    filterSize: 20,
-    searchId: 0,
-    searchValue: '',
-    valueType: '',
-    partDetail: '',
-    workOrderDetail: '',
-    workItemDetail: ''
-  }
-
-  searchTimeout: any;
-  searchWithDelay(event: any) {
-    this.isDisabled = true;
-    const delayMilliseconds = 1000; // Set a delay 1000 milliseconds 
-    if (this.searchTimeout) {
-      clearTimeout(this.searchTimeout);
-    }
-    this.searchTimeout = setTimeout(() => {
-      this.Query.filteredText = event.target.value;
-      if (this.Query.filteredText == '') {
-        this.isDisabled = false;
-        this.showSearchList = false;
-        this.searchnotfound = false;
-      }
-      if (this.Query.filteredText != '') {
-        this.GetResult(this.Query)
-      }
-    }, delayMilliseconds);
-  }
-
-  getColor(valueType: string): string {
-    if (valueType === 'order') {
-      return 'AAE272';
-    } else if (valueType === 'traveler') {
-      return 'F8843A';
-    } else {
-      return 'A084D2';
-    }
-  }
 
 
-  GetResult(Query: GlobalSearchDTO) {
-    this._commonService.GetSearchResult(Query).subscribe((response: SearchResultList) => {
-      this.SearchResult = response.searchResult
-      this.showSearchList = true;
-      this.searchnotfound = true;
-    });
-  }
-  clearSearch() {
-    this.searchInput.nativeElement.value = '';
-    this.showSearchList = false;
-    this.isDisabled = false;
-    this.searchnotfound = false;
-    this.searchInput.nativeElement.focus();
-  }
+ 
 
-  GoToPage(type: string, id: number) {
-    this.searchInput.nativeElement.value = '';
-    this.isDisabled = false;
-    type = type.trim();
-    if (type === 'part') {
-      this.router.navigate(['/PDTLR'], { queryParams: { id: id } })
-    } else if (type === 'order') {
-      this.router.navigate(['/WDTLR'], { queryParams: { id: id } })
-    } else if (type === 'traveler') {
-      this.router.navigate(['/URAD'], { queryParams: { id: id } })
-    }
-  }
+
+
+
+ 
+
 
   navigateTo(menuCode: string) {
     this.router.navigate([`/${menuCode}`])
@@ -211,10 +127,6 @@ export class NavbarComponent {
     const element = this.el.nativeElement.querySelector(`#masterNav_${menuid}`);
     this.renderer.setStyle(element, 'display', 'none');
   }
-  NavigateToSearch() {
-    this.searchInput.nativeElement.value = '';
-    this.isDisabled = false;
-    this.router.navigate(["/GSR"], { queryParams: { filteredText: this.Query.filteredText, filterSize: 0 } })
-  }
+
 
 }

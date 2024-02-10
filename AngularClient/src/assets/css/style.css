@@ -106,8 +106,8 @@ ul, li {list-style-type: none}
 .traveler_vert_info_list li {position: relative; height: 170px;}
 .traveler_vert_info_list li:nth-child(even) {padding-left: 100px;}
 .traveler_vert_info_list li:nth-child(odd) {padding-right: 100px;}
-/* .traveler_vert_info_list li:nth-child(odd)::after {position: absolute; bottom: 10px; transform: scale(0.75); right: 70px; content: ""; background: url(../images/tra_vert_right_arrow.svg) no-repeat; width: 25px; height: 126px; z-index: 0; opacity: 0.5;} */
-/* .traveler_vert_info_list li:nth-child(even)::after {position: absolute; bottom: 10px; transform: scale(0.75); left: 70px; content: ""; background: url(../images/tra_vert_left_arrow.svg) no-repeat; width: 25px; height: 126px; opacity: 0.5;} */
+.traveler_vert_info_list li:nth-child(odd)::after {position: absolute; bottom: 10px; transform: scale(0.75); right: 70px; content: ""; background: url(../images/tra_vert_right_arrow.svg) no-repeat; width: 25px; height: 126px; z-index: 0; opacity: 0.5;}
+.traveler_vert_info_list li:nth-child(even)::after {position: absolute; bottom: 10px; transform: scale(0.75); left: 70px; content: ""; background: url(../images/tra_vert_left_arrow.svg) no-repeat; width: 25px; height: 126px; opacity: 0.5;}
 .traveler_vert_info_list li:nth-child(odd) .tra_vert_icon:after {background-color: rgba(248, 156, 0, 0.5);}
 .traveler_vert_info_list li:nth-child(odd) .tra_vrt_head a {background-color: var(--amber-col);}
 .traveler_vert_info_list li:nth-child(even) .tra_vert_icon:after {background-color: rgba(242 , 72, 0, 0.5);}
@@ -210,7 +210,7 @@ table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control:before, table.dataT
 .new_trav_bubbles_list:nth-child(12) {border : 10px solid #F24C04 ; top : 235px; left: 960px; z-index: 12; transform: scale(0.7)} 
 
 .new_trav_bubbles_list:hover {transform: scale(1.1) !important; z-index: 99 !important; transition: 0.3s all ease;}
-/* .new_trav_bubbles:after {position: absolute; content: ""; height: calc(100vh - 150px); top: 0; left: -25px; right: -25px; background: url(../images/bubbles_bk_bg.jpg) no-repeat top center; background-size: cover;} */
+.new_trav_bubbles:after {position: absolute; content: ""; height: calc(100vh - 150px); top: 0; left: -25px; right: -25px; background: url(../images/bubbles_bk_bg.jpg) no-repeat top center; background-size: cover;}
 
 label.label {font-size: 12px;}
 
@@ -226,7 +226,7 @@ footer.sticky-footer {padding: 1rem 0; bottom:0px; height:auto !important; posit
 .wc_bubbles_list {position: absolute; border-radius: 50%; background-color: #fff; box-shadow: 20px 20px 30px -15px rgba(0,0,0,0.4); z-index: 9; overflow: hidden; display: block; transition: 0.3s all ease; width: 150px; height: 150px;}
 .wc_bubbles_list h2 {text-align: center; font-size: 24px; font-weight: bold; color: var(--dark-gray-col); margin: 40px auto 10px;}
 .wc_bubbles_list:hover {transform: scale(1.1) !important; z-index: 99 !important; transition: 0.3s all ease;}
-/* .wc_bubbles:after {position: absolute; content: ""; height: calc(100vh - 150px); top: 0; left: -25px; right: -25px; background: url(../images/bubbles_bk_bg.jpg) no-repeat top center; background-size: cover;} */
+.wc_bubbles:after {position: absolute; content: ""; height: calc(100vh - 150px); top: 0; left: -25px; right: -25px; background: url(../images/bubbles_bk_bg.jpg) no-repeat top center; background-size: cover;}
 
 
 .ParentChildTable {padding : 0}
@@ -255,7 +255,7 @@ footer.sticky-footer {padding: 1rem 0; bottom:0px; height:auto !important; posit
 .center_val_cont {position: absolute; top: 50%; transform: translateY(-50%); left: 0; width: 100%;}
 
 .user_mang_bg {height: 100%; position: inherit;}
-/* .user_mang_bg:before {position: absolute; top: 0; left: 0; content: ""; background: url(../images/user_bk_bg.png) no-repeat top center; background-size: cover; width: 100%; height: 100%; mix-blend-mode:multiply;} */
+.user_mang_bg:before {position: absolute; top: 0; left: 0; content: ""; background: url(../images/user_bk_bg.png) no-repeat top center; background-size: cover; width: 100%; height: 100%; mix-blend-mode:multiply;}
 
 .user_status_block {margin: 0; padding: 0; position: relative; height: 100%;}
 .user_status_block li {position: absolute; top: 0; left: 0; width: 130px; height: 130px; background-color: white; border-radius: 50%; text-align: center; box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.25); transition: 0.3s all ease;}
@@ -281,7 +281,7 @@ footer.sticky-footer {padding: 1rem 0; bottom:0px; height:auto !important; posit
 .user_mang_admin_block li a small {display: block; line-height: 10px; font-weight: 300;}
 .user_mang_admin_block li:hover a {color: var(--dark-gray-col) !important; background: white; transform: scale(1.1); transition: 0.3s all ease;}
 
-/* .login_container {background: url(../../clientdata/appimages/login_bg.jpg) no-repeat top right; background-size: cover; height: 100%; position: relative;} */
+.login_container {background: url(../../clientdata/appimages/login_bg.jpg) no-repeat top right; background-size: cover; height: 100%; position: relative;}
 .login_block {text-align: center}
 .login_block .logo {height: 50px;}
 .login_block .login_hd {color: white; font-size: 24px;}

@@ -15,12 +15,6 @@ import { PaginationComponent } from './pagination/pagination.component';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { ExpandingTableSkeletonLoaderComponent } from './expanding-table-skeleton-loader/expanding-table-skeleton-loader.component';
 import { ToastrModule } from 'ngx-toastr';
-import { MatTableModule } from '@angular/material/table';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-
-
-
-
 
 @NgModule({
   declarations: [
@@ -42,8 +36,6 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     NgbModule,
     ChartModule,
     NgxSkeletonLoaderModule,
-    MatSlideToggleModule,
-    MatTableModule,
     ToastrModule
   ],
   exports: [
@@ -61,8 +53,6 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     PaginationComponent,
     NgxSkeletonLoaderModule,
     ExpandingTableSkeletonLoaderComponent,
-    MatSlideToggleModule,
-    MatTableModule,
     ToastrModule
   ]
 })

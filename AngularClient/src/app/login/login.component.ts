@@ -5,8 +5,6 @@ import { Router } from '@angular/router';
 import { AuthToken, User, UserLoginDTO } from '../interface/User';
 import { UserService } from '../services/user.service';
 import { LoaderService } from '../services/loader.service';
-import { MSAL_GUARD_CONFIG, MsalBroadcastService, MsalGuardConfiguration, MsalService } from '@azure/msal-angular';
-import { AuthenticationResult } from '@azure/msal-browser';
 import { JwtService } from '../services/jwt.service';
 import { environment } from '../../environments/environment'
 
@@ -26,9 +24,6 @@ export class LoginComponent implements OnInit {
 
 
   constructor(private fb: FormBuilder, private serverService: ServerService, private router: Router, private _userService: UserService, private loaderService: LoaderService,
-    @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
-    private msalService: MsalService,
-    private msalBroadcastService: MsalBroadcastService,
     private jwt: JwtService
 
   ) {

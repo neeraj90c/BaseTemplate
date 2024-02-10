@@ -7,6 +7,7 @@ import { ManageRolesComponent } from './admin/manage-roles/manage-roles.componen
 import { ManageMenuComponent } from './admin/manage-menu/manage-menu.component';
 import { UserComponent } from './user/user/user.component';
 import { ManageSubrolesComponent } from './admin/manage-subroles/manage-subroles.component';
+import { WelcomeComponent } from './welcome/welcome.component';
 
 
 
@@ -14,7 +15,7 @@ import { ManageSubrolesComponent } from './admin/manage-subroles/manage-subroles
 const routes: Routes = [
   {
     path: '', component: NavbarComponent, children: [
-      { path: '', redirectTo: 'WDB', pathMatch: 'full', title: 'TechnoTech ERP' },
+      { path: '', component: WelcomeComponent, title: 'TechnoTech ERP' },
       { path: 'base', component: BaseComponent, title: 'Base' },
       { path: 'DB', component: DashboardComponent, title: 'Dashboard' },
       { path: 'RAD', component: ManageRolesComponent, title: 'UserRoles' },
