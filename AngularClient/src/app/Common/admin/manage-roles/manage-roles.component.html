@@ -1,0 +1,79 @@
+<div class="d-flex align-items-center justify-content-between mb-3" style="border-bottom:1px solid #CDD5E9">
+    <div class="main-heading">User Roles</div>
+    <button type="button" class="btn btn-primary btn-sm" (click)="CreateRole()">Create
+        New</button>
+</div>
+<app-pagination [EnablePageSize]="true" [rowData]="roleList"
+    (pageSizeChanged)="handlePageSizeChange($event)"></app-pagination>
+<app-color-table
+    [columns]="[{colName:'Role Name',colData:'roleName'},{colName:'Role Description',colData:'roleDesc'},{colName:'Created By',colData:'createdBy'}]"
+    [tableData]="roleList" [enableActionColumn]="true" [actionColumnLabel]="'Action'"
+    [actionOptions]="[{actionName:'Edit',actionIcon:'fa fa-edit'},{actionName:'Delete',actionIcon:'fa fa-trash'}]"
+    (actionClick)="handleActionClick($event)" enableBadge="RoleCode"></app-color-table>
+<app-pagination [EnableNavigation]="true" [rowData]="roleList"
+    (pageSizeChanged)="handlePageSizeChange($event)"></app-pagination>
+
+
+<!-- Create Role -->
+<ng-template #manageRoleModal let-modal>
+
+    <div class="modal-header">
+        <h5 class="modal-title" id="manageRoleModalLabel">User Role</h5>
+        <button class="close" aria-label="Close" (click)="editroleModel.close()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <form [formGroup]="CreateRoleForm">
+        <div class="modal-body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="RoleName" class="label font-sb mb-1">Role Name <span
+                                    style="color: red;">*</span></label>
+                            <input class="form-control" formControlName="RoleName" type="text">
+                            <div class="text-danger" *ngIf="(RoleNameCtrl.touched && RoleNameCtrl.invalid )">
+                                <ng-container *ngIf="RoleNameCtrl.errors"> Role Name is
+                                    required</ng-container>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display:none;">
+                        <input class="form-control" id="roleId" type="number">
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="RoleCode" class="label font-sb mb-1">Role Code<span
+                                    style="color: red;">*</span></label>
+                            <input class="form-control" formControlName="RoleCode" type="text">
+                            <div class="text-danger" *ngIf="(RoleCodeCtrl.touched && RoleCodeCtrl.invalid )">
+                                <ng-container *ngIf="RoleCodeCtrl.errors"> Role Code is
+                                    required</ng-container>
+                            </div>
+                        </div>
+                    </div>
+                    <p id="error-message" style="display: none; color: red;" class="ml-3"></p>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="RoleDesc" class="label font-sb mb-1">Role Description<span
+                                    style="color: red;">*</span>
+                            </label>
+                            <textarea class="form-control" rows="5" formControlName="RoleDescription"></textarea>
+                            <div class="text-danger"
+                                *ngIf="(RoleDescriptionCtrl.touched && RoleDescriptionCtrl.invalid )">
+                                <ng-container *ngIf="RoleDescriptionCtrl.errors"> This Field is
+                                    required</ng-container>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="modal-footer">
+        <button class="btn btn-secondary btn-sm" (click)="editroleModel.close()">Cancel</button>
+        <button class="btn btn-primary btn-sm" (click)=" SubmitRoleForm()">Submit</button>
+    </div>
+</ng-template>

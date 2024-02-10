@@ -1,0 +1,25 @@
+.openChild {
+    display: block;
+  }
+.closeChild{
+    display:'none';
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    max-height: 0;
+    display: block;
+  }
+  100% {
+    opacity: 1;
+    max-height: 200px; /* Adjust this value based on your content */
+  }
+}
+
+// .showDiv{
+//   animation: fade-in 1.0s ease-in-out;
+//   display: block;
+//   opacity: 1;
+//   max-height: 200px;
+// }

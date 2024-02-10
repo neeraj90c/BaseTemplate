@@ -1,0 +1,137 @@
+.ribbon {
+  $default-right: 10px;
+  $default-top: -3px;
+  $default-color: #2ca7d8;
+  $default-width: 45px;
+  $default-height: 36px;
+
+  position: absolute;
+  left: var(--right, $default-right);
+  top: var(--top, $default-top);
+
+  filter: drop-shadow(2px 3px 2px rgba(black, 0.5));
+
+  >.content {
+    color: white;
+    font-size: 1.25rem;
+    text-align: center;
+    font-weight: 400;
+    background: #e9621f;
+    padding: 8px 2px 4px;
+
+
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 100%, 0 100%);
+
+    width: var(--width, $default-width);
+    min-height: var(--height, $default-height);
+
+    transition: clip-path 1s, padding 1s, background 1s;
+  }
+
+  &.slant-up>.content {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), 50% calc(100% - 6px), 0 100%);
+  }
+
+  &.slant-down>.content {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 6px), 0 calc(100% - 12px));
+  }
+
+  &.down>.content {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), 50% 100%, 0 calc(100% - 8px));
+  }
+
+  &.up>.content {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 8px), 0 100%);
+  }
+
+  &.check>.content {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), 40% 100%, 0 calc(100% - 12px));
+  }
+}
+
+
+
+
+
+/* bar-graph-loader.component.css */
+.bar-graph-loader {
+  display: flex;
+  align-items: flex-end;
+  height: 150px;
+  /* Adjust the overall height of the bar graph */
+}
+
+.ngx-skeleton {
+  flex: 1;
+}
+
+@keyframes loadingAnimation {
+
+  0%,
+  100% {
+    height: 30px;
+    /* Adjust the minimum height of the bars */
+    opacity: 0.5;
+  }
+
+  50% {
+    height: 100px;
+    /* Adjust the maximum height of the bars */
+    opacity: 1;
+  }
+}
+
+
+
+
+
+
+.ribbon2 {
+  $default-right: 20px;
+  /* Set the right margin for the second ribbon */
+  $default-top: -3px;
+  /* Use the same top margin as the first ribbon */
+  $default-color: #2ca7d8;
+  $default-width: 48px;
+  $default-height: 36px;
+
+
+  position: absolute;
+  left: calc(var(--right, $default-right) + 45px);
+  /* Adjust the left property to position it next to the first ribbon */
+  top: var(--top, $default-top);
+  filter: drop-shadow(2px 3px 2px rgba(black, 0.5));
+
+  >.content {
+    color: white;
+    font-size: 0.8rem;
+    text-align: center;
+    font-weight: 400;
+    background: #2caffe;
+    padding: 8px 2px 4px;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 100%, 0 100%);
+    width: var(--width, $default-width);
+    min-height: var(--height, $default-height);
+    transition: clip-path 1s, padding 1s, background 1s;
+  }
+
+  &.slant-up>.content {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), 50% calc(100% - 6px), 0 100%);
+  }
+
+  &.slant-down>.content {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 6px), 0 calc(100% - 12px));
+  }
+
+  &.down>.content {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), 50% 100%, 0 calc(100% - 8px));
+  }
+
+  &.up>.content {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 8px), 0 100%);
+  }
+
+  &.check>.content {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), 40% 100%, 0 calc(100% - 12px));
+  }
+}

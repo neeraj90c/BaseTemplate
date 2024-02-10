@@ -1,0 +1,240 @@
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <div class="fade_bg d-block d-sm-block d-md-none"></div>
+    <!-- Sidebar -->
+    <div class="sidebar toggled" id="accordionSidebar">
+        <ul class="navbar-nav accordion" id="MainNavigationBar">
+            <ng-container *ngFor="let menu of parentMenu">
+                <ng-container *ngIf="menu.isParent===1">
+                    <li class="nav-item" (mouseenter)="showChildMenu(menu.menuId,menu.childMenuList)"
+                        (mouseleave)="hideChildMenu(menu.menuId)">
+                        <a class="nav-link collapsed" data-toggle="collapse"
+                            [attr.data-target]="'#masterNav'+menu.menuId" aria-expanded="true"
+                            [attr.aria-controls]="'masterNav_'+menu.menuId" [routerLink]="menu.subRoleCode"> <i
+                                class={{trimOutsideDoubleQuotes(menu.menuIconUrl)}} aria-hidden="true"></i> <span>
+                                {{menu.subRoleName}}</span> </a>
+                        <div [id]="'masterNav_'+menu.menuId" class="collapse" aria-labelledby="headingUtilities"
+                            data-parent="#accordionSidebar">
+                            <div [id]="'ParenMenu_'+menu.menuId" class="bg-gray-100 py-2 collapse-inner rounded">
+                                <ng-container *ngFor="let childMenu of menu.childMenuList">
+                                    <a [id]="'ChildMenu_'+childMenu.menuId" class="collapse-item"
+                                        [routerLink]="childMenu.subRoleCode"><span
+                                            class="childMenu">{{childMenu.subRoleName}}</span></a>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </li>
+                </ng-container>
+
+                <ng-container *ngIf="menu.childIsParent===1">
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" [id]="'PChildIsParentMenu_'+menu.menuId"
+                            [routerLink]="menu.subRoleCode">
+                            <i class={{trimOutsideDoubleQuotes(menu.menuIconUrl)}} aria-hidden="true"></i> <span>
+                                {{menu.subRoleName}}</span>
+                        </a>
+                    </li>
+                </ng-container>
+            </ng-container>
+        </ul>
+
+        <br>
+        <br>
+        <br>
+
+
+    </div>
+    <!-- End of Sidebar -->
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top">
+
+                <!-- Sidebar Toggler (Sidebar) -->
+                <div class="text-center d-none d-md-inline sidebarToggler" (click)="toggleProperties()">
+                    <div id="sidebarToggle">
+                        <span class="lines"></span>
+                    </div>
+                </div>
+
+                <a class="sidebar-brand mr-3">
+                    <div class="sidebar-brand-text"><img src="../../assets/AppImages/TechnoTech/HeaderLogo.png" class="img-responsive">
+                    </div>
+                </a>
+
+                <!-- Sidebar Toggle (Topbar) -->
+                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3"> <i
+                        class="fa fa-bars"></i> </button>
+
+                <!-- Topbar Search -->
+                <form class="d-none d-sm-inline-block form-inline m-auto my-2 my-md-0  navbar-search main_search">
+                    <!-- <input #searchInput type="text" id="globalSearch" class="form-control bg-light border-0 small"
+                        placeholder="Search here..." (keyup)="searchWithDelay($event)" aria-label="Search"
+                        aria-describedby="basic-addon2" autocomplete="off">
+                    <span *ngIf="isDisabled" id="clearSearch" class="clear-search-icon" (click)="clearSearch()">
+                        <img src="../../assets/images/clear-search_icon.svg" alt="Clear Search">
+                    </span>
+                    <img src="../../assets/images/search_icon.svg">
+
+                    <div class="search_div shadow" id="GlobalSearchList" *ngIf="SearchResult.length > 0; else noData">
+
+                        <div class="search_list shadow" *ngIf="showSearchList">
+                            <ul id="suggestionlist">
+                                <li style="cursor:pointer;" (click)="GoToPage(data.valueType,data.searchId)"
+                                    [style.border-left]="'5px solid #' + getColor(data.valueType)"
+                                    *ngFor="let data of SearchResult" [ngbTooltip]="data.valueType"
+                                    [placement]="'bottom'">
+                                    <a>{{data.searchValue}}</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div *ngIf="showSearchList"
+                            style="text-align: center; background-color: white; color:blue; padding:  10px; border-radius: 15px; display: block; cursor:pointer"
+                            (click)="NavigateToSearch()">
+                            Show All
+                        </div>
+
+                    </div>
+                    <ng-template #noData>
+                        <div class="search_div shadow" *ngIf="searchnotfound"
+                            style=" text-align: center; background-color: white; color:red; padding: 10px; border-radius: 15px; display: block; cursor:pointer">
+                                <a (click)="clearSearch()">Results Not Found</a>
+                        </div>
+                    </ng-template> -->
+                </form>
+
+                <!-- Topbar Navbar -->
+                <ul class="navbar-nav top_navbar">
+                    <li class="nav-item">
+                        <a href="#" id="sidebarToggleTop" class="btn btn-link d-md-none nav-link">
+                            <div class="hamburger">
+                                <span class="lines"></span>
+                            </div>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <!-- <a href="#" class="nav-link d-md-none mob_logo">
+                            <img src="../../assets/images/Logo.svg" class="img-responsive">
+                        </a> -->
+                    </li>
+
+                    <!-- Nav Item - Search Dropdown (Visible Only mobile screen) -->
+                    <li class="nav-item dropdown no-arrow d-md-none ml-auto">
+                        <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="../../assets/images/search_icon.svg" style="width: 16px;">
+                        </a>
+                        <!-- Dropdown - Messages -->
+                        <div class="dropdown-menu dropdown-menu-right p-2 shadow animated--grow-in shadow-lg"
+                            aria-labelledby="searchDropdown">
+                            <form class="form-inline mr-auto w-100 navbar-search">
+                                <div class="input-group">
+                                    <input type="text" class="form-control bg-light border-0 small"
+                                        placeholder="Search here..." aria-label="Search"
+                                        aria-describedby="basic-addon2">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="button"> <i
+                                                class="fas fa-search fa-sm"></i> </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <div class="nav-link">
+                            <a href="#" class="alert_icon">
+                                <div class="reddot"></div>
+                                <img src="../../assets/images/notification_icon.svg">
+                            </a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <div class="nav-link">
+                            <a href="#" class="alert_icon">
+                                <div class="reddot"></div>
+                                <img src="../../assets/images/msg_icon.svg">
+                            </a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown no-arrow">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img id="HeaderUserImg" class="rounded-circle me-lg-2" src="../../assets/images/user_1.jpg"
+                                alt="" style="width: 40px; height: 40px;">
+                            <img id="MenuUserImg" class="rounded-circle" src="../../assets/images/user_1.jpg" alt=""
+                                style="width: 40px; height: 40px; display:none;">
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right shadow-lg animated--grow-in userDropdown"
+                            aria-labelledby="userDropdown">
+                            <div class="text-center py-2">
+                                <div class="font-sb h6 text_col2 mb-1" id="HeaderUserNameLabel">{{User.userName}}</div>
+                                <div class="font-l text_col4 font-small" id="MenuUserTypeLabel">{{User.designation}}</div>
+                                <div class="font-l text_col4 font-small">{{User.emailId}}</div>
+                                <div class="dropdown-divider"></div>
+                                <div class="profile_setting">
+                                    <a class="d-inline mr-1" href="#"> <i
+                                            class="fas fa-user fa-sm fa-fw mr-1 text_col5"></i> Profile </a> |
+                                    <a class="d-inline ml-1 mr-1" href="#"> <i
+                                            class="fas fa-cogs fa-sm fa-fw mr-1 text_col5"></i> Settings </a> |
+                                    <a class="d-inline ml-1" href="#"> <i
+                                            class="fas fa-user-cog fa-sm fa-fw mr-1 text_col5"></i> Admin </a>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <a href="#" class="btn btn-outline-secondary rounded-pill px-3" (click)="Logout()">
+                                    Logout </a>
+                                <div class="dropdown-divider"></div> 
+                                <a href="#" class="dropdown-item" id="AppVersionA">{{AppVersion}}</a>
+                                <a href="#" class="dropdown-item" id="LayoutNumber" style="display:none;">L2</a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+            <!-- End of Topbar -->
+            <div class="container-fluid" id="LayoutContainerFluid">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+        <!-- End of Main Content -->
+        <!-- Footer -->
+        <div class="d-flex">
+            <footer class="sticky-footer bg-white d-flex">             
+            </footer>
+            <marquee behavior="scroll" direction="left" scrollamount="12">
+                <div class="text-black font-b" style="margin-left:90px;">
+                    <strong>
+                        <p class="h6" style="font-size: 16px;">
+                            <br>
+                            Systel is committed to providing <span style="color: darkorange;">total customer
+                                satisfaction
+                            </span>through <span style="color: darkorange;">continual improvement</span>,
+                            <span style="color: darkorange;">the pursuit of zero defects</span>, <span
+                                style="color: darkorange;">on-time delivery</span>, and <span
+                                style="color: darkorange;">customer service</span>. <span>Copyright © 2024 TechnoTech.
+                                All rights reserved.</span>
+                        </p>
+                    </strong>
+                </div>
+            </marquee>
+        </div>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded-circle" href="#page-top"> <i class="fas fa-angle-up"></i> </a>
+<app-loader></app-loader>
+

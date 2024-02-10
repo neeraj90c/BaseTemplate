@@ -1,0 +1,202 @@
+<div class="d-flex align-items-center justify-content-between my-3" style="border-bottom:1px solid #CDD5E9">
+    <div class="main-heading">User List</div>
+    <button type="button" class="btn btn-primary btn-sm" (click)="createNewUser()"> Create
+        New</button>
+</div>
+
+
+
+<app-pagination [EnablePageSize]="true" [rowData]="UserMasterlist"
+    (pageSizeChanged)="handlePageSizeChange($event)"></app-pagination>
+<app-color-table
+    [columns]="[
+    {colName:'Username',colData:'Username'},
+    {colName:'Name',colData:'Name'}, 
+    {colName:'Roles',colData:'AssignedRoles'},
+    {colName:'Email',colData:'Email'},    
+    {colName:'CreatedBy',colData:'CreatedBy'}]"
+    [tableData]="filteredUsers" [enableCheckboxColumn]="true" [checkboxStateBinding]="'Active'"
+    [checkboxColumnLabel]="'Active'" (checkboxChange)="onCheckboxStatusChange($event)" [enableActionColumn]="true"
+    [actionColumnLabel]="'Action'"
+    [actionOptions]="[{actionName:'Edit',actionIcon:'fa fa-edit'},{actionName:'Delete',actionIcon:'fa fa-trash'},{actionName:'Assign Role',actionIcon:'fa fa-plus'}]"
+    (actionClick)="handleActionClick($event)">
+</app-color-table>
+
+
+<app-pagination [EnableNavigation]="true" [rowData]="UserMasterlist"
+    (pageSizeChanged)="handlePageSizeChange($event)"></app-pagination>
+
+
+
+<ng-template #userListModal let-modal>
+
+    <div class="modal-header">
+        <h5 class="modal-title" id="userListModalLabel">Create User</h5>
+        <button  class="close" aria-label="Close" (click)="editUserModal.close()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" id="userListModalBody">
+
+        <!-- User creation and update form -->
+        <form [formGroup]="UserForm">
+            <div class="form-row">
+                <div class="col-md-6 d-flex flex-column">
+                    <label class="label font-sb mb-1">Profile Picture</label>
+                    <ng-container *ngIf="!UserForm.get('profileImage')?.value; else profile">
+                        <img src="../../../../assets/images/defaultUser.jpg" class="mb-2" style="width: 150px" alt="">
+                        
+                    </ng-container>
+                    <ng-template #profile>
+                        <img [src]="UserForm.get('profileImage')?.value" class="mb-2" style="width: 150px" alt="">
+                    </ng-template>
+                    <input type="file" class="form-control-file" (change)="handleProfileImageChange($event)">
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="label font-sb mb-1">First Name <span
+                            style="color: red;">*</span></label>
+                        <input type="text" class="form-control" formControlName="firstname">
+                        <div class="text-danger" *ngIf="(firstnameCtrl.touched && firstnameCtrl.invalid )">
+                            <ng-container *ngIf="firstnameCtrl.errors"> Firstname is required</ng-container>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="label font-sb mb-1">Middle Name</label>
+                        <input type="text" class="form-control" formControlName="middlename">
+                    </div>
+                    <div class="mb-3">
+                        <label class="label font-sb mb-1">Last Name  <span
+                            style="color: red;">*</span></label>
+                        <input type="text" class="form-control" formControlName="lastname">
+                        <div class="text-danger" *ngIf="(lastnameCtrl.touched && lastnameCtrl.invalid )">
+                            <ng-container *ngIf="lastnameCtrl.errors"> Lastname is required</ng-container>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="label font-sb mb-1">Email Address <span
+                        style="color: red;">*</span></label>
+                    <input type="email" class="form-control" formControlName="email">
+                    <div class="text-danger" *ngIf="(emailCtrl.touched && emailCtrl.invalid )">
+                        <ng-container *ngIf="emailCtrl.errors && emailCtrl.errors?.['required']"> Email is
+                            required</ng-container>
+                        <ng-container *ngIf="emailCtrl.errors && emailCtrl.errors?.['email']"> Enter a valid
+                            email eg : abc@gmail.com</ng-container>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="label font-sb mb-1">Mobile</label>
+                    <input type="number" class="form-control" formControlName="mobileNo">
+                </div>
+
+                <!-- <div class="col-md-6 mb-3">
+                    <label class="label font-sb mb-1">Mobile</label>
+                    <input type="tel" class="form-control" formControlName="mobileNo" pattern="[0-9]+" title="Please enter a valid number">
+                    <div class="text-danger" *ngIf="User.get('mobileNo').hasError('pattern')">
+                      Please enter a valid number.
+                    </div>
+                  </div> -->
+                
+
+                <div class="col-md-6 mb-3">
+                    <label class="label font-sb mb-1">Date of Birth</label>
+                    <input type="date" class="form-control" formControlName="dob">
+                    <div class="text-danger" *ngIf="(dobCtrl.touched && dobCtrl.invalid )">
+                        <ng-container *ngIf="dobCtrl.errors"> BirthDate is required</ng-container>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="label font-sb mb-1">Designation</label>
+                    <input type="text" class="form-control" formControlName="designation">
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="label font-sb mb-1">Role <span style="color: red;">*</span></label>
+                        <select name="RolesList" class="form-control" id="RolesList" formControlName="roleId" required>
+                            <option [value]="0">Select Role...</option>
+                            <option *ngFor="let role of roleList" [value]="role.roleId">{{role.roleName}}</option>
+                        </select>
+            
+                        <span *ngIf="userRoleCtrl && userRoleCtrl.invalid && userRoleCtrl.touched"
+                                    style="color: red;">Role is Required</span>
+                    </div>
+                </div>
+                
+            </div>
+            <!-- User creation and update form ends -->
+            <hr>
+
+            <p id="emailHelp" class="form-text text-muted">Login credentials for <strong id="userDisplayName">User name
+                    here</strong> </p>
+                    <div class="row" formGroupName="userCredential">
+                        <div class="col-md-6 mb-3">
+                            <label for="UserLoginName" class="label font-sb mb-1">Username</label>
+                            <input type="text" class="form-control" formControlName="userName" placeholder="Enter username">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="UserLoginPassword" class="label font-sb mb-1">Password</label>
+                            <input type="password" class="form-control" formControlName="userPassword"
+                                placeholder="Enter password">
+                            <div class="text-danger"
+                                *ngIf="userNameCtrl.touched && userNameCtrl.dirty ">
+                                Password is required if the username has changed.
+                            </div>
+                        </div>
+                    </div>
+
+
+
+        </form>
+        <div class="modal-footer">
+            <button class="btn btn-secondary btn-sm" (click)="editUserModal.close()">Cancel</button>
+            <button class="btn btn-primary btn-sm" (click)="submitUserForm()">Submit</button>
+        </div>
+    </div>
+
+</ng-template>
+<ng-template #assignRoleModalContent let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="userListModalLabel">Assign User Role</h5>
+        <button class="close" aria-label="Close" (click)="assignRoleModal.close()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <div id="userRoleMap">
+            <div class="row">
+                <div class="col-md-12">
+                    <form class="input-group w-auto mb-3" [formGroup]="UserRoleForm" (ngSubmit)="addUserRole()">
+                        <select name="WorkcenterList" class="form-control form-control-sm"
+                            placeholder="Enter WorkItem Name" aria-label="Enter WorkItem Name"
+                            aria-describedby="FetchWorkcenterDetailbtn" id="WorkcenterList"
+                            formControlName="roleDropDown">
+                            <option value="0" selected>Select Role...</option>
+                            <option *ngFor="let role of filteredRoleList" [value]="role.roleId">{{role.roleName}}
+                            </option>
+                        </select>
+                        <button class="btn btn-primary btn-sm" type="submit" id="FetchWorkcenterDetailbtn"
+                            data-mdb-ripple-color="dark" style="border-radius: 0px 5px 5px 0px;">
+                            Add Role
+                        </button>
+                    </form>
+                    <div>
+                        <p style="color:red; display:none;" id="errorMsg" class="ml-2"></p>
+                    </div>
+                    <div id="WorkCenterMasterDiv"
+                        style="min-height:150px; width:100%; border-radius:5px; border: 1px solid #dedede; padding:5px;">
+                        <div class="card d-inline-block mb-3 p-2 shadow-sm w-auto mr-2" *ngFor="let role of userRoles">
+                            {{role.roleName}}<i class="fa fa-trash grayscale ml-1"
+                                style="font-size:18px;color: red; cursor:pointer;" (click)="deleteRole(role)"></i></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</ng-template>

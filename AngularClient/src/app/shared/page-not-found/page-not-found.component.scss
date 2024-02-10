@@ -1,0 +1,44 @@
+.not-found {
+    margin: 9%;
+    font-family: 'Montserrat', sans-serif !important;
+    text-align: center;
+    padding: 20px;
+  }
+  .not-found h1 {
+    font-family: 'Montserrat', sans-serif !important;
+     font-size: 120px;
+     color: #333;
+     margin: 0;
+  }
+
+  .not-found h2 {
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 29px;
+    line-height: 0px;
+    margin: 0;
+    color: #333;
+    padding-bottom: 50px;
+  }
+
+  .not-found p {
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 1.1rem;
+    color: #555;
+  }
+
+  .orange-button {
+    font-family: 'Montserrat', sans-serif !important;
+    background-color: darkorange;
+    color: white;
+    padding: 4px 10px;
+    border: none;
+    border-radius: 3px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin:4%;
+    width: 20%;
+  }
+
+  .orange-button:hover {
+    background-color: orange;
+  }

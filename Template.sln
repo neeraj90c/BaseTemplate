@@ -25,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebUI", "Traveller.UI\WebUI
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DB.SQL", "DB.SQL", "{5833B812-8FA4-4C8A-B8DF-F2C4872DB764}"
 	ProjectSection(SolutionItems) = preProject
-		C:\Users\amuttathu\Desktop\TemplateDB_SchemaWithData.sql = C:\Users\amuttathu\Desktop\TemplateDB_SchemaWithData.sql
+		..\..\..\..\amuttathu\Desktop\TemplateDB_SchemaWithData.sql = ..\..\..\..\amuttathu\Desktop\TemplateDB_SchemaWithData.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SupportDesk", "SupportDesk", "{F2CA4C07-151D-4512-BBA8-6D1D73131701}"
@@ -46,6 +46,27 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ClassLibrary", "ClassLibrary", "{42959CFF-B43A-43C1-A061-527B46059999}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{C2EA9D42-FEFA-48B0-8203-9F48822E50C6}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "AngularClient", "AngularClient\", "{BC1240D7-13C3-4ABE-A202-7963FB280E47}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_64826"
+		Debug.AspNetCompiler.PhysicalPath = "AngularClient\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_64826\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_64826"
+		Release.AspNetCompiler.PhysicalPath = "AngularClient\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_64826\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "64826"
+		SlnRelativePath = "AngularClient\"
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,6 +114,10 @@ Global
 		{C2EA9D42-FEFA-48B0-8203-9F48822E50C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2EA9D42-FEFA-48B0-8203-9F48822E50C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2EA9D42-FEFA-48B0-8203-9F48822E50C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC1240D7-13C3-4ABE-A202-7963FB280E47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC1240D7-13C3-4ABE-A202-7963FB280E47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC1240D7-13C3-4ABE-A202-7963FB280E47}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC1240D7-13C3-4ABE-A202-7963FB280E47}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
