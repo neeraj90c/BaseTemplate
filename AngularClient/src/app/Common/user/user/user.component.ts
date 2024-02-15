@@ -367,40 +367,6 @@ export class UserComponent implements OnInit {
         this.editUserModal?.close()
       }
       this.UserMasterlist = userlist.users
-      const tbodyElement: HTMLTableSectionElement = this.userList.nativeElement;
-
-      for (let i = 0; i < this.UserMasterlist.length; i++) {
-        const tr = this.renderer.createElement('tr');
-    
-        // Set the inner HTML for the row
-        tr.innerHTML = `
-          <td class="dtr-control sorting_1" style="border-left: 5px solid #${this.WCColors[i]};">${(i + 1).toString()}</td>
-          <td>${this.UserMasterlist[i].firstName} ${this.UserMasterlist[i].middleName} ${this.UserMasterlist[i].lastName}</td>
-          <td>${this.UserMasterlist[i].companyName}</td>
-          <td>${this.UserMasterlist[i].designation}</td>
-          <td>${this.UserMasterlist[i].mobileNo}</td>
-          <td>${this.UserMasterlist[i].emailId}</td>
-          <td>${this.UserMasterlist[i].username}</td>
-          <td>${this.UserMasterlist[i].createdBy}</td>
-          <td class="col-3">${this.UserMasterlist[i].roleName}</td>
-          <td>
-            <input type="checkbox" id="employeeIsActive"${this.UserMasterlist[i].isActive ? ' checked' : ''} onchange="UserMaster.EmployeeStatusUpdate(this, '${encodeURIComponent(JSON.stringify(this.UserMasterlist[i]))}')" >
-          </td>
-          <td class="text-center">
-            <div class="btn-group dots_dropdown">
-              <button type="button" class="dropdown-toggle" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-ellipsis-v"></i>
-              </button>
-              <div class="dropdown-menu dropdown-menu-right shadow-lg">
-                <!-- Your dropdown items here -->
-              </div>
-            </div>
-          </td>
-        `;
-    
-        // Append the row to the tbody
-        this.renderer.appendChild(tbodyElement, tr);
-      }
 
       this.filteredUsers = userlist.users.map(user => ({
         Name: `${user.firstName}${user.middleName ? ' ' + user.middleName : ''} ${user.lastName}`,

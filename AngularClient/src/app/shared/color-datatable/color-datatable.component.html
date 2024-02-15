@@ -1,147 +1,112 @@
 
-    <table datatable class="row-border hover table table-bordered com_table" style="width: 100%;">
-        <thead>
-            <tr class="text-dark" style="border-left: 5px solid var(--orange-col);">
-                <th scope="col">SrNo</th>
-             
-                <th scope="col" *ngFor="let col of columns">{{col.colName}}</th>
+  <div class="custom-right my-2" >
+    <label> Show
+      <select name="example_length" (change)="onPageSizeChanged($event)" class="dropdown-toggle">
+        <option>10</option>
+        <option>25</option>
+        <option>50</option>
+        <option>100</option>
+        <option value=1000>ALL</option>
+      </select> entries
+    </label>
+  </div>
 
-                <th *ngIf="enableCheckboxColumn">{{ checkboxColumnLabel }}</th>
-                <th *ngIf="enableActionColumn" class ="text-center">{{ actionColumnLabel }}</th>
-            </tr>
-        </thead>
-        <tbody id="TemplateListBody">
-            <ng-container *ngIf="tableData; else noData">
+  <table class="table table-bordered com_table  mb-0" style="width: 100%;">
+      <thead>
+          <tr class="text-dark" style="border-left: 5px solid var(--orange-col);">
+              <th scope="col">SrNo</th>
+           
+              <th scope="col" *ngFor="let col of columns" (click)="sortData(col.colData)">
+                {{ col.colName }}
+                <span *ngIf="sortingColumn !== col.colData" style="color:#a5a5a5">▲▼</span>
+                <span *ngIf="sortingColumn === col.colData && sortingOrder === 'asc'">▲</span>
+                <span *ngIf="sortingColumn === col.colData && sortingOrder === 'desc'">▼</span>
+              </th>
 
-                <tr *ngFor="let rows of tableData; let i = index" [style.border-left]="'5px solid #' + WCColors[i % WCColors.length]">
+              <th *ngIf="enableCheckboxColumn">{{ checkboxColumnLabel }}</th>
+              <th *ngIf="enableActionColumn" class ="text-center">{{ actionColumnLabel }}</th>
+          </tr>
+      </thead>
+      <tbody id="TemplateListBody">
+          <ng-container *ngIf="tableData; else noData">
 
-                    <td>{{i+1}}</td>
-                    <td *ngFor="let col of columns">
-                        <div [ngClass]="enableBadge===col.colName? 'badge badge-secondary font-l':''"
-                        [style.background-color]="enableBadge===col.colName? '#' + WCColors[i % WCColors.length]:''">{{ rows[col.colData] }}</div>
-                    </td>
-                    <td *ngIf="enableCheckboxColumn" class="text-center">
-                        <input type="checkbox" [(ngModel)]="rows[checkboxStateBinding]" (change)="onCheckboxChange(rows)" [checked]="rows[checkboxStateBinding]===1" />
-                    </td>
-                    <td class="text-center" *ngIf="enableActionColumn">
-                        <div class="btn-group dots_dropdown">
-                            <button type="button" class="dropdown-toggle" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
-                              <i class="fa fa-ellipsis-v"></i>
+              <tr *ngFor="let rows of filteredData; let i = index" [style.border-left]="'5px solid #' + WCColors[i % WCColors.length]">
+
+                  <td>{{ (currentPage - 1) * selectedPageSize + i + 1 }}</td>
+                  <td *ngFor="let col of columns">
+                      <div [ngClass]="enableBadge===col.colName? 'badge badge-secondary font-l':''"
+                      [style.background-color]="enableBadge===col.colName? '#' + WCColors[i % WCColors.length]:''">{{ rows[col.colData] }}</div>
+                  </td>
+                  <td *ngIf="enableCheckboxColumn" class="text-center">
+                      <input type="checkbox" [(ngModel)]="rows[checkboxStateBinding]" (change)="onCheckboxChange(rows)" [checked]="rows[checkboxStateBinding]===1" />
+                  </td>
+                  <td class="text-center" *ngIf="enableActionColumn">
+                      <div class="btn-group dots_dropdown">
+                          <button type="button" class="dropdown-toggle" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-ellipsis-v"></i>
+                          </button>
+                          <div class="dropdown-menu dropdown-menu-right shadow-lg" >
+                            <button class="dropdown-item" type="button" *ngFor="let option of actionOptions" (click)="actionButtonClick(option.actionName,rows)">
+                              <i [ngClass]="option.actionIcon"></i> {{option.actionName}}
                             </button>
-                            <div class="dropdown-menu dropdown-menu-right shadow-lg" >
-                              <button class="dropdown-item" type="button" *ngFor="let option of actionOptions" (click)="actionButtonClick(option.actionName,rows)">
-                                <i [ngClass]="option.actionIcon"></i> {{option.actionName}}
-                              </button>
+                          
                             
-                              
-                            </div>
                           </div>
-                    </td>
-                </tr>
-            </ng-container>
-            <ng-template #noData>
-                <tr>
-                    <td colspan="7">
-                        <font style="color:red;">No Records found..</font>
-                    </td>
-                </tr>
-            </ng-template>
-
-        </tbody>
-    </table>
+                        </div>
+                  </td>
 
 
 
-<table datatable  class="row-border hover table table-bordered com_table">
-    <thead>
-      <tr>
-        <th style="border-left: 5px solid #F42800">Sr No.</th>
-        <th scope="col" *ngFor="let col of columns">{{col.colName}}</th>
+              </tr>
 
-                <th *ngIf="enableCheckboxColumn">{{ checkboxColumnLabel }}</th>
-                <th *ngIf="enableActionColumn" class ="text-center">{{ actionColumnLabel }}</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let rows of tableData; let i = index" [style.border-left]="'5px solid #' + WCColors[i % WCColors.length]">
-        <td>{{i+1}}</td>
-        <td *ngFor="let col of columns">
-            <div [ngClass]="enableBadge===col.colName? 'badge badge-secondary font-l':''"
-            [style.background-color]="enableBadge===col.colName? '#' + WCColors[i % WCColors.length]:''">{{ rows[col.colData] }}</div>
-        </td>
-        <td class="text-center">
-            <input type="checkbox" [(ngModel)]="rows[checkboxStateBinding]" (change)="onCheckboxChange(rows)" [checked]="rows[checkboxStateBinding]===1" />
-        </td>
-        <td class="text-center">
-            <div class="btn-group dots_dropdown">
-                <button type="button" class="dropdown-toggle" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
-                  <i class="fa fa-ellipsis-v"></i>
-                </button>
-                <div class="dropdown-menu dropdown-menu-right shadow-lg" >
-                  <button class="dropdown-item" type="button" *ngFor="let option of actionOptions" (click)="actionButtonClick(option.actionName,rows)">
-                    <i [ngClass]="option.actionIcon"></i> {{option.actionName}}
-                  </button>
-                
-                  
-                </div>
-              </div>
-        </td>
-      </tr>
-      <tr>
-        <td>2</td>
-        <td>Someone</td>
-        <td>Youknow</td>
-      </tr>
-      <tr>
-        <td>3</td>
-        <td>Iamout</td>
-        <td>Ofinspiration</td>
-      </tr>
-      <tr>
-        <td>4</td>
-        <td>Yoda</td>
-        <td>Skywalker</td>
-      </tr>
-      <tr>
-        <td>5</td>
-        <td>Patrick</td>
-        <td>Dupont</td>
-      </tr>
-      <tr>
-        <td>6</td>
-        <td>Barack</td>
-        <td>Obama</td>
-      </tr>
-      <tr>
-        <td>7</td>
-        <td>François</td>
-        <td>Holland</td>
-      </tr>
-      <tr>
-        <td>8</td>
-        <td>Michel</td>
-        <td>Popo</td>
-      </tr>
-      <tr>
-        <td>9</td>
-        <td>Chuck</td>
-        <td>Norris</td>
-      </tr>
-      <tr>
-        <td>10</td>
-        <td>Simon</td>
-        <td>Robin</td>
-      </tr>
-      <tr>
-        <td>11</td>
-        <td>Louis</td>
-        <td>Lin</td>
-      </tr>
-      <tr>
-        <td>12</td>
-        <td>Zelda</td>
-        <td>Link</td>
-      </tr>
-    </tbody>
+          </ng-container>
+
+
+          <ng-template #noData>
+              <tr>
+                  <td colspan="7">
+                      <font style="color:red;">No Records found..</font>
+                  </td>
+              </tr>
+          </ng-template>
+
+
+      </tbody>
   </table>
-  
+
+  <div class="container-fluid mt-0 d-flex align-items-start justify-content-between pt-3">
+    <div>
+      Current Page : {{' ' + currentPage + ' / ' + totalPages }}
+    </div>
+   
+    <div class="d-flex justify-content-end">
+      <ng-container *ngIf="totalPages > 0">
+        <ul class="pagination-list d-flex">
+          <li class="pagination-item px-1">
+            <button class="btn btn-sm" (click)="goToFirstPage()" [disabled]="currentPage === 1"
+              [ngClass]="{'btn-secondary': currentPage === 1, 'btn-primary': currentPage !== 1}">First</button>
+          </li>
+          <li class="pagination-item px-1">
+            <button class="btn btn-sm btn-primary" (click)="goToPreviousPage()" [disabled]="currentPage === 1"
+              [ngClass]="{'btn-secondary': currentPage === 1, 'btn-primary': currentPage !== 1}">Previous</button>
+          </li>
+          <ng-container *ngFor="let page of getPagesToShow()">
+            <li class="pagination-item px-1">
+              <button class="btn btn-outline-primary btn-sm" (click)="goToNumberPage(page)"
+                [ngClass]="{'btn-primary': currentPage === page, 'btn-outline-primary': currentPage !== page}">
+                {{ page }}
+              </button>
+            </li>
+          </ng-container>
+          <li class="pagination-item px-1">
+            <button class="btn btn-sm btn-primary" [disabled]="currentPage == totalPages" (click)="goToNextPage()"
+              [ngClass]="{'btn-secondary': currentPage == totalPages, 'btn-primary': currentPage !== totalPages}">Next</button>
+          </li>
+          <li class="pagination-item">
+            <button class="btn btn-sm btn-primary" (click)="goToLastPage()" [disabled]="currentPage === totalPages"
+              [ngClass]="{'btn-secondary': currentPage == totalPages, 'btn-primary': currentPage !== totalPages}">Last</button>
+          </li>
+        </ul>
+      </ng-container>
+    </div>
+  </div>

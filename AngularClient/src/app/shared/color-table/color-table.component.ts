@@ -6,15 +6,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
   styleUrls: ['./color-table.component.scss']
 })
 export class ColorTableComponent implements OnInit{
-  dtOptions: DataTables.Settings = {};
   ngOnInit(): void {
-    this.dtOptions = {
-      columnDefs: [{ "width": "5%", "targets": [0, 0] }, { "width": "8%", "targets": [1, 2, 3, 5, 6, 7, 8, 9] }, { "width": "34%", "targets": [4] }],
-      dom: 'Bfrtip',
-      // buttons: [
-      //     'copy', 'csv', 'excel', 'pdf', 'print'
-      // ]
-  }
+    
   }
   WCColors = ["c584d3", "a084d2", "60a5e8", "60d9d9", "5ce7a1", "aae272", "fce153", "f8c459", "febc5a", "eb8a5b"];
   @Input() columns!: {colName:string,colData:string}[];
