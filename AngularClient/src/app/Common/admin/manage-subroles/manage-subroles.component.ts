@@ -3,7 +3,7 @@ import { SubRole } from 'src/app/interface/SubRolesDTO';
 import { FormControl, FormGroup } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { ActivatedRoute } from '@angular/router';
-import { UserRole } from 'src/app/interface/UserRoleDTO';
+import { RolesDTO } from 'src/app/interface/UserRoleDTO';
 import { CommonService } from '../../services/common.service';
 
 @Component({
@@ -24,7 +24,7 @@ export class ManageSubrolesComponent {
 
   label: string = ''
 
-  RoleList: UserRole[] = [];
+  RoleList: RolesDTO[] = [];
 
   subroleList: SubRole[] = [];
 
@@ -48,22 +48,18 @@ export class ManageSubrolesComponent {
     
   }
 
-  UserRoleDTO: UserRole = {
+  UserRoleDTO: RolesDTO = {
     roleId: 0,
     roleName: '',
     roleCode: '',
     roleDesc: '',
     isActive: 0,
     createdBy: '',
-    createdOn: new Date(),
+    createdOn: new Date,
     modifiedBy: '',
-    modifiedOn: new Date(),
+    modifiedOn: new Date,
     isDeleted: 0,
-    actionUser: this._userService.User().userId,
-    pageNo: 1,
-    pageSize: 10,
-    rowNum: 0,
-    totalCount: 0
+    actionUser: 0
   }
 
 
@@ -113,7 +109,7 @@ export class ManageSubrolesComponent {
  * API calling functionalities for give user Roles data.
  * @param data  this is empty parameter for calling API
  */
-  public RolesCrud(data: UserRole) {
+  public RolesCrud(data: RolesDTO) {
     this._commonService.getRoleList(data).subscribe(res => {
       this.RoleList = res.roles
       this.SubRolesDTO.roleId = this.RoleList[0].roleId as number

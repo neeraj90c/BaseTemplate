@@ -63,9 +63,11 @@ export class NavbarComponent {
       }
     })
 
-
+    
 
   }
+
+
   Logout() {
     this.serverService.SignOutUser()
   }
@@ -78,6 +80,7 @@ export class NavbarComponent {
       return input; // Return the original string if no double quotes are found
     }
   }
+
 
 
   menuBarCollapsed = false;
@@ -98,6 +101,28 @@ export class NavbarComponent {
     }
   }
 
+  @HostListener('document:click', ['$event'])
+  handleClickOutside(event: Event): void {
+    const clickedOnSidebar = (event.target as HTMLElement).closest('#accordionSidebar');
+    const clickedOnToggle = (event.target as HTMLElement).closest('.sidebarToggler');
+    const clickedOnSmallbutton = (event.target as HTMLElement).closest('#sidebarToggleTop');
+
+    if (clickedOnSidebar || clickedOnToggle) {
+      // Clicked inside the sidebar or on the toggler, no need to toggle
+      return;
+    }
+
+    const clickedInside = this.el.nativeElement.contains(event.target);
+
+    if (clickedInside && this.menuBarCollapsed) {
+      this.toggleProperties();
+      if(clickedOnSmallbutton){
+        this.toggleProperties();
+
+      }
+    }
+    
+  }
 
 
 

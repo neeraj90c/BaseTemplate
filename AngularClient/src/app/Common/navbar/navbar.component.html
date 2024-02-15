@@ -68,51 +68,18 @@
                 </a>
 
                 <!-- Sidebar Toggle (Topbar) -->
-                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3"> 
-                    <i class="fa fa-bars"></i> </button>
+                <!-- <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3"> 
+                    <i class="fa fa-bars"></i> </button> -->
 
                 <!-- Topbar Search -->
                 <form class="d-none d-sm-inline-block form-inline m-auto my-2 my-md-0  navbar-search main_search">
-                    <!-- <input #searchInput type="text" id="globalSearch" class="form-control bg-light border-0 small"
-                        placeholder="Search here..." (keyup)="searchWithDelay($event)" aria-label="Search"
-                        aria-describedby="basic-addon2" autocomplete="off">
-                    <span *ngIf="isDisabled" id="clearSearch" class="clear-search-icon" (click)="clearSearch()">
-                        <img src="../../assets/images/clear-search_icon.svg" alt="Clear Search">
-                    </span>
-                    <img src="../../assets/images/search_icon.svg">
 
-                    <div class="search_div shadow" id="GlobalSearchList" *ngIf="SearchResult.length > 0; else noData">
-
-                        <div class="search_list shadow" *ngIf="showSearchList">
-                            <ul id="suggestionlist">
-                                <li style="cursor:pointer;" (click)="GoToPage(data.valueType,data.searchId)"
-                                    [style.border-left]="'5px solid #' + getColor(data.valueType)"
-                                    *ngFor="let data of SearchResult" [ngbTooltip]="data.valueType"
-                                    [placement]="'bottom'">
-                                    <a>{{data.searchValue}}</a>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div *ngIf="showSearchList"
-                            style="text-align: center; background-color: white; color:blue; padding:  10px; border-radius: 15px; display: block; cursor:pointer"
-                            (click)="NavigateToSearch()">
-                            Show All
-                        </div>
-
-                    </div>
-                    <ng-template #noData>
-                        <div class="search_div shadow" *ngIf="searchnotfound"
-                            style=" text-align: center; background-color: white; color:red; padding: 10px; border-radius: 15px; display: block; cursor:pointer">
-                                <a (click)="clearSearch()">Results Not Found</a>
-                        </div>
-                    </ng-template> -->
                 </form>
 
                 <!-- Topbar Navbar -->
                 <ul class="navbar-nav top_navbar">
                     <li class="nav-item">
-                        <a href="#" id="sidebarToggleTop" class="btn btn-link d-md-none nav-link">
+                        <a id="sidebarToggleTop" class="btn btn-link d-md-none nav-link" (click)="toggleProperties()">
                             <div class="hamburger">
                                 <span class="lines"></span>
                             </div>
@@ -207,7 +174,7 @@
         </div>
         <!-- End of Main Content -->
         <!-- Footer -->
-        <div class="d-flex">
+        <!-- <div class="d-flex">
             <footer class="sticky-footer bg-white d-flex">             
             </footer>
             <marquee behavior="scroll" direction="left" scrollamount="12">
@@ -226,7 +193,7 @@
                     </strong>
                 </div>
             </marquee>
-        </div>
+        </div> -->
         <!-- End of Footer -->
 
     </div>

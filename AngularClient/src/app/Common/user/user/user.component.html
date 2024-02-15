@@ -3,6 +3,28 @@
     <button type="button" class="btn btn-primary btn-sm" (click)="createNewUser()"> Create
         New</button>
 </div>
+<table datatable  class="row-border hover table table-bordered com_table">
+    <thead>
+        <tr class="text-dark">
+            <th style="border-left: 5px solid var(--orange-col);" scope="col">SrNo</th>
+            <th scope="col">Name</th>
+            <th scope="col">Company</th>
+            <th scope="col">Designation</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Email</th>
+            <th scope="col">Username</th>
+            <th scope="col">CreatedBy</th>
+            <th scope="col">User Roles</th>
+            <th scope="col">Active</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody #userlist>
+
+            
+    </tbody>
+</table>
+
 
 
 
@@ -10,11 +32,15 @@
     (pageSizeChanged)="handlePageSizeChange($event)"></app-pagination>
 <app-color-table
     [columns]="[
-    {colName:'Username',colData:'Username'},
-    {colName:'Name',colData:'Name'}, 
-    {colName:'Roles',colData:'AssignedRoles'},
-    {colName:'Email',colData:'Email'},    
-    {colName:'CreatedBy',colData:'CreatedBy'}]"
+        {colName:'Name',colData:'Name'}, 
+        {colName:'Company',colData:'Company'},
+        {colName:'Designation',colData:'Designation'},
+        {colName:'Phone',colData:'Phone'},
+        {colName:'Email',colData:'Email'},    
+        {colName:'Username',colData:'Username'},
+        {colName:'CreatedBy',colData:'CreatedBy'},
+        {colName:'User Roles',colData:'AssignedRoles'},
+    ]"
     [tableData]="filteredUsers" [enableCheckboxColumn]="true" [checkboxStateBinding]="'Active'"
     [checkboxColumnLabel]="'Active'" (checkboxChange)="onCheckboxStatusChange($event)" [enableActionColumn]="true"
     [actionColumnLabel]="'Action'"
@@ -23,10 +49,9 @@
 </app-color-table>
 
 
+
 <app-pagination [EnableNavigation]="true" [rowData]="UserMasterlist"
     (pageSizeChanged)="handlePageSizeChange($event)"></app-pagination>
-
-
 
 <ng-template #userListModal let-modal>
 
@@ -91,18 +116,10 @@
                     <label class="label font-sb mb-1">Mobile</label>
                     <input type="number" class="form-control" formControlName="mobileNo">
                 </div>
-
-                <!-- <div class="col-md-6 mb-3">
-                    <label class="label font-sb mb-1">Mobile</label>
-                    <input type="tel" class="form-control" formControlName="mobileNo" pattern="[0-9]+" title="Please enter a valid number">
-                    <div class="text-danger" *ngIf="User.get('mobileNo').hasError('pattern')">
-                      Please enter a valid number.
-                    </div>
-                  </div> -->
                 
 
                 <div class="col-md-6 mb-3">
-                    <label class="label font-sb mb-1">Date of Birth</label>
+                    <label class="label font-sb mb-1">Date of Birth <span style="color: red;">*</span></label>
                     <input type="date" class="form-control" formControlName="dob">
                     <div class="text-danger" *ngIf="(dobCtrl.touched && dobCtrl.invalid )">
                         <ng-container *ngIf="dobCtrl.errors"> BirthDate is required</ng-container>
@@ -111,7 +128,23 @@
 
                 <div class="col-md-6">
                     <label class="label font-sb mb-1">Designation</label>
-                    <input type="text" class="form-control" formControlName="designation">
+                    <select class="form-control" formControlName="designation">
+                        <option value="User">User</option>
+                        <option value="Supervisor">Support User</option>
+                        <option value="Admin">Admin</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="label font-sb mb-1">Company<span style="color: red;">*</span></label>
+                        <select class="form-control" formControlName="companyId">
+                            <option [value]="0">Select Company...</option>
+                            <option *ngFor="let company of CompanyList"  [value]="company.companyId">{{company.cName}}</option>
+                        </select>
+                        <span *ngIf="userCompanyCtrl && userCompanyCtrl.invalid && userCompanyCtrl.touched"
+                                    style="color: red;">Company is Required</span>
+
+                    </div>
                 </div>
 
                 <div class="col-md-6">
@@ -171,7 +204,7 @@
         <div id="userRoleMap">
             <div class="row">
                 <div class="col-md-12">
-                    <form class="input-group w-auto mb-3" [formGroup]="UserRoleForm" (ngSubmit)="addUserRole()">
+                    <form class="input-group w-auto mb-3" [formGroup]="UserRoleForm">
                         <select name="WorkcenterList" class="form-control form-control-sm"
                             placeholder="Enter WorkItem Name" aria-label="Enter WorkItem Name"
                             aria-describedby="FetchWorkcenterDetailbtn" id="WorkcenterList"
@@ -181,7 +214,7 @@
                             </option>
                         </select>
                         <button class="btn btn-primary btn-sm" type="submit" id="FetchWorkcenterDetailbtn"
-                            data-mdb-ripple-color="dark" style="border-radius: 0px 5px 5px 0px;">
+                            data-mdb-ripple-color="dark" style="border-radius: 0px 5px 5px 0px;" (click)="AddRole()">
                             Add Role
                         </button>
                     </form>
@@ -190,9 +223,9 @@
                     </div>
                     <div id="WorkCenterMasterDiv"
                         style="min-height:150px; width:100%; border-radius:5px; border: 1px solid #dedede; padding:5px;">
-                        <div class="card d-inline-block mb-3 p-2 shadow-sm w-auto mr-2" *ngFor="let role of userRoles">
+                        <div class="card d-inline-block mb-3 p-2 shadow-sm w-auto mr-2" *ngFor="let role of filteredUserRoleList">
                             {{role.roleName}}<i class="fa fa-trash grayscale ml-1"
-                                style="font-size:18px;color: red; cursor:pointer;" (click)="deleteRole(role)"></i></div>
+                                style="font-size:18px;color: red; cursor:pointer;" (click)="DeleteUserRole(role)"></i></div>
                     </div>
                 </div>
             </div>

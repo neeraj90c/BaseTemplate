@@ -1,0 +1,147 @@
+
+    <table datatable class="row-border hover table table-bordered com_table" style="width: 100%;">
+        <thead>
+            <tr class="text-dark" style="border-left: 5px solid var(--orange-col);">
+                <th scope="col">SrNo</th>
+             
+                <th scope="col" *ngFor="let col of columns">{{col.colName}}</th>
+
+                <th *ngIf="enableCheckboxColumn">{{ checkboxColumnLabel }}</th>
+                <th *ngIf="enableActionColumn" class ="text-center">{{ actionColumnLabel }}</th>
+            </tr>
+        </thead>
+        <tbody id="TemplateListBody">
+            <ng-container *ngIf="tableData; else noData">
+
+                <tr *ngFor="let rows of tableData; let i = index" [style.border-left]="'5px solid #' + WCColors[i % WCColors.length]">
+
+                    <td>{{i+1}}</td>
+                    <td *ngFor="let col of columns">
+                        <div [ngClass]="enableBadge===col.colName? 'badge badge-secondary font-l':''"
+                        [style.background-color]="enableBadge===col.colName? '#' + WCColors[i % WCColors.length]:''">{{ rows[col.colData] }}</div>
+                    </td>
+                    <td *ngIf="enableCheckboxColumn" class="text-center">
+                        <input type="checkbox" [(ngModel)]="rows[checkboxStateBinding]" (change)="onCheckboxChange(rows)" [checked]="rows[checkboxStateBinding]===1" />
+                    </td>
+                    <td class="text-center" *ngIf="enableActionColumn">
+                        <div class="btn-group dots_dropdown">
+                            <button type="button" class="dropdown-toggle" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                              <i class="fa fa-ellipsis-v"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right shadow-lg" >
+                              <button class="dropdown-item" type="button" *ngFor="let option of actionOptions" (click)="actionButtonClick(option.actionName,rows)">
+                                <i [ngClass]="option.actionIcon"></i> {{option.actionName}}
+                              </button>
+                            
+                              
+                            </div>
+                          </div>
+                    </td>
+                </tr>
+            </ng-container>
+            <ng-template #noData>
+                <tr>
+                    <td colspan="7">
+                        <font style="color:red;">No Records found..</font>
+                    </td>
+                </tr>
+            </ng-template>
+
+        </tbody>
+    </table>
+
+
+
+<table datatable  class="row-border hover table table-bordered com_table">
+    <thead>
+      <tr>
+        <th style="border-left: 5px solid #F42800">Sr No.</th>
+        <th scope="col" *ngFor="let col of columns">{{col.colName}}</th>
+
+                <th *ngIf="enableCheckboxColumn">{{ checkboxColumnLabel }}</th>
+                <th *ngIf="enableActionColumn" class ="text-center">{{ actionColumnLabel }}</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let rows of tableData; let i = index" [style.border-left]="'5px solid #' + WCColors[i % WCColors.length]">
+        <td>{{i+1}}</td>
+        <td *ngFor="let col of columns">
+            <div [ngClass]="enableBadge===col.colName? 'badge badge-secondary font-l':''"
+            [style.background-color]="enableBadge===col.colName? '#' + WCColors[i % WCColors.length]:''">{{ rows[col.colData] }}</div>
+        </td>
+        <td class="text-center">
+            <input type="checkbox" [(ngModel)]="rows[checkboxStateBinding]" (change)="onCheckboxChange(rows)" [checked]="rows[checkboxStateBinding]===1" />
+        </td>
+        <td class="text-center">
+            <div class="btn-group dots_dropdown">
+                <button type="button" class="dropdown-toggle" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                  <i class="fa fa-ellipsis-v"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right shadow-lg" >
+                  <button class="dropdown-item" type="button" *ngFor="let option of actionOptions" (click)="actionButtonClick(option.actionName,rows)">
+                    <i [ngClass]="option.actionIcon"></i> {{option.actionName}}
+                  </button>
+                
+                  
+                </div>
+              </div>
+        </td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Someone</td>
+        <td>Youknow</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Iamout</td>
+        <td>Ofinspiration</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>Yoda</td>
+        <td>Skywalker</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>Patrick</td>
+        <td>Dupont</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td>Barack</td>
+        <td>Obama</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td>François</td>
+        <td>Holland</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td>Michel</td>
+        <td>Popo</td>
+      </tr>
+      <tr>
+        <td>9</td>
+        <td>Chuck</td>
+        <td>Norris</td>
+      </tr>
+      <tr>
+        <td>10</td>
+        <td>Simon</td>
+        <td>Robin</td>
+      </tr>
+      <tr>
+        <td>11</td>
+        <td>Louis</td>
+        <td>Lin</td>
+      </tr>
+      <tr>
+        <td>12</td>
+        <td>Zelda</td>
+        <td>Link</td>
+      </tr>
+    </tbody>
+  </table>
+  

@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { TokenResponse, UserLoginDTO, UserResponseDTO } from '../interface/User';
 import { MenuDataItem, ParentMenu } from '../interface/ManageMenuDTO';
-import { UserRole, UserRoleDTO } from '../interface/UserRoleDTO';
+import { RolesDTO, RoleList } from '../interface/UserRoleDTO';
 
 
 

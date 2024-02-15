@@ -37,7 +37,13 @@
               "src/assets/style.css",
               "node_modules/fontawesome-4.7/css/font-awesome.css",
               "node_modules/sweetalert2/src/sweetalert2.scss",
-              "node_modules/ngx-toastr/toastr.css"
+              "node_modules/ngx-toastr/toastr.css",
+              "src/assets/css/Bootstrap.min.css",
+              "src/assets/richtexteditor/rte_theme_default.css",
+              "src/assets/datatable/jquery_datatable.min.css",
+              "node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css",
+              "node_modules/datatables.net-dt/css/jquery.dataTables.css"
+
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
@@ -46,11 +52,16 @@
               "src/assets/js/core.js",
               "src/assets/js/jquery.easing.min.js",
               "src/assets/js/jquery.min.js",
-              "src/assets/js/script.js",
               "src/assets/js/wow.min.js",
               "src/assets/js/jquery-ui-1.13.2.js",
-              "src/assets/js/all_plugins.js",
-              "node_modules/google-charts/dist/googleCharts.js"
+              "node_modules/google-charts/dist/googleCharts.js",
+              "src/assets/richtexteditor/rte.js",
+              "node_modules/jquery/dist/jquery.js",
+              "node_modules/datatables.net-dt/js/dataTables.dataTables.js",
+              "node_modules/datatables.net/js/jquery.dataTables.min.js",
+              "node_modules/datatables.net-bs4/js/dataTables.bootstrap4.min.js",
+              "node_modules/jquery/dist/jquery.js",
+              "node_modules/datatables.net/js/jquery.dataTables.js"
             ]
           },
           "configurations": {
@@ -71,7 +82,7 @@
                   "type": "anyComponentStyle",
                   "maximumWarning": "2kb",
                   "maximumError": "6kb"
-                }  
+                }
               ],
               "outputHashing": "all"
             },
@@ -92,7 +103,7 @@
                   "type": "anyComponentStyle",
                   "maximumWarning": "2kb",
                   "maximumError": "6kb"
-                }  
+                }
               ],
               "outputHashing": "all"
             },

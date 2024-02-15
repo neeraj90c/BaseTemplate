@@ -15,6 +15,9 @@ import { PaginationComponent } from './pagination/pagination.component';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { ExpandingTableSkeletonLoaderComponent } from './expanding-table-skeleton-loader/expanding-table-skeleton-loader.component';
 import { ToastrModule } from 'ngx-toastr';
+import { DataTablesModule } from "angular-datatables";
+import { ColorDatatableComponent } from './color-datatable/color-datatable.component';
+
 
 @NgModule({
   declarations: [
@@ -25,7 +28,8 @@ import { ToastrModule } from 'ngx-toastr';
     PageNotFoundComponent,
     RichTextEditorComponent,
     PaginationComponent,
-    ExpandingTableSkeletonLoaderComponent
+    ExpandingTableSkeletonLoaderComponent,
+    ColorDatatableComponent,
   ],
   imports: [
     CommonModule,
@@ -36,7 +40,8 @@ import { ToastrModule } from 'ngx-toastr';
     NgbModule,
     ChartModule,
     NgxSkeletonLoaderModule,
-    ToastrModule
+    ToastrModule,
+    DataTablesModule
   ],
   exports: [
     FormsModule,
@@ -53,7 +58,9 @@ import { ToastrModule } from 'ngx-toastr';
     PaginationComponent,
     NgxSkeletonLoaderModule,
     ExpandingTableSkeletonLoaderComponent,
-    ToastrModule
+    ToastrModule,
+    DataTablesModule,
+    ColorDatatableComponent
   ]
 })
 export class SharedModule { }

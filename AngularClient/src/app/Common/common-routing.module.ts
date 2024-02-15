@@ -8,6 +8,8 @@ import { ManageMenuComponent } from './admin/manage-menu/manage-menu.component';
 import { UserComponent } from './user/user/user.component';
 import { ManageSubrolesComponent } from './admin/manage-subroles/manage-subroles.component';
 import { WelcomeComponent } from './welcome/welcome.component';
+import { UserDashboardComponent } from './user/user-dashboard/user-dashboard.component';
+import { WorklistComponent } from '../Ticket/worklist/worklist.component';
 
 
 
@@ -21,7 +23,9 @@ const routes: Routes = [
       { path: 'RAD', component: ManageRolesComponent, title: 'UserRoles' },
       { path: 'MAD', component: ManageMenuComponent, title: 'Manage Menu' },
       { path: 'USRL', component: UserComponent, title: 'User' },
-      { path: 'SAD', component: ManageSubrolesComponent, title: 'Manage Subroles' }
+      { path: 'SAD', component: ManageSubrolesComponent, title: 'Manage Subroles' },
+      { path: 'USR', component: UserDashboardComponent, title: 'User Dashboard' },
+      { path: 'WDB', component: WorklistComponent, title: 'Worklist' }
     ]
   }
 ];

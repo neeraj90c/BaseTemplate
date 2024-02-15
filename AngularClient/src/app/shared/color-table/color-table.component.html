@@ -1,7 +1,8 @@
 <div>
-    <table id="example" class="table table-bordered com_table" style="width: 100%;">
+    <table datatable class="row-border hover table table-bordered com_table" style="width: 100%;">
         <thead>
             <tr class="text-dark" style="border-left: 5px solid var(--orange-col);">
+                <th scope="col">SrNo</th>
              
                 <th scope="col" *ngFor="let col of columns">{{col.colName}}</th>
 
@@ -14,7 +15,7 @@
 
                 <tr *ngFor="let rows of tableData; let i = index" [style.border-left]="'5px solid #' + WCColors[i % WCColors.length]">
 
-
+                    <td>{{i+1}}</td>
                     <td *ngFor="let col of columns">
                         <div [ngClass]="enableBadge===col.colName? 'badge badge-secondary font-l':''"
                         [style.background-color]="enableBadge===col.colName? '#' + WCColors[i % WCColors.length]:''">{{ rows[col.colData] }}</div>

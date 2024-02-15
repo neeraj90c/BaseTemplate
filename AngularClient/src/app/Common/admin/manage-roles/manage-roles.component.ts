@@ -7,7 +7,7 @@ import { UserService } from 'src/app/services/user.service';
 import { ConfirmmodalserviceService } from 'src/app/shared/confirm-delete-modal/confirmmodalservice.service';
 import { CommonService } from '../../services/common.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserRole } from 'src/app/interface/UserRoleDTO';
+import { RoleList, RolesDTO } from 'src/app/interface/UserRoleDTO';
 
 @Component({
   selector: 'app-manage-roles',
@@ -18,29 +18,25 @@ export class ManageRolesComponent implements OnInit {
 
   constructor(private _commonService: CommonService, private router: Router, public modalService: NgbModal, public _userService: UserService, private confirmmodalserviceService: ConfirmmodalserviceService, private route: ActivatedRoute) { }
   ngOnInit(): void {
-    let currentParams = this.route.snapshot.queryParams
-    if (Object.keys(currentParams).length === 0) {
-      this.router.navigate(['/RAD'], { queryParams: { pageNo: this.UserRoleDTO.pageNo, pageSize: this.UserRoleDTO.pageSize } })
-    } else {
-      this.UserRoleDTO.pageSize = currentParams['pageSize'] as number
-      this.UserRoleDTO.pageNo = currentParams['pageNo'] as number
-    }
+    // let currentParams = this.route.snapshot.queryParams
+    // if (Object.keys(currentParams).length === 0) {
+    //   this.router.navigate(['/RAD'], { queryParams: { pageNo: this.UserRoleDTO.pageNo, pageSize: this.UserRoleDTO.pageSize } })
+    // } else {
+    //   this.UserRoleDTO.pageSize = currentParams['pageSize'] as number
+    //   this.UserRoleDTO.pageNo = currentParams['pageNo'] as number
+    // }
     this.RolesCrud(this.UserRoleDTO)
   }
 
   User = this._userService.User()
 
-  roleList: UserRole[] = [];
+  roleList: RolesDTO[] = [];
   filteredroles: any;
   editroleModel!: NgbModalRef;
 
   @ViewChild('manageRoleModal', { static: false }) manageRoleModal!: ElementRef;
 
-  UserRoleDTO: UserRole = {
-    pageNo: 1,
-    pageSize: 10,
-    rowNum: 0,
-    totalCount: 0,
+  UserRoleDTO: RolesDTO = {
     roleId: 0,
     roleName: '',
     roleCode: '',
@@ -83,7 +79,7 @@ export class ManageRolesComponent implements OnInit {
    * While rowData is the row object for delete and update/edit purpose
    * @param e This argument consists of Object for the particular row
    */
-  public handleActionClick(e: { actionName: string, rowData: UserRole }) {
+  public handleActionClick(e: { actionName: string, rowData: RolesDTO }) {
     const { actionName, rowData } = e
 
     if (actionName === 'Edit') {
@@ -97,7 +93,7 @@ export class ManageRolesComponent implements OnInit {
       });
     }
     else if (actionName === 'Delete') {
-      this.confirmmodalserviceService.openSwalModal(rowData.roleName as string, rowData).subscribe((res: UserRole) => {
+      this.confirmmodalserviceService.openSwalModal(rowData.roleName as string, rowData).subscribe((res: RolesDTO) => {
         if (res) {
           res.isActive = 0;
           res.isDeleted = 1;
@@ -150,7 +146,7 @@ export class ManageRolesComponent implements OnInit {
    * @param data  this is empty parameter for calling API
    * After that it calls a function that has subscription to an api and binds the data with the view.
    */
-  public RolesCrud(data: UserRole) {
+  public RolesCrud(data: RolesDTO) {
     data.actionUser = this.User.userId
     this._commonService.getRoleList(data).subscribe((rolesData) => {
       this.roleList = rolesData.roles;
@@ -162,10 +158,10 @@ export class ManageRolesComponent implements OnInit {
 
   // Page handling and query parameters 
   handlePageSizeChange(e: any) {
-    this.UserRoleDTO.pageNo = +e.currentPage
-    this.UserRoleDTO.pageSize = +e.pageSize
-    this.router.navigate(['/RAD'], { queryParams: { pageNo: this.UserRoleDTO.pageNo, pageSize: this.UserRoleDTO.pageSize } })
-    this.RolesCrud(this.UserRoleDTO)
+    // this.UserRoleDTO.pageNo = +e.currentPage
+    // this.UserRoleDTO.pageSize = +e.pageSize
+    // this.router.navigate(['/RAD'], { queryParams: { pageNo: this.UserRoleDTO.pageNo, pageSize: this.UserRoleDTO.pageSize } })
+    // this.RolesCrud(this.UserRoleDTO)
   }
 
 }

@@ -3,10 +3,6 @@ export interface UserData {
 }
 
 export interface UserMasterDTO {
-  pageNo: number;
-  pageSize: number;
-  rowNum: number;
-  totalCount: number;
   userId: number;
   firstName: string;
   middleName: string;
@@ -28,10 +24,9 @@ export interface UserMasterDTO {
   profileImageBase64: string;
   username: string;
   assignedWC: string;
-  assignedRoles: string;
-  roleId: number;
   companyId: number;
   companyName: string;
+  roleName: string;
 }
 
 export interface UserCredentials {

@@ -1,0 +1,204 @@
+
+<div>
+    <div class="d-flex align-items-center justify-content-between my-3" style="border-bottom:1px solid #CDD5E9">
+        <div class="main-heading">User WorkList- <h3 style="color: darkblue; display: inline-block;" id="UserWorklistTypeTitle">Work in Progress</h3></div>
+    </div>
+    <div>
+
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="TabularViewDiv" role="tabpanel">
+                <!--Tabs-->
+                <div class="nav nav-tabs tra_tab" id="nav-tab" role="tablist" onmouseout="window.dispatchEvent(new Event('resize'));">
+                    <a class="active" data-toggle="tab" href="#tab1" role="tab" aria-selected="true" onclick="DashboardWorkList.InProgressTicketTabOnClick()">Work in progress</a>
+                    <a class="InProgress" data-toggle="tab" href="#tab2" role="tab" aria-selected="true" onclick="DashboardWorkList.AssignedToMeTicketTabOnClick()">Assigned to me</a>
+                    <a data-toggle="tab" href="#tab3" role="tab" aria-selected="false" onclick="DashboardWorkList.OpenTicketTabOnClick()">Open Tickets</a>
+                    <a data-toggle="tab" href="#tab4" role="tab" aria-selected="false" onclick="DashboardWorkList.ClosedTicketTabOnClick()">Closed Tickets</a>
+                    <a data-toggle="tab" href="#tab5" role="tab" aria-selected="false" onclick="DashboardWorkList.AssignedToOthersTicketTabOnClick()">Assigned to Others</a>
+                </div>
+
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="tab1" role="tabpanel" style="padding-bottom: 50px;">
+                        <div class="row">
+                            <div style="bottom: 10px;" class="col-md-12">
+                                <table id="ClientWorkInProgressListTbl" class="table table-bordered com_table" style="width: 100%;">
+                                    <thead>
+                                        <tr class="text-dark">
+                                            <th style="border-left: 5px solid var(--orange-col);" scope="col">Sr No</th>
+                                            <th scope="col">Raised By</th>
+                                            <th scope="col">Ticket No</th>
+                                            <th scope="col">Ticket Date</th>
+                                            <th scope="col">Ticket Title</th>
+                                            <th scope="col">Assigned To</th>
+                                            <th scope="col">Ticket Status</th>
+                                            <th scope="col">Company</th>
+                                            <th scope="col">Target Date</th>
+                                            <th scope="col">Last Action</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ClientWorkInProgressListBody">
+                                        <tr>
+                                            <td colspan="7">
+                                                <font style="color:red;">No Records found..</font>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tab2" role="tabpanel">
+                        <div class="row">
+                            <div style="bottom: 10px;" class="col-md-12">
+                                <table id="ClientAssignedToMeListTbl" class="table table-bordered com_table" style="width: 100%;">
+                                    <thead>
+                                        <tr class="text-dark">
+                                            <th style="border-left: 5px solid var(--orange-col);" scope="col">Sr No</th>
+                                            <th scope="col">Raised By</th>
+                                            <th scope="col">Ticket No</th>
+                                            <th scope="col">Ticket Date</th>
+                                            <th scope="col">Ticket Title</th>
+                                            <th scope="col">Assigned To</th>
+                                            <th scope="col">Ticket Status</th>
+                                            <th scope="col">Company</th>
+                                            <th scope="col">Target Date</th>
+                                            <th scope="col">Last Action</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ClientAssignedToMeListBody">
+                                        <tr>
+                                            <td colspan="7">
+                                                <font style="color:red;">No Records found..</font>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tab3" role="tabpanel">
+                        <div class="row">
+                            <div style="bottom: 10px;" class="col-md-12">
+                                <table id="ClientOpenTicketsListTbl" class="table table-bordered com_table" style="width: 100%;">
+                                    <thead>
+                                        <tr class="text-dark">
+                                            <th style="border-left: 5px solid var(--orange-col);" scope="col">Sr No</th>
+                                            <th scope="col">Raised By</th>
+                                            <th scope="col">Ticket No</th>
+                                            <th scope="col">Ticket Date</th>
+                                            <th scope="col">Ticket Title</th>
+                                            <th scope="col">Assigned To</th>
+                                            <th scope="col">Ticket Status</th>
+                                            <th scope="col">Company</th>
+                                            <th scope="col">Target Date</th>
+                                            <th scope="col">Last Action</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ClientOpenTicketsListBody">
+                                        <tr>
+                                            <td colspan="7">
+                                                <font style="color:red;">No Records found..</font>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tab4" role="tabpanel">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        Start Date
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="col-auto">
+                                            <input type="date" class="form-control form-control-sm" id="ClosedTicketsStartDate">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        End Date
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="col-auto">
+                                            <input type="date" class="form-control form-control-sm" id="ClosedTicketsEndDate">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="col-auto">
+                                            <button class="btn btn-primary btn-sm" onclick="DashboardWorkList.LoadAll()">Load Data</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div style="bottom: 10px;" class="col-md-12">
+                                <table id="ClientClosedTicketsListTbl" class="table table-bordered com_table" style="width: 100%;">
+                                    <thead>
+                                        <tr class="text-dark">
+                                            <th style="border-left: 5px solid var(--orange-col);" scope="col">Sr No</th>
+                                            <th scope="col">Raised By</th>
+                                            <th scope="col">Ticket No</th>
+                                            <th scope="col">Ticket Date</th>
+                                            <th scope="col">Ticket Title</th>
+                                            <th scope="col">Assigned To</th>
+                                            <th scope="col">Ticket Status</th>
+                                            <th scope="col">Company</th>
+                                            <th scope="col">Target Date</th>
+                                            <th scope="col">Last Action</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ClientClosedTicketsListBody">
+                                        <tr>
+                                            <td colspan="7">
+                                                <font style="color:red;">No Records found..</font>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tab5" role="tabpanel">
+                        <div class="row">
+                            <div style="bottom: 10px;" class="col-md-12">
+                                <table id="ClientAssignedToOthersListTbl" class="table table-bordered com_table" style="width: 100%;">
+                                    <thead>
+                                        <tr class="text-dark">
+                                            <th style="border-left: 5px solid var(--orange-col);" scope="col">Sr No</th>
+                                            <th scope="col">Raised By</th>
+                                            <th scope="col">Ticket No</th>
+                                            <th scope="col">Ticket Date</th>
+                                            <th scope="col">Ticket Title</th>
+                                            <th scope="col">Assigned To</th>
+                                            <th scope="col">Ticket Status</th>
+                                            <th scope="col">Company</th>
+                                            <th scope="col">Target Date</th>
+                                            <th scope="col">Last Action</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ClientAssignedToOthersListBody">
+
+                                        <tr>
+                                            <td colspan="7">
+                                                <font style="color:red;">No Records found..</font>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

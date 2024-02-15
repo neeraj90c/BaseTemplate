@@ -13,6 +13,8 @@ import { ManageMenuComponent } from './admin/manage-menu/manage-menu.component';
 import { UserComponent } from './user/user/user.component';
 import { ManageSubrolesComponent } from './admin/manage-subroles/manage-subroles.component';
 import { WelcomeComponent } from './welcome/welcome.component';
+import { UserDashboardComponent } from './user/user-dashboard/user-dashboard.component';
+import { WorklistComponent } from '../Ticket/worklist/worklist.component';
 
 
 
@@ -26,6 +28,8 @@ import { WelcomeComponent } from './welcome/welcome.component';
     UserComponent,
     ManageSubrolesComponent,
     WelcomeComponent,
+    UserDashboardComponent,
+    WorklistComponent,
 
   ],
   imports: [
