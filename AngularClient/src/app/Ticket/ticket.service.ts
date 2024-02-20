@@ -2,13 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { ClientWorkListDTO, TicketActivityList, TicketAsigneeList, TicketCommentDTO, TicketList, UserList } from './interface/ticket.interface';
+import { ClientWorkListDTO, SupportTicketDTO, TicketActivityList, TicketAsigneeDTO, TicketAsigneeList, TicketCommentDTO, TicketList, UserList } from './interface/ticket.interface';
 import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root'
 })
 export class TicketService {
-
   private BaseURL = environment.apiURL;
 
   constructor(private http: HttpClient, private router: Router) { }
@@ -37,4 +36,13 @@ export class TicketService {
   getAllUserList(): Observable<UserList> {
     return this.http.get<UserList>(`${this.BaseURL}/users/GetAllUserList`);
   }
+
+  takeOverTicket(data:{ticketId: number, actionUser: string, assignedTo: string}):Observable<SupportTicketDTO> {
+    return this.http.post<SupportTicketDTO>(`${this.BaseURL}/Ticket/AssignToUser`,data);
+  }
+
+  ticketStatusUpdate(data:TicketAsigneeDTO):Observable<TicketAsigneeList>{
+    return this.http.post<TicketAsigneeList>(`${this.BaseURL}/TicketAsignee/UpdateStatus`,data)
+  }
+
 }

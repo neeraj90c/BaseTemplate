@@ -1,19 +1,22 @@
 import { Component, ElementRef, SecurityContext, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TicketService } from '../../ticket.service';
-import { SupportTicketDTO, TicketActivityDTO, TicketActivityList, TicketCommentDTO, TicketUserDTO, UserList } from '../../interface/ticket.interface';
+import { SupportTicketDTO, TicketActivityDTO, TicketActivityList, TicketAsigneeDTO, TicketCommentDTO, TicketUserDTO, UserList } from '../../interface/ticket.interface';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { formatDate } from '@angular/common';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { FormControl, FormGroup } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
+import { ToastrService } from 'ngx-toastr';
+
 @Component({
   selector: 'app-view-ticket',
   templateUrl: './view-ticket.component.html',
   styleUrls: ['./view-ticket.component.scss']
 })
 export class ViewTicketComponent {
+  WCColors = ["c584d3", "a084d2", "60a5e8", "60d9d9", "5ce7a1", "aae272", "fce153", "f8c459", "febc5a", "eb8a5b"];
   User = this._userService.User()
   ticketId!: number;
   ticketInfo: SupportTicketDTO = {
@@ -64,61 +67,35 @@ export class ViewTicketComponent {
   ticketComments: TicketActivityDTO[] = []
   userList: TicketUserDTO[] = []
 
+  ticketAsignees: TicketAsigneeDTO[] = []
+
   commentForm = new FormGroup({
     htmlContent: new FormControl('')
   })
-
-  editorConfig: AngularEditorConfig = {
-    editable: true,
-    spellcheck: true,
-    height: 'auto',
-    minHeight: '150px',
-    maxHeight: 'auto',
-    width: 'auto',
-    minWidth: '0',
-    translate: 'yes',
-    enableToolbar: true,
-    showToolbar: true,
-    placeholder: 'Enter text here...',
-    defaultParagraphSeparator: '',
-    defaultFontName: '',
-    defaultFontSize: '',
-    fonts: [
-      { class: 'arial', name: 'Arial' },
-      { class: 'times-new-roman', name: 'Times New Roman' },
-      { class: 'calibri', name: 'Calibri' },
-      { class: 'comic-sans-ms', name: 'Comic Sans MS' }
-    ],
-    customClasses: [
-      {
-        name: 'quote',
-        class: 'quote',
-      },
-      {
-        name: 'redText',
-        class: 'redText'
-      },
-      {
-        name: 'titleText',
-        class: 'titleText',
-        tag: 'h1',
-      },
-    ],
-    toolbarPosition: 'top',
+assigneeTableLoading: boolean = false;
+resolverList:SupportTicketDTO[]=[]
+activityLoading: boolean = false;
 
 
-  };
-
-  constructor(private route: ActivatedRoute, private _ticketService: TicketService, private sanitizer: DomSanitizer, private modalService: NgbModal, private _userService: UserService) { }
+  constructor(private route: ActivatedRoute, private _ticketService: TicketService, private sanitizer: DomSanitizer, private modalService: NgbModal, private _userService: UserService, private toaster: ToastrService) { }
 
   ngOnInit(): void {
+    this.activityLoading = true
     this.GetAllUserList();
+    this.getTicketResolverList();
     this.route.params.subscribe(params => {
       this.ticketId = +params['id'];
       this.getTicketDetail(this.ticketId)
     });
   }
 
+  getTicketResolverList(){
+    this._ticketService.getTicketResolverList({actionUser: this.User.userId}).subscribe(res=>{
+      console.log(res.tickets);
+      this.resolverList = res.tickets
+      
+    })
+  }
 
   getTicketDetail(id: number) {
     let data = {
@@ -126,8 +103,12 @@ export class ViewTicketComponent {
     }
     this._ticketService.getTicketDetailsById(data).subscribe(res => {
       this.ticketInfo = res.tickets[0]
-      this._ticketService.getTicketComments({ ticketId: this.ticketInfo.ticketId }).subscribe(res => {
-        this.ticketComments = res.ticketActivities
+      this._ticketService.getTicketComments({ ticketId: this.ticketInfo.ticketId }).subscribe({
+        next:(res) => {
+          this.ticketComments = res.ticketActivities
+        },complete:()=>{
+          this.activityLoading = false
+        }
       })
     })
   }
@@ -167,15 +148,28 @@ export class ViewTicketComponent {
   }
 
   AssignTicketToUserOnClick() {
+    this.assigneeTableLoading = true
     this.detailActivityDivVisible = false
     this.assignTicketToUserDivVisible = !this.assignTicketToUserDivVisible
+    this._ticketService.getAllByTicketId({ ticketId: this.ticketId }).subscribe(res => {
+      this.ticketAsignees = res.ticketAsignee
+      this.assigneeTableLoading = false
+    })
   }
   TakeOverButtonOnClick() {
+    let assignModel = {
+      ticketId: this.ticketInfo.ticketId,
+      actionUser: this.User.userId.toString(),
+      assignedTo: this.User.userId.toString()
+    };
+    this._ticketService.takeOverTicket(assignModel).subscribe(res => {
+      this.toaster.success(`ticket #${res.ticketId} taken over successfully!`)
 
+    })
   }
 
   SupportTicket_Forceclose() {
-
+    this.toaster.warning('Feature Not Available!')
   }
 
   @ViewChild('CreateTicketModal') ticketModalContent!: ElementRef
@@ -187,22 +181,53 @@ export class ViewTicketComponent {
   SupportTicket_ReOpen() {
 
   }
-  handleRTEsubmit(event:any){
-    console.log(event);
-  }
-  InsertTicketActivity() {
-    console.log(this.commentForm.value);
+  handleRTEsubmit(event: { value: string, clearText: () => void }) {
+
     let data: TicketCommentDTO = {
       createdBy: this.User.userId.toString(),
-      ticketComments: this.commentForm.controls.htmlContent.value as string,
+      ticketComments: event.value,
       ticketId: this.ticketInfo.ticketId
     }
 
     this._ticketService.getTicketComments(data).subscribe(res => {
       this.commentForm.reset()
       this.ticketComments = res.ticketActivities
-    })
+      event.clearText();
+      this.toaster.success("Comment Added!")
 
+    })
   }
+
+
+  TicketAsigneeStartTask(ticketAsignee: TicketAsigneeDTO) {
+    ticketAsignee.aStatus = "InProgress",
+      ticketAsignee.actionUser = this.User.userId.toString(),
+      this._ticketService.ticketStatusUpdate(ticketAsignee).subscribe(res => {
+        console.log(res.ticketAsignee[0]);
+        ticketAsignee = res.ticketAsignee[0]
+        this.toaster.success('Ticket Started!')
+
+      })
+  }
+  TicketAsigneeCloseTask(ticketAsignee: TicketAsigneeDTO){
+    ticketAsignee.aStatus = "Close";
+    ticketAsignee.actionUser = this.User.userId.toString();
+    this._ticketService.ticketStatusUpdate(ticketAsignee).subscribe(res => {
+      console.log(res.ticketAsignee[0]);
+      ticketAsignee = res.ticketAsignee[0]
+      this.toaster.success('Ticket Closed!!')
+
+    })
+  }
+  TicketAsigneeHoldTask(ticketAsignee: TicketAsigneeDTO){
+    ticketAsignee.aStatus = "Hold";
+    ticketAsignee.actionUser = this.User.userId.toString(),
+    this._ticketService.ticketStatusUpdate(ticketAsignee).subscribe(res => {
+      console.log(res.ticketAsignee[0]);
+      ticketAsignee = res.ticketAsignee[0]
+      this.toaster.success('Ticket on Hold!!')
+    })
+  }
+
 
 }

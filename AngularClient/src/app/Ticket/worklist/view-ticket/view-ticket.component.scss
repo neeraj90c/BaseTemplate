@@ -39,3 +39,18 @@ body {padding: 0; margin: 0; font-size: 14px; color: #303e3d;}
         }
     }
 }
+
+.side_status{
+    table{
+        tr{
+            th{
+                text-align: start !important;
+                width: 50%;
+            }
+            td{
+                width: 50%;
+            }
+            
+        }
+    }
+}
