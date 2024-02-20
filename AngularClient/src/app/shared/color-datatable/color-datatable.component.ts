@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { PdfGeneratorService } from '../pdf-generator/pdf-generator';
 
 @Component({
   selector: 'app-color-datatable',
@@ -6,20 +7,21 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./color-datatable.component.scss']
 })
 export class ColorDatatableComponent {
+  constructor(private pdfGeneratorService: PdfGeneratorService) { }
   currentPage: number = 1;
   totalPages: number = 0;
   selectedPageSize: number = 10;
   sortingColumn: string = '';
   sortingOrder: 'asc' | 'desc' = 'asc'; // Initial sorting order
-
+  loading = true
   WCColors = ["c584d3", "a084d2", "60a5e8", "60d9d9", "5ce7a1", "aae272", "fce153", "f8c459", "febc5a", "eb8a5b"];
-  filteredData: any[] = [];
+  filteredData!: any[] | undefined;
 
   //WCColors = ["c584d3", "a084d2", "60a5e8", "60d9d9", "5ce7a1", "aae272", "fce153", "f8c459", "febc5a", "eb8a5b"];
   //filteredData: any[] = [];
 
-  @Input() columns!: { colName: string, colData: string }[];
-  @Input() tableData: any[] = [];
+  @Input() columns!: { colName: string, colData: string, enableCurrency?: boolean, isDate?: boolean }[];
+  @Input() tableData!: any[];
   @Input() enableCheckboxColumn: boolean = false;
   @Input() checkboxColumnLabel: string = 'Select';
   @Input() enableActionColumn: boolean = false;
@@ -39,6 +41,7 @@ export class ColorDatatableComponent {
     this.tableData.forEach((item, index) => {
       item.srno = this.startingSerialNumber + index;
     });
+
   }
 
   ngOnChanges(): void {
@@ -46,7 +49,7 @@ export class ColorDatatableComponent {
     this.updateFilteredData();
   }
   calculateStartingSerialNumber(): void {
-    this.tableData.map(i=>{
+    this.tableData.map(i => {
       i.SrNo
     })
   }
@@ -57,7 +60,10 @@ export class ColorDatatableComponent {
 
   updateFilteredData(): void {
     const startIndex = (this.currentPage - 1) * this.selectedPageSize;
-    this.filteredData = this.tableData.slice(startIndex, startIndex + this.selectedPageSize);
+    this.filteredData = this.tableData?.slice(startIndex, startIndex + this.selectedPageSize);
+    setTimeout(() => {
+      this.loading = false
+    }, 2200)
   }
 
   goToFirstPage(): void {
@@ -77,7 +83,7 @@ export class ColorDatatableComponent {
     const halfTotalPagesToShow = Math.floor(totalPagesToShow / 2);
     const startPage = Math.max(1, this.currentPage - halfTotalPagesToShow);
     const endPage = Math.min(this.totalPages, startPage + totalPagesToShow - 1);
-  
+
     // If there are many pages, adjust the range to show only a subset
     if (this.totalPages > totalPagesToShow) {
       if (this.currentPage <= halfTotalPagesToShow + 1) {
@@ -91,7 +97,7 @@ export class ColorDatatableComponent {
       return Array.from({ length: this.totalPages }, (_, i) => i + 1);
     }
   }
-  
+
 
   goToNumberPage(pageNumber: number): void {
     if (pageNumber > 0 && pageNumber <= this.totalPages) {
@@ -149,4 +155,14 @@ export class ColorDatatableComponent {
     this.currentPage = 1;
     this.updateFilteredData();
   }
+
+  generatePDF() {
+    console.log('Button clicked. Generating PDF...');
+    this.pdfGeneratorService.generatePDF('TechnoTech ERP', this.tableData, this.columns);
+  }
+
+  isNumber(data: any): boolean {
+    return !isNaN(data)
+  }
+
 }

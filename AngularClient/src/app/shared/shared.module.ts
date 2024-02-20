@@ -15,8 +15,10 @@ import { PaginationComponent } from './pagination/pagination.component';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { ExpandingTableSkeletonLoaderComponent } from './expanding-table-skeleton-loader/expanding-table-skeleton-loader.component';
 import { ToastrModule } from 'ngx-toastr';
-import { DataTablesModule } from "angular-datatables";
 import { ColorDatatableComponent } from './color-datatable/color-datatable.component';
+import { PdfGeneratorService } from './pdf-generator/pdf-generator';
+import { PdfGeneratorComponent } from './pdf-generator/pdf-generator.component';
+import { AngularEditorModule } from '@kolkov/angular-editor';
 
 
 @NgModule({
@@ -30,6 +32,8 @@ import { ColorDatatableComponent } from './color-datatable/color-datatable.compo
     PaginationComponent,
     ExpandingTableSkeletonLoaderComponent,
     ColorDatatableComponent,
+    PdfGeneratorComponent
+
   ],
   imports: [
     CommonModule,
@@ -41,7 +45,8 @@ import { ColorDatatableComponent } from './color-datatable/color-datatable.compo
     ChartModule,
     NgxSkeletonLoaderModule,
     ToastrModule,
-    DataTablesModule
+    AngularEditorModule 
+
   ],
   exports: [
     FormsModule,
@@ -59,8 +64,10 @@ import { ColorDatatableComponent } from './color-datatable/color-datatable.compo
     NgxSkeletonLoaderModule,
     ExpandingTableSkeletonLoaderComponent,
     ToastrModule,
-    DataTablesModule,
-    ColorDatatableComponent
-  ]
+    ColorDatatableComponent,
+    PdfGeneratorComponent,
+    AngularEditorModule 
+  ],
+  providers: [PdfGeneratorService],
 })
 export class SharedModule { }

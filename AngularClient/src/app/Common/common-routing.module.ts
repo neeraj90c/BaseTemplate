@@ -9,7 +9,13 @@ import { UserComponent } from './user/user/user.component';
 import { ManageSubrolesComponent } from './admin/manage-subroles/manage-subroles.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { UserDashboardComponent } from './user/user-dashboard/user-dashboard.component';
-import { WorklistComponent } from '../Ticket/worklist/worklist.component';
+import { WorklistComponent } from '../ticket/worklist/worklist.component';
+import { WorkInProgressComponent } from '../ticket/worklist/work-in-progress/work-in-progress.component';
+import { AssignedToMeComponent } from '../ticket/worklist/assigned-to-me/assigned-to-me.component';
+import { OpenTicketComponent } from '../ticket/worklist/open-ticket/open-ticket.component';
+import { ClosedTicketComponent } from '../ticket/worklist/closed-ticket/closed-ticket.component';
+import { AssignedToOthersComponent } from '../ticket/worklist/assigned-to-others/assigned-to-others.component';
+import { ViewTicketComponent } from '../ticket/worklist/view-ticket/view-ticket.component';
 
 
 
@@ -25,7 +31,17 @@ const routes: Routes = [
       { path: 'USRL', component: UserComponent, title: 'User' },
       { path: 'SAD', component: ManageSubrolesComponent, title: 'Manage Subroles' },
       { path: 'USR', component: UserDashboardComponent, title: 'User Dashboard' },
-      { path: 'WDB', component: WorklistComponent, title: 'Worklist' }
+      {
+        path: 'WDB', component: WorklistComponent, title: 'Worklist' ,children: [
+          { path: '', redirectTo: 'work-in-progress', pathMatch: 'full' },
+          { path: 'work-in-progress', component: WorkInProgressComponent, title: 'Work In Progress' },
+          { path: 'assigned-to-me', component: AssignedToMeComponent, title: 'Assigned To Me' },
+          { path: 'open-tickets', component: OpenTicketComponent, title: 'Open Tickets' },
+          { path: 'closed-tickets', component:ClosedTicketComponent, title: 'Closed Tickets' },
+          { path: 'assigned-to-others', component: AssignedToOthersComponent, title: 'Assigned To Others' }
+        ]
+      },
+      { path: 'view-ticket/:id', component: ViewTicketComponent, title: 'View Ticket' },
     ]
   }
 ];

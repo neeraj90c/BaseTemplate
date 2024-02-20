@@ -1,0 +1,28 @@
+<button class="btn btn-sm btn-outline-danger" (click)="startGenerating()" *ngIf="!loading">Generate PDF<i class="bi bi-filetype-pdf ml-1"></i></button>
+<button class="btn btn-sm btn-outline-danger" *ngIf="loading">Generating PDF...</button>
+
+
+<div #dataTable style="display:none;"> 
+    <table class="table table-bordered com_table  mb-0" style="width: 100%;">
+        <thead>
+            <tr class="text-dark" style="border-left: 5px solid var(--orange-col);">
+                <th scope="col">SrNo</th>
+             
+                <th scope="col" *ngFor="let col of columns">
+                  {{ col.colName }}
+                </th>
+            </tr>
+        </thead>
+        <tbody id="TemplateListBody">
+            <ng-container>
+    
+                <tr *ngFor="let rows of data; let i = index">
+                    <td>{{i+1}}</td>
+                    <td *ngFor="let col of columns">
+                        {{ rows[col.colData] }}
+                    </td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+</div>
