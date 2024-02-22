@@ -110,18 +110,23 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="btn-group" role="group" aria-label="Basic outlined example">
-                    <button type="button" id="TicketCommentBtn" class="btn btn-outline-primary btn-sm"
-                        (click)="toggleCommentDialogOnClick()">Comment</button>
-                    <button type="button" id="TicketTakeOverBtn" class="btn btn-outline-primary btn-sm"
-                        (click)="TakeOverButtonOnClick()">Take Over</button>
-                    <button type="button" id="TicketAssignBtn" class="btn btn-outline-primary btn-sm"
-                        (click)="AssignTicketToUserOnClick()">Assign To</button>
-                    <button type="button" id="TicketForceCloseBtn" class="btn btn-outline-primary btn-sm"
-                        (click)="SupportTicket_Forceclose()">Force Close</button>
-                    <button type="button" id="TicketEditBtn" class="btn btn-outline-primary btn-sm"
-                        (click)="OpenEditTicketModal()">Edit</button>
-                    <button type="button" id="TicketReOpenBtn" class="btn btn-outline-primary btn-sm"
-                        (click)="SupportTicket_ReOpen()">ReOpen</button>
+                    <ng-container *ngIf="ticketInfo.ticketStatus != 'Close' && ticketInfo.ticketStatus != 'Force Closed'">
+
+                        <button type="button" id="TicketCommentBtn" class="btn btn-outline-primary btn-sm"
+                            (click)="toggleCommentDialogOnClick()">Comment</button>
+                        <button type="button" id="TicketTakeOverBtn" class="btn btn-outline-primary btn-sm"
+                            (click)="TakeOverButtonOnClick()">Take Over</button>
+                        <button type="button" id="TicketAssignBtn" class="btn btn-outline-primary btn-sm"
+                            (click)="AssignTicketToUserOnClick()">Assign To</button>
+                        <button type="button" id="TicketForceCloseBtn" class="btn btn-outline-primary btn-sm"
+                            (click)="SupportTicket_Forceclose()">Force Close</button>
+                        <button type="button" id="TicketEditBtn" class="btn btn-outline-primary btn-sm"
+                            (click)="OpenEditTicketModal()">Edit</button>
+                    </ng-container>
+                        <ng-container *ngIf="ticketInfo.ticketStatus == 'Close'|| ticketInfo.ticketStatus == 'Force Closed'">
+                            <button type="button" id="TicketReOpenBtn" class="btn btn-outline-primary btn-sm"
+                                (click)="SupportTicket_ReOpen()" >ReOpen</button>
+                        </ng-container>
                 </div>
             </div>
             <div class="col-md-4" style="text-align:right;">
@@ -210,10 +215,10 @@
             <div class="row">
                 <div class="col-md-12">
                     <div id="dataFormDiv">
-                        <div class="row">
+                        <form class="row" [formGroup]="ticketAssigneeForm">
                             <div class="col-md-3">
                                 <label>Assign To</label>
-                                <select class="form-control" id="assignToList">
+                                <select class="form-control" id="assignToList" formControlName="assigneeListID">
                                     <option value="0">Please Select...</option>
                                     <option *ngFor="let user of resolverList" [value]="user.userId">{{user.name}}
                                     </option>
@@ -222,20 +227,20 @@
                             <div class="col-md-1">
                                 <label>Work Ratio</label>
                                 <input id="TicketAsigneeWorkRatio" class="form-control" type="number" max="100" min="0"
-                                    value="100" />
+                                    value="100" formControlName="workRatio" />
                             </div>
                             <div class="col-md-6">
                                 <label>Description</label><br />
-                                <input id="TicketAsigneeDescription" class="form-control" />
+                                <input id="TicketAsigneeDescription" class="form-control" formControlName="ticketAsigneeDescription" />
                             </div>
                             <div class="col-md-2">
                                 <br />
-                                <button class="btn btn-primary btn-sm mt-2" onclick="TicketAsignee.SaveAsignee()"
+                                <button class="btn btn-primary btn-sm mt-2" (click)="TicketAsigneeSaveAsignee()"
                                     id="TicketAsigneeSaveUpdateBtn"> Save</button>
-                                <button class="btn btn-sm mt-2" onclick="TicketAsignee.ClearAsigneeForm()"
+                                <button class="btn btn-sm mt-2" (click)="assignTicketToUserDivVisible  = false"
                                     style="outline:1px solid grey;"> Cancel</button>
                             </div>
-                        </div>
+                        </form>
                         <div class="row">
                             <br />
                         </div>
@@ -259,6 +264,7 @@
                                     <ng-container *ngIf="ticketAsignees.length > 0; else noRecords">
                                         <tr *ngFor="let ticketAsignee of ticketAsignees; let i = index"
                                             [style.border-left]="'5px solid #' + WCColors[i % WCColors.length]">
+                                            <td>{{i+1}}</td>
                                             <td>{{ticketAsignee.assignedToName}} </td>
                                             <td>{{ticketAsignee.workRatio}} </td>
                                             <td>{{ticketAsignee.assignDesc}} </td>

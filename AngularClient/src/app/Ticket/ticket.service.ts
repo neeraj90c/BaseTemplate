@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class TicketService {
+
   private BaseURL = environment.apiURL;
 
   constructor(private http: HttpClient, private router: Router) { }
@@ -43,6 +44,12 @@ export class TicketService {
 
   ticketStatusUpdate(data:TicketAsigneeDTO):Observable<TicketAsigneeList>{
     return this.http.post<TicketAsigneeList>(`${this.BaseURL}/TicketAsignee/UpdateStatus`,data)
+  }
+  assignTicketToUser(data:TicketAsigneeDTO):Observable<TicketAsigneeList>{
+    return this.http.post<TicketAsigneeList>(`${this.BaseURL}/TicketAsignee/Insert`,data)
+  }
+  reopenTicket(data:{ ticketId: number, actionUser: number }):Observable<any> {
+    return this.http.post<any>(`${this.BaseURL}/ticket/ReOpenTicket`,data)
   }
 
 }

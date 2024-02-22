@@ -6,7 +6,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { formatDate } from '@angular/common';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { ToastrService } from 'ngx-toastr';
 
@@ -72,9 +72,14 @@ export class ViewTicketComponent {
   commentForm = new FormGroup({
     htmlContent: new FormControl('')
   })
-assigneeTableLoading: boolean = false;
-resolverList:SupportTicketDTO[]=[]
-activityLoading: boolean = false;
+  ticketAssigneeForm = new FormGroup({
+    assigneeListID: new FormControl('', [Validators.required]),
+    workRatio: new FormControl(),
+    ticketAsigneeDescription: new FormControl()
+  })
+  assigneeTableLoading: boolean = false;
+  resolverList: SupportTicketDTO[] = []
+  activityLoading: boolean = false;
 
 
   constructor(private route: ActivatedRoute, private _ticketService: TicketService, private sanitizer: DomSanitizer, private modalService: NgbModal, private _userService: UserService, private toaster: ToastrService) { }
@@ -89,11 +94,11 @@ activityLoading: boolean = false;
     });
   }
 
-  getTicketResolverList(){
-    this._ticketService.getTicketResolverList({actionUser: this.User.userId}).subscribe(res=>{
+  getTicketResolverList() {
+    this._ticketService.getTicketResolverList({ actionUser: this.User.userId }).subscribe(res => {
       console.log(res.tickets);
       this.resolverList = res.tickets
-      
+
     })
   }
 
@@ -104,9 +109,9 @@ activityLoading: boolean = false;
     this._ticketService.getTicketDetailsById(data).subscribe(res => {
       this.ticketInfo = res.tickets[0]
       this._ticketService.getTicketComments({ ticketId: this.ticketInfo.ticketId }).subscribe({
-        next:(res) => {
+        next: (res) => {
           this.ticketComments = res.ticketActivities
-        },complete:()=>{
+        }, complete: () => {
           this.activityLoading = false
         }
       })
@@ -155,6 +160,12 @@ activityLoading: boolean = false;
       this.ticketAsignees = res.ticketAsignee
       this.assigneeTableLoading = false
     })
+
+    this.ticketAssigneeForm.patchValue({
+      assigneeListID: '0',
+      workRatio: 100,
+      ticketAsigneeDescription: ''
+    })
   }
   TakeOverButtonOnClick() {
     let assignModel = {
@@ -175,11 +186,23 @@ activityLoading: boolean = false;
   @ViewChild('CreateTicketModal') ticketModalContent!: ElementRef
   ticketModal!: NgbModalRef
   OpenEditTicketModal() {
+
     this.ticketModal = this.modalService.open(this.ticketModalContent, { size: 'lg' })
   }
 
   SupportTicket_ReOpen() {
 
+    let data: { ticketId: number, actionUser: number } = {
+      ticketId: this.ticketInfo.ticketId,
+      actionUser: this.User.userId
+    }
+    this._ticketService.reopenTicket(data).subscribe(res => {
+      console.log(res);
+      this.GetAllUserList();
+      this.getTicketResolverList();
+      this.getTicketDetail(this.ticketId)
+
+    })
   }
   handleRTEsubmit(event: { value: string, clearText: () => void }) {
 
@@ -209,7 +232,7 @@ activityLoading: boolean = false;
 
       })
   }
-  TicketAsigneeCloseTask(ticketAsignee: TicketAsigneeDTO){
+  TicketAsigneeCloseTask(ticketAsignee: TicketAsigneeDTO) {
     ticketAsignee.aStatus = "Close";
     ticketAsignee.actionUser = this.User.userId.toString();
     this._ticketService.ticketStatusUpdate(ticketAsignee).subscribe(res => {
@@ -219,13 +242,40 @@ activityLoading: boolean = false;
 
     })
   }
-  TicketAsigneeHoldTask(ticketAsignee: TicketAsigneeDTO){
+  TicketAsigneeHoldTask(ticketAsignee: TicketAsigneeDTO) {
     ticketAsignee.aStatus = "Hold";
     ticketAsignee.actionUser = this.User.userId.toString(),
-    this._ticketService.ticketStatusUpdate(ticketAsignee).subscribe(res => {
-      console.log(res.ticketAsignee[0]);
-      ticketAsignee = res.ticketAsignee[0]
-      this.toaster.success('Ticket on Hold!!')
+      this._ticketService.ticketStatusUpdate(ticketAsignee).subscribe(res => {
+        console.log(res.ticketAsignee[0]);
+        ticketAsignee = res.ticketAsignee[0]
+        this.toaster.success('Ticket on Hold!!')
+      })
+  }
+
+  TicketAsigneeSaveAsignee() {
+    let assigneeForm = { ...this.ticketAssigneeForm.value }
+    let data: TicketAsigneeDTO = {
+      taId: 0,
+      ticketId: this.ticketInfo.ticketId,
+      assignedTo: assigneeForm.assigneeListID as string,
+      workRatio: assigneeForm.workRatio,
+      assignDesc: assigneeForm.ticketAsigneeDescription,
+      aStatus: 'Open',
+      actionUser: this.User.userId.toString(),
+      assignedToName: '',
+      assignedByName: ''
+    }
+    this.assigneeTableLoading = true
+    this._ticketService.assignTicketToUser(data).subscribe(res => {
+      this.ticketAsignees = res.ticketAsignee
+      this.toaster.success('Ticket Assigned!!')
+      this.assigneeTableLoading = false
+      this.ticketAssigneeForm.reset();
+      this.ticketAssigneeForm.patchValue({
+        assigneeListID: '0',
+        workRatio: 100,
+        ticketAsigneeDescription: ''
+      })
     })
   }
 
