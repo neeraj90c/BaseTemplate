@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { PdfGeneratorService } from '../pdf-generator/pdf-generator';
+import { PrintService } from '../print/print.service';
 
 @Component({
   selector: 'app-color-datatable',
@@ -7,7 +8,8 @@ import { PdfGeneratorService } from '../pdf-generator/pdf-generator';
   styleUrls: ['./color-datatable.component.scss']
 })
 export class ColorDatatableComponent {
-  constructor(private pdfGeneratorService: PdfGeneratorService) { }
+  @ViewChild('dataTable') pdfTableContainer!: ElementRef;
+  constructor(private pdfGeneratorService: PdfGeneratorService,private printService: PrintService) { }
   currentPage: number = 1;
   totalPages: number = 0;
   selectedPageSize: number = 10;
@@ -164,5 +166,15 @@ export class ColorDatatableComponent {
   isNumber(data: any): boolean {
     return !isNaN(data)
   }
+  printTable() {
+    const table = this.pdfTableContainer.nativeElement.querySelector('table');
+    if (table) {
+      this.printService.printTable(table);
+    }
+  }
 
 }
+function formateDate(arg0: Date, arg1: string, arg2: string) {
+  throw new Error('Function not implemented.');
+}
+

@@ -1,9 +1,10 @@
 <button class="btn btn-sm btn-outline-danger" (click)="startGenerating()" *ngIf="!loading">Generate PDF<i class="bi bi-filetype-pdf ml-1"></i></button>
 <button class="btn btn-sm btn-outline-danger" *ngIf="loading">Generating PDF...</button>
-
+<button class="btn btn-sm btn-outline-danger" (click)="printTable()">Print</button>
+<button class="btn btn-sm btn-outline-danger" (click)="exportToExcel()">export to excel</button>
 
 <div #dataTable style="display:none;"> 
-    <table class="table table-bordered com_table  mb-0" style="width: 100%;">
+    <table class="table table-bordered com_table  mb-0" style="width: 100%;" #tableRef>
         <thead>
             <tr class="text-dark" style="border-left: 5px solid var(--orange-col);">
                 <th scope="col">SrNo</th>
@@ -19,7 +20,7 @@
                 <tr *ngFor="let rows of data; let i = index">
                     <td>{{i+1}}</td>
                     <td *ngFor="let col of columns">
-                        {{ rows[col.colData] }}
+                        {{ col.isDate ? (rows[col.colData] | date:'dd/MM/yyyy') : rows[col.colData] }}
                     </td>
                 </tr>
             </ng-container>

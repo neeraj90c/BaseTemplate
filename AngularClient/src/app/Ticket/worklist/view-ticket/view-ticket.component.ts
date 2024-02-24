@@ -9,6 +9,7 @@ import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { ToastrService } from 'ngx-toastr';
+import { RichTextEditorComponent } from 'src/app/shared/rich-text-editor/rich-text-editor.component';
 
 @Component({
   selector: 'app-view-ticket',
@@ -180,14 +181,53 @@ export class ViewTicketComponent {
   }
 
   SupportTicket_Forceclose() {
-    this.toaster.warning('Feature Not Available!')
+    let data = { ...this.ticketInfo }
+    data.actionUser = this.User.userId
+    data.ticketStatus = 'Close'
+    this._ticketService.forceCloseTicket(data).subscribe(res => {
+      this.getTicketDetail(this.ticketId)
+      this.toaster.warning('Ticket Closed!')
+
+    })
   }
 
   @ViewChild('CreateTicketModal') ticketModalContent!: ElementRef
   ticketModal!: NgbModalRef
-  OpenEditTicketModal() {
+  updateTicketForm = new FormGroup({
+    title: new FormControl('', [Validators.required]),
+    ticketPriority: new FormControl(''),
+    ticketType: new FormControl(''),
+    targetDate: new FormControl(),
+    tagList: new FormControl(''),
+    affectsCustomer: new FormControl(false),
+    department: new FormControl(''),
+    raisedBy: new FormControl(''),
+    addField3: new FormControl(''),
+    category: new FormControl(''),
+    projectId: new FormControl(0)
+  })
 
-    this.ticketModal = this.modalService.open(this.ticketModalContent, { size: 'lg' })
+  @ViewChild('editor2') editor2!: RichTextEditorComponent;
+  OpenEditTicketModal() {
+    let ticketData = { ...this.ticketInfo }
+    this.updateTicketForm.patchValue({
+      title: ticketData.title,
+      ticketType: ticketData.ticketType,
+      category: ticketData.category,
+      tagList: ticketData.tagList,
+      ticketPriority: ticketData.ticketPriority,
+      affectsCustomer: ticketData.affectsCustomer.toLowerCase() === 'true' ? true : false,
+      targetDate: formatDate(ticketData.targetDate as Date, 'yyyy-MM-dd', 'en'),
+      projectId: ticketData.projectId,
+      department: ticketData.department,
+      raisedBy: ticketData.raisedBy,
+      addField3: ticketData.addField3
+
+    })
+    this.ticketModal = this.modalService.open(this.ticketModalContent, { size: 'xl' })
+    // this.editor2.setHtml(ticketData.ticketDesc)
+
+
   }
 
   SupportTicket_ReOpen() {
@@ -201,10 +241,11 @@ export class ViewTicketComponent {
       this.GetAllUserList();
       this.getTicketResolverList();
       this.getTicketDetail(this.ticketId)
+      this.toaster.success('Ticket Re-Opened')
 
     })
   }
-  handleRTEsubmit(event: { value: string, clearText: () => void }) {
+  handleRTEsubmit(event: { value: string, clearText: () => void, setHtml: (text: string) => void }) {
 
     let data: TicketCommentDTO = {
       createdBy: this.User.userId.toString(),
@@ -277,6 +318,34 @@ export class ViewTicketComponent {
         ticketAsigneeDescription: ''
       })
     })
+  }
+
+  TicketUpdate(event: { value: string, clearText: () => void, setHtml: (text: string) => void }) {
+    console.log(event.value);
+    let formData = { ...this.updateTicketForm.value }
+
+
+    let data = { ...this.ticketInfo }
+    data.title = formData.title as string
+    data.actionUser = this.User.userId
+    data.addField3 = formData.addField3 as string
+    data.affectsCustomer = formData.affectsCustomer ? 'true' : 'false'
+    data.category = formData.category as string
+    data.department = formData.department as string
+    data.projectId = formData.projectId as number
+    data.raisedBy = formData.raisedBy as string
+    data.tagList = formData.tagList as string
+    data.targetDate = formData.targetDate
+    data.ticketPriority = formData.ticketPriority as string
+    data.ticketType = formData.ticketType as string
+    data.ticketDesc = event.value as string
+
+    this._ticketService.manageTicket(data).subscribe(res => {
+      this.ticketModal.close();
+      this.getTicketDetail(this.ticketId)
+      this.toaster.success('Ticket Updated!')
+    })
+
   }
 
 

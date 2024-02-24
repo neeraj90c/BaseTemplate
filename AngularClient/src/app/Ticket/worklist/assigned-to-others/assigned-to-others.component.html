@@ -1,13 +1,13 @@
 <app-color-datatable [tableData]="AssignedToOthers" [columns]="[
     {colName:'Raised By',colData:'raisedBy'},
     {colName:'Ticket No',colData:'ticketId'},
-    {colName:'Ticket Date',colData:'createdOn'},
+    {colName:'Ticket Date',colData:'createdOn',isDate:true},
     {colName:'Ticket Title',colData:'title'},
     {colName:'Assigned To',colData:'assignedToName'},
     {colName:'Ticket Status',colData:'ticketStatus'},
     {colName:'Company',colData:'companyName'},
-    {colName:'Target Date',colData:'targetDate'},
-    {colName:'Last Action',colData:'modifiedOn'}
+    {colName:'Target Date',colData:'targetDate',isDate:true},
+    {colName:'Last Action',colData:'modifiedOn',isDate:true}
     ]"
     [enableActionColumn]="true"
     [actionColumnLabel]="'Action'"

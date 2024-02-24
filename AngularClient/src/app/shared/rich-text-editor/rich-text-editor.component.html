@@ -1,7 +1,9 @@
 <div id="rteEditor" (keyup)="onSubmit()">
 
 </div>
-
-<button class="btn btn-sm btn-primary my-2" (click)="onSubmit()">
-    Submit
-</button>
+<div class="d-flex justify-content-end">
+    <button class="btn btn-sm btn-primary my-2" (click)="onSubmit()">
+        Submit
+    </button>
+    <ng-content></ng-content>
+</div>

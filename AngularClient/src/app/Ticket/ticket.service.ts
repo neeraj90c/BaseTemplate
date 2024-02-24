@@ -51,5 +51,11 @@ export class TicketService {
   reopenTicket(data:{ ticketId: number, actionUser: number }):Observable<any> {
     return this.http.post<any>(`${this.BaseURL}/ticket/ReOpenTicket`,data)
   }
+  forceCloseTicket(data:SupportTicketDTO):Observable<SupportTicketDTO> {
+    return this.http.post<SupportTicketDTO>(`${this.BaseURL}/ticket/ForceCloseTicket`,data)
+  }
+  manageTicket(data:SupportTicketDTO):Observable<TicketList> {
+    return this.http.post<TicketList>(`${this.BaseURL}/ticket/ManageTicket`,data)
+  }
 
 }

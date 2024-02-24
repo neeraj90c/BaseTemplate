@@ -153,10 +153,11 @@
                                                 <div class="form-group" [formGroup]="commentForm">
                                                     <label><Strong>Add Comment </Strong></label>
                                                     <div id="ActivityDetailEditor">
-                                                        <app-rich-text-editor
-                                                            (submit)="handleRTEsubmit($event)"></app-rich-text-editor>
-                                                        <button class="btn btn-sm btn-secondary ml-2"
-                                                            (click)="detailActivityDivVisible = false">Close</button>
+                                                        <app-rich-text-editor #editor1
+                                                            (submit)="handleRTEsubmit($event)">
+                                                            <button class="btn btn-sm btn-secondary my-2 ml-2"
+                                                                (click)="detailActivityDivVisible = false">Close</button>
+                                                        </app-rich-text-editor>
                                                     </div>
 
                                                     <!-- <button class="btn btn-primary btn-sm mt-2" (click)="InsertTicketActivity()"> AddComment</button>
@@ -175,7 +176,7 @@
     </div>
 
     <div id="AssignTicketToUserDiv" *ngIf="assignTicketToUserDivVisible">
-        <div class="container-fluid " id="test" style="display:none;">
+        <!-- <div class="container-fluid " id="test">
             <div class="row">
                 <div class="col-md-12">
                     <div class="ticket-details">
@@ -210,7 +211,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="container-fluid " id="MultiAsigneeSection">
             <div class="row">
                 <div class="col-md-12">
@@ -373,30 +374,30 @@
 
 <ng-template #CreateTicketModal>
     <div class="modal-header text-light" style="background-color: #01018f;">
-        <h5 class="modal-title font-weight-bold" id="WorkflowInstructionsModalLabel">Create Ticket</h5>
+        <h5 class="modal-title font-weight-bold" id="WorkflowInstructionsModalLabel">Update Ticket</h5>
         <button type="button" class="close text-light" aria-label="Close" data-dismiss="modal"
             (click)="ticketModal.close()">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
     <div class="modal-body">
-        <form>
+        <form [formGroup]="updateTicketForm">
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="project">Project Name</label>
-                    <select class="form-control" id="project">
+                    <select class="form-control" id="project" formControlName="projectId">
                         <option value="1">Default</option>
                     </select>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="title">Title</label>
-                    <input type="text" class="form-control" id="title">
+                    <input type="text" class="form-control" id="title" formControlName="title">
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-4">
                     <label for="category">Category</label>
-                    <select class="form-control" id="category">
+                    <select class="form-control" id="category" formControlName="category">
                         <option value="1">Software</option>
                         <option value="2">Hardware</option>
                         <option value="2">Network</option>
@@ -404,7 +405,7 @@
                 </div>
                 <div class="form-group col-md-4">
                     <label for="priority">Ticket Priority</label>
-                    <select class="form-control" id="priority">
+                    <select class="form-control" id="priority" formControlName="ticketPriority">
                         <option>High</option>
                         <option>Medium</option>
                         <option>Low</option>
@@ -412,7 +413,7 @@
                 </div>
                 <div class="form-group col-md-4">
                     <label for="ticketType">Ticket Type</label>
-                    <select class="form-control" id="ticketType">
+                    <select class="form-control" id="ticketType" formControlName="ticketType">
                         <option>Technical</option>
                         <option>Functional</option>
                     </select>
@@ -423,15 +424,15 @@
 
                 <div class="form-group col-md-4">
                     <label for="targetDate">Target Date</label>
-                    <input type="date" class="form-control" id="targetDate">
+                    <input type="date" class="form-control" id="targetDate" formControlName="targetDate">
                 </div>
                 <div class="form-group col-md-4">
                     <label for="tags">Tag List</label>
-                    <input type="text" class="form-control" id="tags">
+                    <input type="text" class="form-control" id="tags" formControlName="tagList">
                 </div>
                 <div class="form-group col-md-4">
                     <div class="form-check mt-4">
-                        <input type="checkbox" class="form-check-input" id="affectsCustomer">
+                        <input type="checkbox" class="form-check-input" id="affectsCustomer" formControlName="affectsCustomer">
                         <label class="form-check-label" for="affectsCustomer">Affects Customer</label>
                     </div>
                 </div>
@@ -439,34 +440,34 @@
             <div class="form-row">
                 <div class="form-group col-md-4">
                     <label for="AddField1">Department</label>
-                    <input type="text" class="form-control" id="department">
+                    <input type="text" class="form-control" id="department" formControlName="department">
                 </div>
                 <div class="form-group col-md-4">
                     <label for="AddField2">Raised By</label>
-                    <input type="text" class="form-control" id="raisedBy">
+                    <input type="text" class="form-control" id="raisedBy" formControlName="raisedBy">
                 </div>
                 <div class="form-group col-md-4">
                     <label for="AddField2">Raised By Contact No.</label>
-                    <input type="text" class="form-control" id="raisedByContactNo">
+                    <input type="text" class="form-control" id="raisedByContactNo" formControlName="addField3">
                 </div>
             </div>
             <label>Ticket Description</label>
-            <div id="TemplateInstEditor">
-                This is the default text.
-            </div>
             <div class="form-row">
+                <app-rich-text-editor #editor2 (submit)="TicketUpdate($event)" [setRTEHtml]="ticketInfo.ticketDesc">
+                    <button type="button" class="btn btn-sm btn-secondary my-2 ml-2" id="SupportTicketCloseBtn" data-dismiss="modal"
+                    (click)="ticketModal.close()">Close</button>
+                </app-rich-text-editor>
             </div>
 
 
         </form>
     </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" id="SupportTicketCloseBtn" data-dismiss="modal"
+    <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-secondary" id="SupportTicketCloseBtn" data-dismiss="modal"
             (click)="ticketModal.close()">Close</button>
-        <button type="button" class="btn btn-primary" id="SupportTicketSaveBtn" onclick="Ticket.CreateNew()">Create
+        <button type="button" class="btn btn-primary" id="SupportTicketSaveBtn" onclick="TicketUpdate()">Create
             Ticket</button>
-
-    </div>
+    </div> -->
 </ng-template>
 
 <ng-template #topBandLoader>
@@ -475,8 +476,6 @@
             <div class="col">
                     <ngx-skeleton-loader></ngx-skeleton-loader> 
             </div>
-            
-                    <ngx-skeleton-loader></ngx-skeleton-loader>
         </div>
     </div>
 
@@ -491,14 +490,7 @@
                             <span id="detailTicketType"><ngx-skeleton-loader></ngx-skeleton-loader></span>
                             <ngx-skeleton-loader></ngx-skeleton-loader>
                         </div>
-                        <div class="d-flex mb-1">
-                            <div class="font-b me-2">Assigned To :</div>
-                            <div><span id="detailAssignedTo"><ngx-skeleton-loader></ngx-skeleton-loader></span></div>
-                        </div>
-                        <div class="d-flex mb-1">
-                            <div class="font-b me-2">Owned By :</div>
-                            <div><span id="detailTicketOwnedBy"><ngx-skeleton-loader></ngx-skeleton-loader></span></div>
-                        </div>
+                        
                     </div>
                     <div class="col-auto text-end assign_side_action_btn">
                         <a href="#"><i class="fas fa-book me-1"></i> <ngx-skeleton-loader></ngx-skeleton-loader></a>

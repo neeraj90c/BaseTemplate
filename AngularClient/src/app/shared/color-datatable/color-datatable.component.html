@@ -12,12 +12,13 @@
       entries
     </label>
     <button class="btn btn-sm btn-outline-success" (click)="generatePDF()">Export <i class="bi bi-filetype-pdf"></i></button>
+    <button class="btn btn-sm btn-outline-success" (click)="printTable()">Print <i class="bi bi-filetype-pdf"></i></button>
     <!-- parent.component.html -->
-  <app-pdf-generator [pdfFileName]="'generated-pdf'" [data]="tableData" [columns]="columns"></app-pdf-generator>
+    <app-pdf-generator [pdfFileName]="'generated-pdf'" [data]="tableData" [columns]="columns"></app-pdf-generator>
 
   </div>
-  <div *ngIf="!loading; else skeletonLoader">
-    <table class="table table-bordered com_table  mb-0" style="width: 100%;" id="dataTable">
+  <div *ngIf="!loading; else skeletonLoader" #dataTable>
+    <table  class="table table-bordered com_table  mb-0" style="width: 100%;" >
         <thead>
             <tr class="text-dark" style="border-left: 5px solid var(--orange-col);">
                 <th scope="col">SrNo</th>
@@ -41,7 +42,7 @@
                     <td>{{ (currentPage - 1) * selectedPageSize + i + 1 }}</td>
                     <td *ngFor="let col of columns">
                         <div [ngClass]="enableBadge===col.colName? 'badge badge-secondary font-l':''"
-                        [style.background-color]="enableBadge===col.colName? '#' + WCColors[i % WCColors.length]:''">{{ col.enableCurrency ? (isNumber(rows[col.colData]) ? (rows[col.colData] | currency) : rows[col.colData]) : (col.isDate ? (rows[col.colData] | date) : rows[col.colData]) || rows[col.colData]  }}</div>
+                        [style.background-color]="enableBadge===col.colName? '#' + WCColors[i % WCColors.length]:''">{{ col.enableCurrency ? (isNumber(rows[col.colData]) ? (rows[col.colData] | currency) : rows[col.colData]) : (col.isDate ? (rows[col.colData] | date:'dd/MM/yyyy') : rows[col.colData]) || rows[col.colData]  }}</div>
                     </td>
                     <td *ngIf="enableCheckboxColumn" class="text-center">
                         <input type="checkbox" [(ngModel)]="rows[checkboxStateBinding]" (change)="onCheckboxChange(rows)" [checked]="rows[checkboxStateBinding]===1" />
