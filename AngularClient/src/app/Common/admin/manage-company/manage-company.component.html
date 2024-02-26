@@ -1,0 +1,102 @@
+<div class="d-flex align-items-center justify-content-between my-3" style="border-bottom:1px solid #CDD5E9">
+    <div class="main-heading">Company</div>
+    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" (click)="CompanyOpenCompanyModal()">
+        Create
+        New
+    </button>
+
+</div>
+
+<app-color-datatable [columns]="[
+{colName:'Id',colData:'companyId'}, 
+{colName:'Name',colData:'cName'},
+{colName:'Code',colData:'cCode'},
+{colName:'Email',colData:'email'},    
+{colName:'Type',colData:'cType'},
+{colName:'Phone',colData:'phone'},
+]"
+[tableData]="CompanyList" [checkboxStateBinding]="'Active'"
+[checkboxColumnLabel]="'Active'" [enableActionColumn]="true"
+[actionColumnLabel]="'Action'"
+[actionOptions]="[{actionName:'Edit',actionIcon:'fa fa-edit'},{actionName:'Delete',actionIcon:'fa fa-trash'}]"
+(actionClick)="handleActionClick($event)"></app-color-datatable>
+
+
+<!-- Create Company Modal -->
+<ng-template #companyModalcontent>
+        <div class="modal-header" style="background-color: #01018f;">
+            <h5 class="modal-title" id="MenuCRUDModalLabel" style="color: white;">Add Company Details</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="companyModal.close()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="companyForm">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="companyName">Company Name</label>
+                        <input type="text" class="form-control" formControlName="cName">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="companyCode">Company Code</label>
+                        <input type="text" class="form-control" formControlName="cCode">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="companyDescription">Company Description</label>
+                        <textarea class="form-control" formControlName="cDesc" rows="3"></textarea>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="companyAddress">Company Address</label>
+                        <textarea class="form-control" formControlName="cAddress" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="companyEmail">Company Email</label>
+                        <input type="email" class="form-control" formControlName="cEmail">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="phoneNumber">Phone Number</label>
+                        <input type="tel" class="form-control" formControlName="phone">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="website">Website</label>
+                        <input type="text" class="form-control" formControlName="website">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="category">Category</label>
+                        <input type="text" class="form-control" formControlName="category">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="subCategory">Sub Category</label>
+                        <input type="text" class="form-control" formControlName="subCategory">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="contactPerson">Contact Person</label>
+                        <input type="text" class="form-control" formControlName="contactPerson">
+                    </div>
+                </div>
+                <div class="form-row ">
+                    <div class="form-group col-md-6">
+                        <label for="companyType">Company Type</label>
+                        <input type="tel" class="form-control" formControlName="type">
+                    </div>
+                    <div class="form-group col-md-6 d-flex align-items-center">
+                        <input type="checkbox" class="form-check-input ml-2 mr-2" formControlName="isActive">
+                        <label class="form-check-label ml-4 mr-2" for="isActive">Is Active</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" (click)="companyModal.close()">Cancel</button>
+            <button type="button" class="btn btn-primary btn-sm" id="createMenuButton" (click)="submitForm()">Submit</button>
+        </div>
+</ng-template>
+    

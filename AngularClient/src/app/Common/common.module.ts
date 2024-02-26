@@ -20,6 +20,7 @@ import { OpenTicketComponent } from '../ticket/worklist/open-ticket/open-ticket.
 import { ClosedTicketComponent } from '../ticket/worklist/closed-ticket/closed-ticket.component';
 import { AssignedToOthersComponent } from '../ticket/worklist/assigned-to-others/assigned-to-others.component';
 import { ViewTicketComponent } from '../ticket/worklist/view-ticket/view-ticket.component';
+import { ManageCompanyComponent } from './admin/manage-company/manage-company.component';
 
 
 
@@ -41,6 +42,7 @@ import { ViewTicketComponent } from '../ticket/worklist/view-ticket/view-ticket.
     ClosedTicketComponent,
     AssignedToOthersComponent,
     ViewTicketComponent,
+    ManageCompanyComponent,
 
   ],
   imports: [

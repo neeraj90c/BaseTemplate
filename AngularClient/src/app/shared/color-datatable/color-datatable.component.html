@@ -11,10 +11,12 @@
       </select> 
       entries
     </label>
-    <button class="btn btn-sm btn-outline-success" (click)="generatePDF()">Export <i class="bi bi-filetype-pdf"></i></button>
-    <button class="btn btn-sm btn-outline-success" (click)="printTable()">Print <i class="bi bi-filetype-pdf"></i></button>
+    <!-- <button class="btn btn-sm btn-outline-success" (click)="generatePDF()">Export <i class="bi bi-filetype-pdf"></i></button>
+    <button class="btn btn-sm btn-outline-success" (click)="printTable()">Print <i class="bi bi-filetype-pdf"></i></button> -->
     <!-- parent.component.html -->
-    <app-pdf-generator [pdfFileName]="'generated-pdf'" [data]="tableData" [columns]="columns"></app-pdf-generator>
+    <ng-container *ngIf="enableExports">
+      <app-pdf-generator [pdfFileName]="'generated-pdf'" [data]="tableData" [columns]="columns"></app-pdf-generator>
+    </ng-container>
 
   </div>
   <div *ngIf="!loading; else skeletonLoader" #dataTable>

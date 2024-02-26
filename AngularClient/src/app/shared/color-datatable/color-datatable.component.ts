@@ -33,8 +33,9 @@ export class ColorDatatableComponent {
   @Input() enableBadge: string = '';
 
   @Output() checkboxChange: EventEmitter<{ rowData: any, isChecked: boolean }> = new EventEmitter<{ rowData: any, isChecked: boolean }>();
-  @Output() actionClick: EventEmitter<any> = new EventEmitter<{ actionName: string, rowData: any }>();
+  @Output() actionClick: EventEmitter<{ actionName: string, rowData: any }> = new EventEmitter<{ actionName: string, rowData: any }>();
   startingSerialNumber: any;
+  @Input() enableExports : boolean = false;
 
   ngOnInit(): void {
     this.calculateStartingSerialNumber()
