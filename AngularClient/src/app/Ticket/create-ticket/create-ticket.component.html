@@ -1,0 +1,211 @@
+<div class="d-flex align-items-center justify-content-between my-3" style="border-bottom:1px solid #CDD5E9">
+    <div class="main-heading">Tickets - <h3 style="color: darkblue; display: inline-block;" id="TicketTypeTitle">{{title}}</h3></div>
+    <button type="button" class="btn btn-primary btn-sm" (click)="TicketOpenCreateTicketModal()">Create New</button>
+</div>
+
+
+<style>
+    .nav.nav-tabs {
+        width: 100%;
+        display: flex;
+    }
+
+        .nav.nav-tabs li.nav-item {
+            flex: 1;
+            text-align: center;
+        }
+</style>
+
+
+
+
+<ng-template #CreateTicketModal>
+    <div class="modal-header text-light" style="background-color: #01018f;">
+        <h5 class="modal-title font-weight-bold" id="WorkflowInstructionsModalLabel">Create Ticket</h5>
+        <button type="button" class="close text-light" aria-label="Close" data-dismiss="modal"
+            (click)="ticketModal.close()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="updateTicketForm">
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="project">Company Name <span
+                        style="color: red;">*</span></label>
+                    <select class="form-control" id="project" formControlName="companyId">
+                        <option value="0">Select Company...</option>
+                        <option *ngFor="let company of CompanyList" [value]="company.companyId">{{company.cName}}</option>
+                    </select>
+                    <div *ngIf="companyIdCtrl.invalid && companyIdCtrl.touched">
+                        <p style="color: red;">Company is Required, Please Select</p>
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="project">Project Name</label>
+                    <select class="form-control" id="project" formControlName="projectId">
+                        <option value="1">Default</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="title">Title<span style="color: red;">*</span></label>
+                    <input type="text" class="form-control" id="title" formControlName="title">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="category">Category</label>
+                    <select class="form-control" id="category" formControlName="category">
+                        <option value="1">Software</option>
+                        <option value="2">Hardware</option>
+                        <option value="2">Network</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="priority">Ticket Priority</label>
+                    <select class="form-control" id="priority" formControlName="ticketPriority">
+                        <option>High</option>
+                        <option>Medium</option>
+                        <option>Low</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="ticketType">Ticket Type</label>
+                    <select class="form-control" id="ticketType" formControlName="ticketType">
+                        <option>Technical</option>
+                        <option>Functional</option>
+                    </select>
+                </div>
+
+            </div>
+            <div class="form-row">
+
+                <div class="form-group col-md-4">
+                    <label for="targetDate">Target Date</label>
+                    <input type="date" class="form-control" id="targetDate" formControlName="targetDate">
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="tags">Tag List <span style="color: red;">*</span></label>
+                    <input type="text" class="form-control" id="tags" formControlName="tagList">
+                </div>
+                <div class="form-group col-md-4">
+                    <div class="form-check mt-4">
+                        <input type="checkbox" class="form-check-input" id="affectsCustomer" formControlName="affectsCustomer">
+                        <label class="form-check-label" for="affectsCustomer">Affects Customer</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="AddField1">Department</label>
+                    <input type="text" class="form-control" id="department" formControlName="department">
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="AddField2">Raised By <span style="color: red;">*</span></label>
+                    <input type="text" class="form-control" id="raisedBy" formControlName="raisedBy">
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="AddField2">Raised By Contact No. <span style="color: red;">*</span></label>
+                    <input type="text" class="form-control" id="raisedByContactNo" formControlName="addField3">
+                </div>
+            </div>
+            <label>Ticket Description</label>
+            <div class="form-row">
+                <app-rich-text-editor #editor2 (submit)="TicketUpdate($event)">
+                    <button type="button" class="btn btn-sm btn-secondary my-2 ml-2" id="SupportTicketCloseBtn" data-dismiss="modal"
+                    (click)="ticketModal.close()">Close</button>
+                </app-rich-text-editor>
+            </div>
+
+
+        </form>
+    </div>
+    <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-secondary" id="SupportTicketCloseBtn" data-dismiss="modal"
+            (click)="ticketModal.close()">Close</button>
+        <button type="button" class="btn btn-primary" id="SupportTicketSaveBtn" (click)="TicketUpdate()">Create
+            Ticket</button>
+    </div> -->
+</ng-template>
+
+
+
+
+
+
+
+
+
+<div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="TabularViewDiv" role="tabpanel">
+        <!--Tabs-->
+        <div class="nav nav-tabs tra_tab" id="nav-tab" role="tablist">
+            <a class="active" data-toggle="tab" href="#tab1" role="tab" aria-selected="true" (click)="changeTitle('Tickets Created but Not Assigned to anyone')">Active Tickets</a>
+            <a class="InProgress" data-toggle="tab" href="#tab2" role="tab" aria-selected="true" (click)="changeTitle('In Progress Tickets')">In Progress Tickets</a>
+            <a data-toggle="tab" href="#tab3" role="tab" aria-selected="false" (click)="changeTitle('Completed/Cancelled/Closed Tickets')">Closed Tickets</a>
+        </div>
+
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="tab1" role="tabpanel" style="padding-bottom: 50px;">
+                <app-color-datatable [tableData]="activeTickets" [columns]="[
+                    {colName:'Raised By',colData:'raisedBy'},
+                    {colName:'Ticket No',colData:'ticketId'},
+                    {colName:'Ticket Title',colData:'title'},
+                    {colName:'Target Date',colData:'targetDate',isDate:true},
+                    {colName:'Created On',colData:'createdOn',isDate:true},
+                    {colName:'Ticket Status',colData:'ticketStatus'},
+                    {colName:'Assigned To',colData:'assignedToName'},
+                    {colName:'Updated Action',colData:'modifiedOn',isDate:true},
+                    {colName:'Company',colData:'companyName'},
+                    ]"
+                    [enableActionColumn]="true"
+                    [actionColumnLabel]="'Action'"
+                    [actionOptions]="[{actionName: 'View', actionIcon: 'fa fa-eye '}]"
+                    (actionClick)="handleActionClick($event)" [enableExports]="true"
+                    ></app-color-datatable>
+            </div>
+            <div class="tab-pane fade" id="tab2" role="tabpanel">
+                <div class="row">
+                    <app-color-datatable [tableData]="inprogressTickets" [columns]="[
+                    {colName:'Raised By',colData:'raisedBy'},
+                    {colName:'Ticket No',colData:'ticketId'},
+                    {colName:'Ticket Title',colData:'title'},
+                    {colName:'Target Date',colData:'targetDate',isDate:true},
+                    {colName:'Created On',colData:'createdOn',isDate:true},
+                    {colName:'Ticket Status',colData:'ticketStatus'},
+                    {colName:'Assigned To',colData:'assignedToName'},
+                    {colName:'Updated Action',colData:'modifiedOn',isDate:true},
+                    {colName:'Company',colData:'companyName'},
+                    ]"
+                    [enableActionColumn]="true"
+                    [actionColumnLabel]="'Action'"
+                    [actionOptions]="[{actionName: 'View', actionIcon: 'fa fa-eye '}]"
+                    (actionClick)="handleActionClick($event)" [enableExports]="true"
+                    ></app-color-datatable>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="tab3" role="tabpanel">
+                <div class="row">
+                    <app-color-datatable [tableData]="closedTickets" [columns]="[
+                    {colName:'Raised By',colData:'raisedBy'},
+                    {colName:'Ticket No',colData:'ticketId'},
+                    {colName:'Ticket Title',colData:'title'},
+                    {colName:'Target Date',colData:'targetDate',isDate:true},
+                    {colName:'Created On',colData:'createdOn',isDate:true},
+                    {colName:'Ticket Status',colData:'ticketStatus'},
+                    {colName:'Assigned To',colData:'assignedToName'},
+                    {colName:'Updated Action',colData:'modifiedOn',isDate:true},
+                    {colName:'Company',colData:'companyName'},
+                    ]"
+                    [enableActionColumn]="true"
+                    [actionColumnLabel]="'Action'"
+                    [actionOptions]="[{actionName: 'View', actionIcon: 'fa fa-eye '}]"
+                    (actionClick)="handleActionClick($event)" [enableExports]="true"
+                    ></app-color-datatable>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>

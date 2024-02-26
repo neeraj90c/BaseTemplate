@@ -36,6 +36,9 @@
                     <div class="form-group col-md-6">
                         <label for="companyName">Company Name</label>
                         <input type="text" class="form-control" formControlName="cName">
+                        <div class="text-danger" *ngIf="(cNameCtrl.touched && cNameCtrl.invalid )">
+                            <ng-container *ngIf="cNameCtrl.errors"> Company Name is required</ng-container>
+                        </div>
                     </div>
                     <div class="form-group col-md-6">
                         <label for="companyCode">Company Code</label>
@@ -56,6 +59,12 @@
                     <div class="form-group col-md-6">
                         <label for="companyEmail">Company Email</label>
                         <input type="email" class="form-control" formControlName="cEmail">
+                        <div class="text-danger" *ngIf="(cEmailCtrl.touched && cEmailCtrl.invalid )">
+                            <ng-container *ngIf="cEmailCtrl.errors && cEmailCtrl.errors?.['required']"> Email is
+                                required</ng-container>
+                            <ng-container *ngIf="cEmailCtrl.errors && cEmailCtrl.errors?.['email']"> Enter a valid
+                                email eg : abc@gmail.com</ng-container>
+                        </div>
                     </div>
                     <div class="form-group col-md-6">
                         <label for="phoneNumber">Phone Number</label>

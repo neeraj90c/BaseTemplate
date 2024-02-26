@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { TicketService } from '../../ticket.service';
 import { GetClientListDTO, SupportTicketDTO } from '../../interface/ticket.interface';
+import { environment } from 'src/environments/environment';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-work-in-progress',
@@ -8,18 +10,19 @@ import { GetClientListDTO, SupportTicketDTO } from '../../interface/ticket.inter
   styleUrls: ['./work-in-progress.component.scss']
 })
 export class WorkInProgressComponent implements OnInit {
+  COMPANY_ID = parseInt(environment.COMPANY_CODE)
   today = new Date();
   firstDayOfMonth = new Date(Date.UTC(this.today.getFullYear(), this.today.getMonth(), 1, 0, 0, 0));
 
   WorkInProgress: SupportTicketDTO[] = []
 
-  constructor(private _ticketService: TicketService) { }
-
+  constructor(private _ticketService: TicketService,private userService:UserService) { }
+  User = this.userService.User()
   ngOnInit(): void {
 
     let data: GetClientListDTO = {
-      actionUser: 1,
-      companyId: 1,
+      actionUser: this.User.userId,
+      companyId: this.COMPANY_ID,
       startDate: this.firstDayOfMonth,
       endDate: this.today
     };

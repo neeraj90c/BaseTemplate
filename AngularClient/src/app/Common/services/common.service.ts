@@ -45,16 +45,16 @@ export class CommonService {
     return this._http.post<UserRoleList>(`${this.BaseURL}/users/UserRoleCRUD`, data)
   }
   menuMasterCRUD(data: MenuManage): Observable<MenuManageDTO> {
-    return this._http.post<MenuManageDTO>(`${this.BaseURL}/menus/MenuMasterCRUD`, data)
+    return this._http.post<MenuManageDTO>(`${this.BaseURL}/admin/MenuMasterCRUD`, data)
   }
   getRoleList(data: RolesDTO): Observable<RoleList> {
     return this._http.post<RoleList>(`${this.BaseURL}/admin/RolesCRUD`, data);
   }
   getSubRoles(data : SubRole) : Observable<SubRolesDTO>{
-    return this._http.post<SubRolesDTO>(`${this.BaseURL}/roles/SubRolesMapping`,data);
+    return this._http.post<SubRolesDTO>(`${this.BaseURL}/admin/SubRolesMapping`,data);
   }
   getUsersGroupList(data: UserGroup) : Observable<userGroupDTO>{
-    return this._http.post<userGroupDTO>(`${this.BaseURL}/roles/UserGroupCRUDPaginated`,data);
+    return this._http.post<userGroupDTO>(`${this.BaseURL}/admin/UserGroupCRUD`,data);
   }
   companyCRUD(data:CompanyMasterDTO):Observable<CompanyList>{
     return this._http.post<CompanyList>(`${this.BaseURL}/company/GetCompanyList`,data);

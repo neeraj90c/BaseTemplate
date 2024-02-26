@@ -17,6 +17,9 @@ import { ClosedTicketComponent } from '../ticket/worklist/closed-ticket/closed-t
 import { AssignedToOthersComponent } from '../ticket/worklist/assigned-to-others/assigned-to-others.component';
 import { ViewTicketComponent } from '../ticket/worklist/view-ticket/view-ticket.component';
 import { ManageCompanyComponent } from './admin/manage-company/manage-company.component';
+import { ManageUsergroupComponent } from './admin/manage-usergroup/manage-usergroup.component';
+import { CreateTicketComponent } from '../ticket/create-ticket/create-ticket.component';
+import { AdminDashboardComponent } from '../ticket/admin-dashboard/admin-dashboard.component';
 
 
 
@@ -32,6 +35,10 @@ const routes: Routes = [
       { path: 'USRL', component: UserComponent, title: 'User' },
       { path: 'SAD', component: ManageSubrolesComponent, title: 'Manage Subroles' },
       { path: 'USR', component: UserDashboardComponent, title: 'User Dashboard' },
+      { path: 'UGAD', component: ManageUsergroupComponent, title: 'Manage UserGroup' },
+      { path: 'CSD', component: CreateTicketComponent, title: 'Create Ticket' },
+      { path: 'SDAD', component: AdminDashboardComponent, title: 'Admin Dashboard' },
+
       {
         path: 'WDB', component: WorklistComponent, title: 'Worklist' ,children: [
           { path: '', redirectTo: 'work-in-progress', pathMatch: 'full' },

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { ClientWorkListDTO, SupportTicketDTO, TicketActivityList, TicketAsigneeDTO, TicketAsigneeList, TicketCommentDTO, TicketList, UserList } from './interface/ticket.interface';
+import { ClientUserTicketList, ClientWorkListDTO, DashboardDTO, DashboardInputParams, SupportTicketDTO, TicketActivityList, TicketAsigneeDTO, TicketAsigneeList, TicketCommentDTO, TicketList, UserList } from './interface/ticket.interface';
 import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root'
@@ -56,5 +56,13 @@ export class TicketService {
   manageTicket(data:SupportTicketDTO):Observable<TicketList> {
     return this.http.post<TicketList>(`${this.BaseURL}/ticket/ManageTicket`,data)
   }
+
+  getClientUserTicketList(data:{actionUser: number, companyId: number}):Observable<ClientUserTicketList> {
+    return this.http.post<ClientUserTicketList>(`${this.BaseURL}/Ticket/ClientUserTicketList`,data)
+  }
+  getAdminDashboard(data:DashboardInputParams):Observable<DashboardDTO>{
+    return this.http.post<DashboardDTO>(`${this.BaseURL}/ticket/GetAdminDashboardData`,data)
+  }
+
 
 }

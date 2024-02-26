@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./worklist.component.scss']
 })
 export class WorklistComponent {
+  title = 'Work in progress'
+  changeTitle(text:string) {
+    this.title = text
+  }
 
 }

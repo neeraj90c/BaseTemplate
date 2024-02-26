@@ -34,5 +34,7 @@ export class RichTextEditorComponent implements OnInit {
   }
 
 
+  ngOnDestroy(){
+  }
 
 }

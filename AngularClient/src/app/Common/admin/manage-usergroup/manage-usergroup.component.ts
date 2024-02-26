@@ -24,13 +24,13 @@ export class ManageUsergroupComponent implements OnInit {
  * If parameters exist, updates the UserGroupDTO with the values from the query parameters and fetches the user groups.
  */
  ngOnInit(): void {
-    let currentParams = this.route.snapshot.queryParams
-    if (Object.keys(currentParams).length === 0) {
-      this.router.navigate(['/PRAD'], { queryParams: { pageNo: this.UserGroupDTO.pageNo, pageSize: this.UserGroupDTO.pageSize } })
-    } else {
-      this.UserGroupDTO.pageSize = currentParams['pageSize'] as number
-      this.UserGroupDTO.pageNo = currentParams['pageNo'] as number
-    }
+    // let currentParams = this.route.snapshot.queryParams
+    // if (Object.keys(currentParams).length === 0) {
+    //   this.router.navigate(['/UGAD'], { queryParams: { pageNo: this.UserGroupDTO.pageNo, pageSize: this.UserGroupDTO.pageSize } })
+    // } else {
+    //   this.UserGroupDTO.pageSize = currentParams['pageSize'] as number
+    //   this.UserGroupDTO.pageNo = currentParams['pageNo'] as number
+    // }
     this.UserGroupCrud(this.UserGroupDTO)
 }
 User = this.userService.User()
@@ -165,7 +165,7 @@ UserGroupForm = new FormGroup({
   handlePageSizeChange(e: any) {
     this.UserGroupDTO.pageNo = +e.currentPage
     this.UserGroupDTO.pageSize = +e.pageSize
-    this.router.navigate(['/PRAD'], { queryParams: { pageNo: this.UserGroupDTO.pageNo, pageSize: this.UserGroupDTO.pageSize } })
+    this.router.navigate(['/UGAD'], { queryParams: { pageNo: this.UserGroupDTO.pageNo, pageSize: this.UserGroupDTO.pageSize } })
     this.UserGroupCrud(this.UserGroupDTO)
   }
 }

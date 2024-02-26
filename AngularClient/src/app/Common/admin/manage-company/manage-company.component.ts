@@ -6,6 +6,7 @@ import { UserService } from 'src/app/services/user.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { ConfirmmodalserviceService } from 'src/app/shared/confirm-delete-modal/confirmmodalservice.service';
 
 @Component({
   selector: 'app-manage-company',
@@ -14,7 +15,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class ManageCompanyComponent implements OnInit {
 
-  constructor(private modalService: NgbModal, private _commonService: CommonService, private _userService: UserService,private toaster:ToastrService) { }
+  constructor(private modalService: NgbModal, private _commonService: CommonService, private _userService: UserService,private toaster:ToastrService,private confirmModal:ConfirmmodalserviceService) { }
   User = this._userService.User()
   CompanyList: CompanyMasterDTO[] = []
 
@@ -37,6 +38,16 @@ export class ManageCompanyComponent implements OnInit {
     isActive: new FormControl()
   })
 
+  get cNameCtrl():FormControl{
+    return this.companyForm.controls.cName as FormControl
+  }
+
+  get cEmailCtrl():FormControl{
+    return this.companyForm.controls.cEmail as FormControl
+  }
+
+
+
   ngOnInit() {
     this.getCompanyList()
   }
@@ -44,7 +55,7 @@ export class ManageCompanyComponent implements OnInit {
   CompanyCRUD(data: CompanyMasterDTO) {
     this._commonService.companyCRUD(data).subscribe(res => {
       this.CompanyList = res.companies
-      this.companyModal.close()
+      this.companyModal?.close()
       this.companyForm.reset()
       this.toaster.success('Success!!')
     })
@@ -71,7 +82,10 @@ export class ManageCompanyComponent implements OnInit {
       cType: '',
       actionUser: this.User.userId.toString()
     }
-    this.CompanyCRUD(data)
+    this._commonService.companyCRUD(data).subscribe(res => {
+      this.CompanyList = res.companies
+      this.companyForm.reset()
+    })
   }
 
   CompanyOpenCompanyModal() {
@@ -98,7 +112,19 @@ export class ManageCompanyComponent implements OnInit {
       })
       this.companyModal = this.modalService.open(this.modalContent, { size: 'lg' })
     } else if (actionName === 'Delete') {
-
+      this.confirmModal.openSwalModal(rowData.cName,rowData).subscribe(res=>{
+        if(res){
+          rowData.isActive = 0
+          rowData.isDeleted = 1
+          rowData.actionUser = this.User.userId.toString()
+          this._commonService.companyCRUD(rowData).subscribe(res => {
+            this.CompanyList = res.companies
+            this.companyModal?.close()
+            this.companyForm.reset()
+            this.toaster.warning('Company Deleted Successfully!!')
+          })
+        }
+      })
     }
   }
 

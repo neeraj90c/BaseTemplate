@@ -3,6 +3,8 @@ import { SupportTicketDTO, GetClientListDTO } from '../../interface/ticket.inter
 import { TicketService } from '../../ticket.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { formatDate } from '@angular/common';
+import { UserService } from 'src/app/services/user.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-closed-ticket',
@@ -10,23 +12,24 @@ import { formatDate } from '@angular/common';
   styleUrls: ['./closed-ticket.component.scss']
 })
 export class ClosedTicketComponent {
-
+  COMPANY_ID = parseInt(environment.COMPANY_CODE)
 
   today = new Date();
   firstDayOfMonth = new Date(Date.UTC(this.today.getFullYear(), this.today.getMonth(), 1, 0, 0, 0));
 
   ClosedTickets: SupportTicketDTO[] = []
 
-  constructor(private _ticketService: TicketService) { }
+  constructor(private _ticketService: TicketService,private userService:UserService) { }
    dateForm = new FormGroup({
     startDate: new FormControl<Date|null>(null),
     endDate: new FormControl<Date|null>(null)
   })
+  User = this.userService.User()
   ngOnInit(): void {
 
     let data: GetClientListDTO = {
-      actionUser: 1,
-      companyId: 1,
+      actionUser: this.User.userId,
+      companyId: this.COMPANY_ID,
       startDate: this.firstDayOfMonth,
       endDate: this.today
     };
@@ -48,8 +51,8 @@ export class ClosedTicketComponent {
   LoadDataWithDate(){
     console.log(this.dateForm.value);
     let data: GetClientListDTO = {
-      actionUser: 1,
-      companyId: 1,
+      actionUser: this.User.userId,
+      companyId: this.COMPANY_ID,
       startDate: this.dateForm.controls.startDate.value as Date,
       endDate: this.dateForm.controls.endDate.value as Date
     };

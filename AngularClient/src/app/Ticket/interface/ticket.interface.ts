@@ -113,3 +113,38 @@ export interface TicketCommentDTO {
     ticketComments?: string,
     ticketId?: number
 }
+
+export interface ClientUserTicketList {
+    activeTickets: SupportTicketDTO[]
+    inprogressTickets: SupportTicketDTO[]
+    closedTickets: SupportTicketDTO[]
+    workInProgress: SupportTicketDTO[]
+}
+
+export interface KeyValue {
+    key: string,
+    value: number
+}
+
+export interface DashboardInputParams {
+    startDate: Date,
+    endDate: Date
+}
+
+export interface KeyData {
+    key: string,
+    totalTickets: number,
+    closeTickets: number,
+    inProgressTickets: number,
+    openTickets: number,
+    others: number
+}
+
+export interface DashboardDTO {
+    ticketCount: KeyValue[],
+    priorityWiseCount: KeyValue[],
+    categoryWiseCount: KeyValue[],
+    clientWiseCount: KeyValue[],
+    supportUserWiseCount: KeyValue[],
+
+}

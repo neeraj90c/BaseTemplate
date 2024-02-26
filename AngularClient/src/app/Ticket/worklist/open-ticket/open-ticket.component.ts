@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { SupportTicketDTO, GetClientListDTO } from '../../interface/ticket.interface';
 import { TicketService } from '../../ticket.service';
+import { UserService } from 'src/app/services/user.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-open-ticket',
@@ -8,19 +10,19 @@ import { TicketService } from '../../ticket.service';
   styleUrls: ['./open-ticket.component.scss']
 })
 export class OpenTicketComponent {
-
+  COMPANY_ID = parseInt(environment.COMPANY_CODE)
   today = new Date();
   firstDayOfMonth = new Date(Date.UTC(this.today.getFullYear(), this.today.getMonth(), 1, 0, 0, 0));
 
   OpenTickets: SupportTicketDTO[] = []
 
-  constructor(private _ticketService: TicketService) { }
-
+  constructor(private _ticketService: TicketService,private userService:UserService) { }
+  User = this.userService.User()
   ngOnInit(): void {
 
     let data: GetClientListDTO = {
-      actionUser: 1,
-      companyId: 1,
+      actionUser: this.User.userId,
+      companyId: this.COMPANY_ID,
       startDate: this.firstDayOfMonth,
       endDate: this.today
     };

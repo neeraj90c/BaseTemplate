@@ -4,9 +4,8 @@
       (click)="CreateNewGroup()">Create New</button>
   </div>
   
-  <app-pagination [EnablePageSize]="true" [rowData]="userGroupList"
-  (pageSizeChanged)="handlePageSizeChange($event)"></app-pagination>
-<app-color-table 
+
+<app-color-datatable 
 [columns]="[
 {colName:'Role Name',colData:'groupName'},
 {colName:'Role Code',colData:'groupCode'},
@@ -16,9 +15,8 @@
 [enableActionColumn]="true" [actionColumnLabel]="'Action'"
 [actionOptions]="[{actionName:'Edit',actionIcon:'fa fa-edit'},{actionName:'Delete',actionIcon:'fa fa-trash'}]"
 (actionClick)="handleActionClick($event)" enableBadge="groupCode">
-</app-color-table> 
-<app-pagination [EnableNavigation]="true" [rowData]="userGroupList"
-    (pageSizeChanged)="handlePageSizeChange($event)"></app-pagination>
+</app-color-datatable> 
+
 
 
   <!-- Modal -->

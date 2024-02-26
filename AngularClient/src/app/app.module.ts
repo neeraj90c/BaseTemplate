@@ -10,18 +10,6 @@ import { LoginComponent } from './login/login.component';
 import { SharedModule } from './shared/shared.module';
 import { ValidationInterceptor } from './validation.interceptor';
 
-
-const isIE = window.navigator.userAgent.indexOf("MSIE ") > -1 || window.navigator.userAgent.indexOf("Trident/") > -1;
-const GRAPH_ENDPOINT = environment.GRAPH_ENDPOINT;
-const CLIENT_ID = environment.clientId;
-const REDIRECT_URI = environment.redirectUri;
-const AURHORITY = environment.authority;
-const USER_READ = environment.USER_READ;
-
-
-
-
-
 @NgModule({
   declarations: [
     AppComponent,

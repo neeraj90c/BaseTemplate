@@ -21,6 +21,9 @@ import { ClosedTicketComponent } from '../ticket/worklist/closed-ticket/closed-t
 import { AssignedToOthersComponent } from '../ticket/worklist/assigned-to-others/assigned-to-others.component';
 import { ViewTicketComponent } from '../ticket/worklist/view-ticket/view-ticket.component';
 import { ManageCompanyComponent } from './admin/manage-company/manage-company.component';
+import { ManageUsergroupComponent } from './admin/manage-usergroup/manage-usergroup.component';
+import { CreateTicketComponent } from '../ticket/create-ticket/create-ticket.component';
+import { AdminDashboardComponent } from '../ticket/admin-dashboard/admin-dashboard.component';
 
 
 
@@ -43,6 +46,9 @@ import { ManageCompanyComponent } from './admin/manage-company/manage-company.co
     AssignedToOthersComponent,
     ViewTicketComponent,
     ManageCompanyComponent,
+    ManageUsergroupComponent,
+    CreateTicketComponent,
+    AdminDashboardComponent
 
   ],
   imports: [
