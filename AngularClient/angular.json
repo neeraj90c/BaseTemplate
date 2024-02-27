@@ -27,7 +27,8 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.png",
-              "src/assets"
+              "src/assets",
+              "src/web.config"
             ],
             "styles": [
               "src/styles.scss",
@@ -54,7 +55,6 @@
               "src/assets/js/jquery-ui-1.13.2.js",
               "node_modules/google-charts/dist/googleCharts.js",
               "src/assets/richtexteditor/rte.js"
-
             ]
             
           },
