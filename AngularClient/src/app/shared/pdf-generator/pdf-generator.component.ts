@@ -105,7 +105,7 @@ export class PdfGeneratorComponent {
         XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
 
         // Save the file
-        XLSX.writeFile(wb, 'exported-data.xlsx');
+        XLSX.writeFile(wb, `${this.pdfFileName}.xlsx`);
     }
 
 }

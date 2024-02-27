@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { GetClientListDTO, SupportTicketDTO } from '../../interface/ticket.interface';
+import { GetClientListDTO, SupportTicketDTO } from '../../../interface/ticket.interface';
 import { TicketService } from '../../ticket.service';
 import { environment } from 'src/environments/environment';
 import { UserService } from 'src/app/services/user.service';

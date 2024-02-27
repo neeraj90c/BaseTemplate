@@ -1,7 +1,7 @@
 import { Component, ElementRef, SecurityContext, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TicketService } from '../../ticket.service';
-import { SupportTicketDTO, TicketActivityDTO, TicketActivityList, TicketAsigneeDTO, TicketCommentDTO, TicketUserDTO, UserList } from '../../interface/ticket.interface';
+import { SupportTicketDTO, TicketActivityDTO, TicketActivityList, TicketAsigneeDTO, TicketCommentDTO, TicketUserDTO, UserList } from '../../../interface/ticket.interface';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { formatDate } from '@angular/common';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -74,10 +74,15 @@ export class ViewTicketComponent {
     htmlContent: new FormControl('')
   })
   ticketAssigneeForm = new FormGroup({
-    assigneeListID: new FormControl('', [Validators.required]),
+    assigneeListID: new FormControl('', [Validators.required,Validators.pattern(/^[1-9]\d*$/)]),
     workRatio: new FormControl(),
     ticketAsigneeDescription: new FormControl()
   })
+
+  get assigneeCrl():FormControl{
+    return this.ticketAssigneeForm.controls.assigneeListID as FormControl
+  }
+
   assigneeTableLoading: boolean = false;
   resolverList: SupportTicketDTO[] = []
   activityLoading: boolean = false;
@@ -289,30 +294,35 @@ export class ViewTicketComponent {
   }
 
   TicketAsigneeSaveAsignee() {
-    let assigneeForm = { ...this.ticketAssigneeForm.value }
-    let data: TicketAsigneeDTO = {
-      taId: 0,
-      ticketId: this.ticketInfo.ticketId,
-      assignedTo: assigneeForm.assigneeListID as string,
-      workRatio: assigneeForm.workRatio,
-      assignDesc: assigneeForm.ticketAsigneeDescription,
-      aStatus: 'Open',
-      actionUser: this.User.userId.toString(),
-      assignedToName: '',
-      assignedByName: ''
-    }
-    this.assigneeTableLoading = true
-    this._ticketService.assignTicketToUser(data).subscribe(res => {
-      this.ticketAsignees = res.ticketAsignee
-      this.toaster.success('Ticket Assigned!!')
-      this.assigneeTableLoading = false
-      this.ticketAssigneeForm.reset();
-      this.ticketAssigneeForm.patchValue({
-        assigneeListID: '0',
-        workRatio: 100,
-        ticketAsigneeDescription: ''
-      })
+    Object.values(this.ticketAssigneeForm.controls).forEach(control => {
+      control.markAsTouched()
     })
+    if(this.ticketAssigneeForm.valid){
+      let assigneeForm = { ...this.ticketAssigneeForm.value }
+      let data: TicketAsigneeDTO = {
+        taId: 0,
+        ticketId: this.ticketInfo.ticketId,
+        assignedTo: assigneeForm.assigneeListID as string,
+        workRatio: assigneeForm.workRatio,
+        assignDesc: assigneeForm.ticketAsigneeDescription,
+        aStatus: 'Open',
+        actionUser: this.User.userId.toString(),
+        assignedToName: '',
+        assignedByName: ''
+      }
+      this.assigneeTableLoading = true
+      this._ticketService.assignTicketToUser(data).subscribe(res => {
+        this.ticketAsignees = res.ticketAsignee
+        this.toaster.success('Ticket Assigned!!')
+        this.assigneeTableLoading = false
+        this.ticketAssigneeForm.reset();
+        this.ticketAssigneeForm.patchValue({
+          assigneeListID: '0',
+          workRatio: 100,
+          ticketAsigneeDescription: ''
+        })
+      })
+    }
   }
 
   TicketUpdate(event: { value: string, clearText: () => void, setHtml: (text: string) => void }) {

@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { ClientUserTicketList, ClientWorkListDTO, DashboardDTO, DashboardInputParams, SupportTicketDTO, TicketActivityList, TicketAsigneeDTO, TicketAsigneeList, TicketCommentDTO, TicketList, UserList } from './interface/ticket.interface';
 import { Router } from '@angular/router';
+import { ClientUserTicketList, ClientWorkListDTO, DashboardDTO, DashboardInputParams, SupportTicketDTO, TicketActivityList, TicketAsigneeDTO, TicketAsigneeList, TicketCommentDTO, TicketList, UserList } from '../interface/ticket.interface';
 @Injectable({
   providedIn: 'root'
 })

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { SupportTicketDTO, GetClientListDTO } from '../../interface/ticket.interface';
+import { SupportTicketDTO, GetClientListDTO } from '../../../interface/ticket.interface';
 import { TicketService } from '../../ticket.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { formatDate } from '@angular/common';
