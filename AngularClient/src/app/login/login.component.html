@@ -1,0 +1,48 @@
+<div class="login_container">
+    <div class="container h-100">
+        <div class="row align-items-center h-100">
+            <div class="col-md-8">
+                <div class="col-md-10">
+
+                </div>
+                <div class="col-md-8">
+                    <div class="h1 text-white font-b">{{title}}</div>
+                    <!-- <p class="h5 mb-3 text-white">The Travelers system tracks all activity during the manufacturing
+                        process.
+                    </p> -->
+                    <div class="text-white font-b">
+                        <p class="h5">
+                            The Ticket Desk Management System.
+                        </p>
+                    </div>
+                </div>
+                <img src="../../assets/images/login_stages.png">
+            </div>
+
+            <div class="col-md-4">
+                <div class="login_block">
+                    <img src="../../assets/AppImages/TechnoTech/logo.png" class="logo">
+                    <div class="text-center my-4 login_hd">Login</div>
+                    <div *ngIf="loginError !== null" class="alert alert-danger" role="alert">
+                        {{loginError}}.
+                    </div>
+                    <form [formGroup]="loginForm" (ngSubmit)="loginUser()">
+                        <input type="text" placeholder="UserID" formControlName="userName"
+                            class="form-control rounded-pill mb-3">
+                        <input type="password" placeholder="Password" formControlName="password"
+                            class="form-control rounded-pill mb-2">
+                        <!-- Add validation messages if needed -->
+                        <!-- <div *ngIf="myForm.get('userId')?.hasError('required')" class="text-danger">UserID is required</div>
+                        <div *ngIf="myForm.get('userPassword')?.hasError('required')" class="text-danger">Password is required</div> -->
+                        <div class="text-right mb-3">
+                            <a href="#" class="forgot_pass">forgot password ?</a>
+                        </div>
+                        <button href="#" class="btn btn-primary rounded-pill w-100">Login</button>
+                        <!-- <button class="btn btn-primary rounded-pill w-100 mt-2 microsoftbutton" (click)="azureLogin()">Login With Microsoft <i class="fa fa-windows ml-2" aria-hidden="true"></i></button> -->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-loader></app-loader>

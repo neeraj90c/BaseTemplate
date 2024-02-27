@@ -1,0 +1,569 @@
+<div class="com_card mb-3">
+    <ng-container *ngIf="!activityLoading; else topBandLoader">
+        <div class="tick_topband">
+            <div class="row align-items-center">
+                <div class="col">
+                    <span id="headerTicketStatus">{{ticketInfo.ticketStatus}}</span>
+                    <span id="headerTicketId">#{{ticketInfo.ticketId}}</span>
+                    <span id="headerTicketTitle">{{ticketInfo.title}}</span>
+                </div>
+                <div class="col-auto"><a href="#" class="btn btn-secondary btn-sm rounded"> <i
+                            class="far fa-eye-slash me-1"></i> Unwatch</a></div>
+            </div>
+        </div>
+        <div class="row g-0">
+            <div class="col-8">
+                <div class="assigned_block">
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-1"><span id="detailTicketPriority">{{ticketInfo.ticketPriority}}</span>
+                                Priority
+                                <span id="detailTicketType">{{ticketInfo.ticketType}}</span> Problem
+                            </div>
+                            <div class="d-flex mb-1">
+                                <div class="font-b me-2">Assigned To :</div>
+                                <div><span id="detailAssignedTo">{{GetUserNameById(ticketInfo.assignedTo)}}</span></div>
+                            </div>
+                            <div class="d-flex mb-1">
+                                <div class="font-b me-2">Owned By :</div>
+                                <div><span id="detailTicketOwnedBy">{{GetUserNameById(ticketInfo.ownedBy)}}</span></div>
+                            </div>
+                        </div>
+                        <div class="col-auto text-end assign_side_action_btn">
+                            <a href="#"><i class="fas fa-book me-1"></i> Default</a>
+                            <a href="#" class="d-block"><i class="fas fa-tag me-1"></i> <span
+                                    id="detailTicketTag">{{ticketInfo.tagList}}</span></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-3" id="detailTicketDesc" [innerHTML]="returnSanitizedDom(ticketInfo.ticketDesc)">
+
+                </div>
+            </div>
+            <div class="col-4 side_status">
+                <table class="table mb-0">
+                    <tr>
+                        <th>Status</th>
+                        <td><label id="detailTicketStatus">{{ticketInfo.ticketStatus}}</label> </td>
+                    </tr>
+                    <tr>
+                        <th>Raised By</th>
+                        <td><span id="detailTicketRaisedBy">{{ticketInfo.raisedBy}}</span></td>
+                    </tr>
+                    <tr>
+                        <th>Raised By Contact No</th>
+                        <td><span id="detailTicketRaisedByContactNo">{{ticketInfo.addField3}}</span></td>
+                    </tr>
+                    <tr>
+                        <th>Target Date</th>
+                        <td><span id="detailTicketTargetDate">{{returnFormattedDate(ticketInfo.targetDate)}}</span></td>
+                    </tr>
+                    <tr>
+                        <th>Resolution Date</th>
+                        <td><span
+                                id="detailTicketResolutionDate">{{returnFormattedDate(ticketInfo.resolutionDate)}}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Updated By</th>
+                        <td><span id="detailTicketUpdatedBy">{{GetUserNameById(ticketInfo.modifiedBy)}}</span></td>
+                    </tr>
+                    <tr>
+                        <th>Updated Date</th>
+                        <td><span id="detailTicketUpdatedOn">{{returnFormattedDate(ticketInfo.modifiedOn)}}</span></td>
+                    </tr>
+                    <tr>
+                        <th>Work Start Date</th>
+                        <td><span id="detailTicketStartOn">-</span></td>
+                    </tr>
+                    <tr>
+                        <th>Created By</th>
+                        <td><span id="detailTicketCreatedBy">{{GetUserNameById(ticketInfo.createdByName)}}</span></td>
+                    </tr>
+                    <tr>
+                        <th>Created Date</th>
+                        <td><span id="detailTicketCreatedOn">{{returnFormattedDate(ticketInfo.createdOn)}}</span></td>
+                    </tr>
+                    <tr>
+                        <th>Estimate Duration</th>
+                        <td><span id="detailTicketEstimatedDuration">{{ticketInfo.estimatedDuration}}</span></td>
+                    </tr>
+                    <tr>
+                        <th>Actual Duration</th>
+                        <td><span id="detailTicketActualDuration">{{ticketInfo.actualDuration}}</span></td>
+                    </tr>
+                    <tr>
+                        <th>Subscribers</th>
+                        <td>
+                            <div><span id="detailTicketSubscriber1">-</span></div>
+                            <div><span id="detailTicketSubscriber2">-</span></div>
+                            <div><span id="detailTicketSubscriber3">-</span></div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </ng-container>
+
+
+    <div class="p-3 action_buttons mb-4 border">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="btn-group" role="group" aria-label="Basic outlined example">
+                    <ng-container *ngIf="ticketInfo.ticketStatus != 'Close' && ticketInfo.ticketStatus != 'Force Closed'">
+
+                        <button type="button" id="TicketCommentBtn" class="btn btn-outline-primary btn-sm"
+                            (click)="toggleCommentDialogOnClick()">Comment</button>
+                        <button type="button" id="TicketTakeOverBtn" class="btn btn-outline-primary btn-sm"
+                            (click)="TakeOverButtonOnClick()">Take Over</button>
+                        <button type="button" id="TicketAssignBtn" class="btn btn-outline-primary btn-sm"
+                            (click)="AssignTicketToUserOnClick()">Assign To</button>
+                        <button type="button" id="TicketForceCloseBtn" class="btn btn-outline-primary btn-sm"
+                            (click)="SupportTicket_Forceclose()">Force Close</button>
+                        <button type="button" id="TicketEditBtn" class="btn btn-outline-primary btn-sm"
+                            (click)="OpenEditTicketModal()">Edit</button>
+                    </ng-container>
+                        <ng-container *ngIf="ticketInfo.ticketStatus == 'Close'|| ticketInfo.ticketStatus == 'Force Closed'">
+                            <button type="button" id="TicketReOpenBtn" class="btn btn-outline-primary btn-sm"
+                                (click)="SupportTicket_ReOpen()" >ReOpen</button>
+                        </ng-container>
+                </div>
+            </div>
+            <div class="col-md-4" style="text-align:right;">
+                <div id="RaisedByClientDiv">
+                    Ticket Raised By : <font style="color:blue;">{{ticketInfo.companyName}}</font>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="detailActivityDiv" *ngIf="detailActivityDivVisible">
+        <div class="container-fluid " id="test">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="ticket-details">
+                        <div class="row mt-2">
+
+                            <div class="card col-md-12"
+                                style="border: none; border-top: 0.5px solid black; border-radius: 0px;">
+                                <div class="card-body ">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group" [formGroup]="commentForm">
+                                                    <label><Strong>Add Comment </Strong></label>
+                                                    <div id="ActivityDetailEditor">
+                                                        <app-rich-text-editor #editor1
+                                                            (submit)="handleRTEsubmit($event)">
+                                                            <button class="btn btn-sm btn-secondary my-2 ml-2"
+                                                                (click)="detailActivityDivVisible = false">Close</button>
+                                                        </app-rich-text-editor>
+                                                    </div>
+
+                                                    <!-- <button class="btn btn-primary btn-sm mt-2" (click)="InsertTicketActivity()"> AddComment</button>
+                                                    <button class="btn btn-sm mt-2" onclick="TicketDetails.CloseCommentDialougeOnClick()" style="outline:1px solid grey;"> Cancel</button> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="AssignTicketToUserDiv" *ngIf="assignTicketToUserDivVisible">
+        <!-- <div class="container-fluid " id="test">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="ticket-details">
+                        <div class="row mt-2">
+                            <div class="card col-md-12"
+                                style="border: none; border-top: 0.5px solid black; border-radius: 0px;">
+                                <div class="card-body ">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label><Strong>Assign Ticket to Support User </Strong></label><br />
+                                                    <select class="form-control" id="assignToList1"
+                                                        style="width:150px;">
+                                                        <option value="0">Select...</option>
+                                                        <option *ngFor="let user of ticketAsignees" [value]="user.taId">
+                                                            Select...</option>
+                                                    </select><br />
+                                                    <button class="btn btn-primary btn-sm mt-2"
+                                                        onclick="TicketDetails.AssignTicketToSupportUser_OnClick()">
+                                                        Assign</button>
+                                                    <button class="btn btn-sm mt-2"
+                                                        onclick="TicketDetails.CloseAssignTicketToUserOnClick()"
+                                                        style="outline:1px solid grey;"> Cancel</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <div class="container-fluid " id="MultiAsigneeSection">
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="dataFormDiv">
+                        <form class="row" [formGroup]="ticketAssigneeForm">
+                            <div class="col-md-3">
+                                <label>Assign To</label>
+                                <select class="form-control" id="assignToList" formControlName="assigneeListID">
+                                    <option value="0">Please Select...</option>
+                                    <option *ngFor="let user of resolverList" [value]="user.userId">{{user.name}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-md-1">
+                                <label>Work Ratio</label>
+                                <input id="TicketAsigneeWorkRatio" class="form-control" type="number" max="100" min="0"
+                                    value="100" formControlName="workRatio" />
+                            </div>
+                            <div class="col-md-6">
+                                <label>Description</label><br />
+                                <input id="TicketAsigneeDescription" class="form-control" formControlName="ticketAsigneeDescription" />
+                            </div>
+                            <div class="col-md-2">
+                                <br />
+                                <button class="btn btn-primary btn-sm mt-2" (click)="TicketAsigneeSaveAsignee()"
+                                    id="TicketAsigneeSaveUpdateBtn"> Save</button>
+                                <button class="btn btn-sm mt-2" (click)="assignTicketToUserDivVisible  = false"
+                                    style="outline:1px solid grey;"> Cancel</button>
+                            </div>
+                        </form>
+                        <div class="row">
+                            <br />
+                        </div>
+                    </div>
+                    <div id="dataTableDiv">
+
+                        <table id="TicketAsigneeListTbl" class="table table-bordered com_table" style="width: 100%;">
+                            <thead>
+                                <tr class="text-dark">
+                                    <th style="border-left: 5px solid var(--orange-col);" scope="col">Sr No</th>
+                                    <th scope="col">Assigned To</th>
+                                    <th scope="col">Work Ratio</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Assigned By</th>
+                                    <th scope="col">Current Status</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="TicketAsigneeListBody">
+                                <ng-container *ngIf="!assigneeTableLoading;else loader">
+                                    <ng-container *ngIf="ticketAsignees.length > 0; else noRecords">
+                                        <tr *ngFor="let ticketAsignee of ticketAsignees; let i = index"
+                                            [style.border-left]="'5px solid #' + WCColors[i % WCColors.length]">
+                                            <td>{{i+1}}</td>
+                                            <td>{{ticketAsignee.assignedToName}} </td>
+                                            <td>{{ticketAsignee.workRatio}} </td>
+                                            <td>{{ticketAsignee.assignDesc}} </td>
+                                            <td>{{ticketAsignee.assignedByName}}</td>
+                                            <td>{{ticketAsignee.aStatus}} </td>
+                                            <td>
+                                                <button class="btn btn-primary btn-sm mt-2"
+                                                    (click)="TicketAsigneeStartTask(ticketAsignee)"
+                                                    *ngIf="ticketAsignee.aStatus === 'Open' || ticketAsignee.aStatus === 'Hold'">
+                                                    Start</button>
+                                                <button class="btn btn-info btn-sm mt-2"
+                                                    (click)="TicketAsigneeCloseTask(ticketAsignee)"
+                                                    *ngIf="ticketAsignee.aStatus === 'InProgress'">
+                                                    Close</button>
+                                                <button class="btn btn-warning btn-sm mt-2"
+                                                    (click)="TicketAsigneeHoldTask(ticketAsignee)"
+                                                    *ngIf="ticketAsignee.aStatus === 'InProgress'">
+                                                    Hold</button>
+                                            </td>
+                                            <td class="text-center">
+                                                <div class="btn-group dots_dropdown">
+                                                    <button type="button" class="dropdown-toggle" data-toggle="dropdown"
+                                                        data-display="static" aria-haspopup="true"
+                                                        aria-expanded="false">
+                                                        <i class="fas fa-ellipsis-v"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu dropdown-menu-right shadow-lg">
+                                                        <button class="dropdown-item" type="button"
+                                                            onclick="TicketAsignee.UpdateOnClick()">
+                                                            <i class="far fa fa-edit"></i> Update
+                                                        </button>
+                                                        <button class="dropdown-item" type="button"
+                                                            onclick="TicketAsignee.DeleteOnClick()">
+                                                            <i class="far fa fa-trash"></i> Delete
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                        </tr>
+                                    </ng-container>
+                                </ng-container>
+                                <ng-template #noRecords>
+                                    <tr>
+                                        <td colspan="7">
+                                            <font style="color:red;">No Records found..</font>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template #loader>
+                                    <tr *ngFor="let _ of [].constructor(3); let i = index"
+                                        [style.border-left]="'5px solid #' + WCColors[i % WCColors.length]">
+                                        <td><ngx-skeleton-loader></ngx-skeleton-loader></td>
+                                        <td><ngx-skeleton-loader></ngx-skeleton-loader></td>
+                                        <td><ngx-skeleton-loader></ngx-skeleton-loader></td>
+                                        <td><ngx-skeleton-loader></ngx-skeleton-loader></td>
+                                        <td><ngx-skeleton-loader></ngx-skeleton-loader></td>
+                                        <td><ngx-skeleton-loader></ngx-skeleton-loader></td>
+                                        <td><ngx-skeleton-loader></ngx-skeleton-loader></td>
+                                    </tr>
+                                </ng-template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="font-b h5 mb-3">Activity</div>
+        <div id="ticketDetailActivity">
+            <ng-container *ngIf="!activityLoading;else activityLoader">
+                <div class="card mb-3" *ngFor="let activity of ticketComments">
+                    <div class="card-header">
+                        <div><b>{{GetUserNameById(activity.createdBy)}}</b></div>
+                        <small class="text-muted">{{activity.createdOn | date:'medium'}}</small>
+                    </div>
+                    <div class="card-body" [innerHTML]="returnSanitizedDom(activity.ticketComments)">
+
+                    </div>
+                </div>
+            </ng-container>
+            <ng-template #activityLoader>
+                <div class="card mb-3" *ngFor="let _ of [].constructor(3); let i = index">
+                    <div class="card-header">
+                        <div><b><ngx-skeleton-loader></ngx-skeleton-loader> </b></div>
+                        <small class="text-muted"><ngx-skeleton-loader></ngx-skeleton-loader> </small>
+                    </div>
+                    <div class="card-body">
+                        <ngx-skeleton-loader></ngx-skeleton-loader>
+                        <ngx-skeleton-loader></ngx-skeleton-loader>
+                    </div>
+                </div>
+            </ng-template>
+
+
+        </div>
+    </div>
+</div>
+
+<div style="height:100px;">
+</div>
+
+<!-- CreateTicketModal -->
+
+<ng-template #CreateTicketModal>
+    <div class="modal-header text-light" style="background-color: #01018f;">
+        <h5 class="modal-title font-weight-bold" id="WorkflowInstructionsModalLabel">Update Ticket</h5>
+        <button type="button" class="close text-light" aria-label="Close" data-dismiss="modal"
+            (click)="ticketModal.close()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="updateTicketForm">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="project">Project Name</label>
+                    <select class="form-control" id="project" formControlName="projectId">
+                        <option value="1">Default</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="title">Title</label>
+                    <input type="text" class="form-control" id="title" formControlName="title">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="category">Category</label>
+                    <select class="form-control" id="category" formControlName="category">
+                        <option value="1">Software</option>
+                        <option value="2">Hardware</option>
+                        <option value="2">Network</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="priority">Ticket Priority</label>
+                    <select class="form-control" id="priority" formControlName="ticketPriority">
+                        <option>High</option>
+                        <option>Medium</option>
+                        <option>Low</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="ticketType">Ticket Type</label>
+                    <select class="form-control" id="ticketType" formControlName="ticketType">
+                        <option>Technical</option>
+                        <option>Functional</option>
+                    </select>
+                </div>
+
+            </div>
+            <div class="form-row">
+
+                <div class="form-group col-md-4">
+                    <label for="targetDate">Target Date</label>
+                    <input type="date" class="form-control" id="targetDate" formControlName="targetDate">
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="tags">Tag List</label>
+                    <input type="text" class="form-control" id="tags" formControlName="tagList">
+                </div>
+                <div class="form-group col-md-4">
+                    <div class="form-check mt-4">
+                        <input type="checkbox" class="form-check-input" id="affectsCustomer" formControlName="affectsCustomer">
+                        <label class="form-check-label" for="affectsCustomer">Affects Customer</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="AddField1">Department</label>
+                    <input type="text" class="form-control" id="department" formControlName="department">
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="AddField2">Raised By</label>
+                    <input type="text" class="form-control" id="raisedBy" formControlName="raisedBy">
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="AddField2">Raised By Contact No.</label>
+                    <input type="text" class="form-control" id="raisedByContactNo" formControlName="addField3">
+                </div>
+            </div>
+            <label>Ticket Description</label>
+            <div class="form-row">
+                <app-rich-text-editor #editor2 (submit)="TicketUpdate($event)" [setRTEHtml]="ticketInfo.ticketDesc">
+                    <button type="button" class="btn btn-sm btn-secondary my-2 ml-2" id="SupportTicketCloseBtn" data-dismiss="modal"
+                    (click)="ticketModal.close()">Close</button>
+                </app-rich-text-editor>
+            </div>
+
+
+        </form>
+    </div>
+    <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-secondary" id="SupportTicketCloseBtn" data-dismiss="modal"
+            (click)="ticketModal.close()">Close</button>
+        <button type="button" class="btn btn-primary" id="SupportTicketSaveBtn" onclick="TicketUpdate()">Create
+            Ticket</button>
+    </div> -->
+</ng-template>
+
+<ng-template #topBandLoader>
+    <div class="tick_topband">
+        <div class="row align-items-center">
+            <div class="col">
+                    <ngx-skeleton-loader></ngx-skeleton-loader> 
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-0">
+        <div class="col-8">
+            <div class="assigned_block">
+                <div class="row">
+                    <div class="col">
+                        <div class="mb-1"><span
+                                id="detailTicketPriority"><ngx-skeleton-loader></ngx-skeleton-loader></span>
+                            <ngx-skeleton-loader></ngx-skeleton-loader>
+                            <span id="detailTicketType"><ngx-skeleton-loader></ngx-skeleton-loader></span>
+                            <ngx-skeleton-loader></ngx-skeleton-loader>
+                        </div>
+                        
+                    </div>
+                    <div class="col-auto text-end assign_side_action_btn">
+                        <a href="#"><i class="fas fa-book me-1"></i> <ngx-skeleton-loader></ngx-skeleton-loader></a>
+                        <a href="#" class="d-block"><i class="fas fa-tag me-1"></i> <span
+                                id="detailTicketTag"><ngx-skeleton-loader></ngx-skeleton-loader></span></a>
+                    </div>
+                </div>
+            </div>
+            <div class="p-3" id="detailTicketDesc">
+                <ngx-skeleton-loader></ngx-skeleton-loader>
+                <ngx-skeleton-loader></ngx-skeleton-loader>
+            </div>
+        </div>
+        <div class="col-4 side_status">
+            <table class="table mb-0 " >
+                <tr>
+                    <th>Status</th>
+                    <td><ngx-skeleton-loader></ngx-skeleton-loader></td>
+                </tr>
+                <tr>
+                    <th>Raised By</th>
+                    <td><ngx-skeleton-loader></ngx-skeleton-loader></td>
+                </tr>
+                <tr>
+                    <th>Raised By Contact No</th>
+                    <td><span id="detailTicketRaisedByContactNo"><ngx-skeleton-loader></ngx-skeleton-loader></span></td>
+                </tr>
+                <tr>
+                    <th>Target Date</th>
+                    <td><span id="detailTicketTargetDate"><ngx-skeleton-loader></ngx-skeleton-loader></span></td>
+                </tr>
+                <tr>
+                    <th>Resolution Date</th>
+                    <td><span id="detailTicketResolutionDate"><ngx-skeleton-loader></ngx-skeleton-loader></span></td>
+                </tr>
+                <tr>
+                    <th>Updated By</th>
+                    <td><span id="detailTicketUpdatedBy"><ngx-skeleton-loader></ngx-skeleton-loader></span></td>
+                </tr>
+                <tr>
+                    <th>Updated Date</th>
+                    <td><span id="detailTicketUpdatedOn"><ngx-skeleton-loader></ngx-skeleton-loader></span></td>
+                </tr>
+                <tr>
+                    <th>Work Start Date</th>
+                    <td><span id="detailTicketStartOn"><ngx-skeleton-loader></ngx-skeleton-loader></span></td>
+                </tr>
+                <tr>
+                    <th>Created By</th>
+                    <td><span id="detailTicketCreatedBy"><ngx-skeleton-loader></ngx-skeleton-loader></span></td>
+                </tr>
+                <tr>
+                    <th>Created Date</th>
+                    <td><span id="detailTicketCreatedOn"><ngx-skeleton-loader></ngx-skeleton-loader></span></td>
+                </tr>
+                <tr>
+                    <th>Estimate Duration</th>
+                    <td><span id="detailTicketEstimatedDuration"><ngx-skeleton-loader></ngx-skeleton-loader></span></td>
+                </tr>
+                <tr>
+                    <th>Actual Duration</th>
+                    <td><span id="detailTicketActualDuration"><ngx-skeleton-loader></ngx-skeleton-loader></span></td>
+                </tr>
+                <tr>
+                    <th>Subscribers</th>
+
+                    <td>
+                        <div><span id="detailTicketSubscriber1"><ngx-skeleton-loader></ngx-skeleton-loader></span></div>
+                        <div><span id="detailTicketSubscriber2"><ngx-skeleton-loader></ngx-skeleton-loader></span></div>
+                        <div><span id="detailTicketSubscriber3"><ngx-skeleton-loader></ngx-skeleton-loader></span></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</ng-template>

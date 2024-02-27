@@ -142,7 +142,7 @@ function DashboardWorkList_OnSuccessCallBack(data) {
 
     Ticket.ClientAssignedToOthersListTblDT = $('#ClientAssignedToOthersListTbl').DataTable({
         columnDefs: [{ "width": "5%", "targets": [0, 10] }, { "width": "8%", "targets": [1, 2, 3, 5, 6, 7, 8, 9] }, { "width": "34%", "targets": [4] }],
-        dom: 'Bfrtip',
+        dom: '5',
         buttons: [
             'copy', 'csv', 'excel', 'pdf', 'print'
         ]

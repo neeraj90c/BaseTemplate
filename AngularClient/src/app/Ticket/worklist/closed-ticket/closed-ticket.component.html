@@ -1,0 +1,34 @@
+
+<form class="d-flex mb-4" [formGroup]="dateForm">
+    <div class=" d-flex align-items-center">
+        <div>Start Date: </div>
+        <div>
+            <input type="date" class="form-control form-control-sm ml-2" formControlName="startDate">
+        </div>
+    </div>
+    <div class=" d-flex align-items-center ml-4">
+        <div>End Date: </div>
+        <div>
+            <input type="date" class="form-control form-control-sm ml-2" formControlName="endDate">
+        </div>
+    </div>
+    <div class="ml-4">
+        <button class="btn btn-primary btn-sm" (click)="LoadDataWithDate()">Load Data</button>
+    </div>
+</form>
+<app-color-datatable [tableData]="ClosedTickets" [columns]="[
+    {colName:'Raised By',colData:'raisedBy'},
+    {colName:'Ticket No',colData:'ticketId'},
+    {colName:'Ticket Date',colData:'createdOn',isDate:true},
+    {colName:'Ticket Title',colData:'title'},
+    {colName:'Assigned To',colData:'assignedToName'},
+    {colName:'Ticket Status',colData:'ticketStatus'},
+    {colName:'Company',colData:'companyName'},
+    {colName:'Target Date',colData:'targetDate',isDate:true},
+    {colName:'Last Action',colData:'modifiedOn',isDate:true}
+    ]"
+    [enableActionColumn]="true"
+    [actionColumnLabel]="'Action'"
+    [actionOptions]="[{actionName: 'View', actionIcon: 'fa fa-eye '}]"
+    (actionClick)="handleActionClick($event)" [enableExports]="true"
+    ></app-color-datatable>

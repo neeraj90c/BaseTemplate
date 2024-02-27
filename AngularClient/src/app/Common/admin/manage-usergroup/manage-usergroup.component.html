@@ -1,0 +1,63 @@
+<div class="d-flex align-items-center justify-content-between mb-3" style="border-bottom:1px solid #CDD5E9">
+    <div class="main-heading">Project Roles</div>
+    <button type="button" class="btn btn-primary btn-sm" 
+      (click)="CreateNewGroup()">Create New</button>
+  </div>
+  
+
+<app-color-datatable 
+[columns]="[
+{colName:'Role Name',colData:'groupName'},
+{colName:'Role Code',colData:'groupCode'},
+{colName:'Description',colData:'groupDesc'},
+{colName:'Created By',colData:'createdBy'}]"
+[tableData]="userGroupList"
+[enableActionColumn]="true" [actionColumnLabel]="'Action'"
+[actionOptions]="[{actionName:'Edit',actionIcon:'fa fa-edit'},{actionName:'Delete',actionIcon:'fa fa-trash'}]"
+(actionClick)="handleActionClick($event)" enableBadge="groupCode">
+</app-color-datatable> 
+
+
+
+  <!-- Modal -->
+  <ng-template #usrGroup let-Modal>
+
+          <div class="modal-header">
+            <h5 class="modal-title font-b" id="ModalTitle">Project Roles</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="EditGroupModal.close()">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form class="form-row" [formGroup]="UserGroupForm">
+                
+             
+              <div class="col-md-6 mb-3">
+  
+                <label class="label font-sb mb-1">Role Name<span style="color: red;">*</span></label>
+                <input type="text" class="form-control" formControlName="groupName">
+                <span *ngIf="groupname && groupname.invalid && groupname.touched" style="color: red;">This field is Required</span>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="label font-sb mb-1">Role Code<span style="color: red;">*</span></label>
+                <input type="text" class="form-control" formControlName="groupCode">
+                <span *ngIf="groupcode && groupcode.invalid && groupcode.touched" style="color: red;">This field is Required</span>
+              </div>
+        
+  
+              <div class="col-md-12">
+                <label class="label font-sb mb-1">Role Description<span style="color: red;">*</span></label>
+                <textarea id="GroupDescArea" class="form-control" row="6" formControlName="groupDescription"> </textarea>
+                <span *ngIf="groupdescription && groupdescription.invalid && groupdescription.touched"
+                  style="color: red;">This field is Required</span>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer ">
+            <button class="btn btn-secondary btn-sm" (click)="EditGroupModal.close()">Cancel</button>
+            <button class="btn btn-primary btn-sm" (click)=" SubmitUserGroupForm()">Submit</button>
+          </div>
+        
+  
+  
+  </ng-template>

@@ -1,0 +1,146 @@
+
+  <div class="custom-right my-2" >
+    <label> 
+      Show
+      <select name="example_length" (change)="onPageSizeChanged($event)" class="dropdown-toggle from-control form-control-sm">
+        <option>10</option>
+        <option>25</option>
+        <option>50</option>
+        <option>100</option>
+        <option value=1000>ALL</option>
+      </select> 
+      entries
+    </label>
+    <!-- <button class="btn btn-sm btn-outline-success" (click)="generatePDF()">Export <i class="bi bi-filetype-pdf"></i></button>
+    <button class="btn btn-sm btn-outline-success" (click)="printTable()">Print <i class="bi bi-filetype-pdf"></i></button> -->
+    <!-- parent.component.html -->
+    <ng-container *ngIf="enableExports">
+      <app-pdf-generator [pdfFileName]="'TechnoTechERP'" [data]="tableData" [columns]="columns"></app-pdf-generator>
+    </ng-container>
+
+  </div>
+  <div *ngIf="!loading; else skeletonLoader" #dataTable>
+    <table  class="table table-bordered com_table  mb-0" style="width: 100%;" >
+        <thead>
+            <tr class="text-dark" style="border-left: 5px solid var(--orange-col);">
+                <th scope="col">SrNo</th>
+             
+                <th scope="col" *ngFor="let col of columns" (click)="sortData(col.colData)" style="cursor: pointer;">
+                  {{ col.colName }}
+                  <span *ngIf="sortingColumn !== col.colData" style="color:#a5a5a5">▲▼</span>
+                  <span *ngIf="sortingColumn === col.colData && sortingOrder === 'asc'">▲</span>
+                  <span *ngIf="sortingColumn === col.colData && sortingOrder === 'desc'">▼</span>
+                </th>
+  
+                <th *ngIf="enableCheckboxColumn">{{ checkboxColumnLabel }}</th>
+                <th *ngIf="enableActionColumn" class ="text-center">{{ actionColumnLabel }}</th>
+            </tr>
+        </thead>
+        <tbody id="TemplateListBody">
+            <ng-container *ngIf="tableData.length > 0; else noData">
+  
+                <tr *ngFor="let rows of filteredData; let i = index" [style.border-left]="'5px solid #' + WCColors[i % WCColors.length]">
+  
+                    <td>{{ (currentPage - 1) * selectedPageSize + i + 1 }}</td>
+                    <td *ngFor="let col of columns">
+                        <div [ngClass]="enableBadge===col.colName? 'badge badge-secondary font-l':''"
+                        [style.background-color]="enableBadge===col.colName? '#' + WCColors[i % WCColors.length]:''">{{ col.enableCurrency ? (isNumber(rows[col.colData]) ? (rows[col.colData] | currency) : rows[col.colData]) : (col.isDate ? (rows[col.colData] | date:'dd/MM/yyyy') : rows[col.colData]) || rows[col.colData]  }}</div>
+                    </td>
+                    <td *ngIf="enableCheckboxColumn" class="text-center">
+                        <input type="checkbox" [(ngModel)]="rows[checkboxStateBinding]" (change)="onCheckboxChange(rows)" [checked]="rows[checkboxStateBinding]===1" />
+                    </td>
+                    <td class="text-center" *ngIf="enableActionColumn">
+                        <div class="btn-group dots_dropdown">
+                            <button type="button" class="dropdown-toggle" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                              <i class="fa fa-ellipsis-v"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right shadow-lg" >
+                              <button class="dropdown-item" type="button" *ngFor="let option of actionOptions" (click)="actionButtonClick(option.actionName,rows)">
+                                <i [ngClass]="option.actionIcon"></i> {{option.actionName}}
+                              </button>
+                            
+                              
+                            </div>
+                          </div>
+                    </td>
+  
+  
+  
+                </tr>
+  
+            </ng-container>
+  
+  
+            <ng-template #noData>
+                <tr>
+                    <td colspan="7">
+                        <font style="color:red;">No Records found..</font>
+                    </td>
+                </tr>
+            </ng-template>
+  
+  
+        </tbody>
+    </table>
+  </div>
+
+  <div class="container-fluid mt-0 d-flex align-items-start justify-content-between pt-3">
+    <div>
+      Current Page : {{' ' + currentPage + ' / ' + totalPages }}
+    </div>
+   
+    <div class="d-flex justify-content-end">
+      <ng-container *ngIf="totalPages > 0">
+        <ul class="pagination-list d-flex">
+          <li class="pagination-item px-1">
+            <button class="btn btn-sm" (click)="goToFirstPage()" [disabled]="currentPage === 1"
+              [ngClass]="{'btn-secondary': currentPage === 1, 'btn-primary': currentPage !== 1}">First</button>
+          </li>
+          <li class="pagination-item px-1">
+            <button class="btn btn-sm btn-primary" (click)="goToPreviousPage()" [disabled]="currentPage === 1"
+              [ngClass]="{'btn-secondary': currentPage === 1, 'btn-primary': currentPage !== 1}">Previous</button>
+          </li>
+          <ng-container *ngFor="let page of getPagesToShow()">
+            <li class="pagination-item px-1">
+              <button class="btn btn-outline-primary btn-sm" (click)="goToNumberPage(page)"
+                [ngClass]="{'btn-primary': currentPage === page, 'btn-outline-primary': currentPage !== page}">
+                {{ page }}
+              </button>
+            </li>
+          </ng-container>
+          <li class="pagination-item px-1">
+            <button class="btn btn-sm btn-primary" [disabled]="currentPage == totalPages" (click)="goToNextPage()"
+              [ngClass]="{'btn-secondary': currentPage == totalPages, 'btn-primary': currentPage !== totalPages}">Next</button>
+          </li>
+          <li class="pagination-item">
+            <button class="btn btn-sm btn-primary" (click)="goToLastPage()" [disabled]="currentPage === totalPages"
+              [ngClass]="{'btn-secondary': currentPage == totalPages, 'btn-primary': currentPage !== totalPages}">Last</button>
+          </li>
+        </ul>
+      </ng-container>
+    </div>
+  </div>
+
+
+  <ng-template #skeletonLoader>
+    <table id="example" class="table table-bordered com_table" style="width: 100%;">
+        <thead>
+            <tr>
+                <th style="width: 30px; border-left: 5px solid var(--orange-col); cursor: pointer;"
+                    ng-reflect-ng-class="[object Object]" class="active_arrow">
+                    <ngx-skeleton-loader appearance="line"></ngx-skeleton-loader>
+                  </th>
+                <th *ngFor="let col of columns" scope="col"><ngx-skeleton-loader appearance="line"></ngx-skeleton-loader></th>
+            </tr>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let _ of [].constructor(5); let i = index" [style.border-left]="'5px solid #' + WCColors[i % WCColors.length]">
+                
+                <td><ngx-skeleton-loader appearance="line"></ngx-skeleton-loader></td>
+                <td *ngFor="let col of columns"><ngx-skeleton-loader appearance="line"></ngx-skeleton-loader> </td>
+            </tr>
+    
+        </tbody>
+    </table>
+  </ng-template>

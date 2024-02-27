@@ -1,0 +1,79 @@
+.dots_dropdown .dropdown-toggle::after {
+  display: none
+}
+
+.dots_dropdown .dropdown-toggle {
+  border: none;
+  background-color: transparent;
+  color: var(--gray);
+  outline: none !important;
+}
+
+.dots_dropdown .dropdown-menu {
+  min-width: 7rem;
+}
+
+.dots_dropdown .dropdown-menu .dropdown-item {
+  font-size: 12px;
+  padding: 5px 15px;
+  outline: none !important;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.dots_dropdown .dropdown-menu .dropdown-item i {
+  width: 15px;
+}
+
+.dots_dropdown .dropdown-menu .dropdown-item:active {
+  background-color: var(--orange-col) !important;
+}
+
+.dots_dropdown .dropdown-menu .dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.table>:not(:last-child)>:last-child>* {
+  border-bottom-color: rgb(48 62 61 / 10%);
+}
+
+.com_table {
+  font-size: 12px
+}
+
+.com_table thead th {
+  background-color: rgb(48 62 61 / 10%);
+  color: #455a64;
+  vertical-align: middle;
+}
+
+.com_table tbody td {
+  color: #455a64
+}
+
+.com_table tbody tr:hover td {
+  background-color: #ecf1ff;
+  color: #263238;
+}
+
+table>tbody>tr>td>span.footable-toggle {
+  opacity: 1 !important;
+  font-size: 16px !important;
+  font-weight: bold !important;
+}
+
+table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control:before,
+table.dataTable.dtr-inline.collapsed>tbody>tr>th.dtr-control:before {
+  background-color: #90A4AE !important;
+}
+
+.com_table tbody td .progress-bar {
+  background-color: rgb(242 72 0 / 75%);
+}
+
+
+.com_table td {
+  padding: 7px 10px;
+}
+
+
+

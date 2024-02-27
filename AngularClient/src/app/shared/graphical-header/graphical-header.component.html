@@ -1,0 +1,149 @@
+<ng-container *ngIf="!dataLoading; else GraphicalSkeletonLoader">
+    <div class="work_order_body" style="margin-left : -25px; margin-right : -25px">
+        <div class="ribbon down" style="--color: #fd9c2e;" *ngIf="headerData.isFAI == 1">
+            <div class="content">
+                <!-- <svg width="24px" height="24px" aria-hidden="true" focusable="false" data-prefix="far" data-icon="star" class="svg-inline--fa fa-star fa-w-18" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                  <path fill="currentColor" d="M528.1 171.5L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6zM388.6 312.3l23.7 138.4L288 385.4l-124.3 65.3 23.7-138.4-100.6-98 139-20.2 62.2-126 62.2 126 139 20.2-100.6 98z"></path>
+                </svg> -->
+                <div class="icon"><i class="fa fa-solid fa-trophy"></i></div>
+
+                FAI
+            </div>
+        </div>
+        <!-- <div class="ribbon-2">Folded Ribbon</div> -->
+        <!-- <div class="ribbon-1 left">Rotated Ribbon</div> -->
+
+
+
+        <div class="ribbon2 down" style="--color: #aaada2;" *ngIf="headerData.isLegacy == 1">
+            <div class="content">
+                <!-- <svg width="24px" height="24px" aria-hidden="true" focusable="false" data-prefix="far" data-icon="star" class="svg-inline--fa fa-star fa-w-18" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+              <path fill="currentColor" d="M528.1 171.5L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6zM388.6 312.3l23.7 138.4L288 385.4l-124.3 65.3 23.7-138.4-100.6-98 139-20.2 62.2-126 62.2 126 139 20.2-100.6 98z"></path>
+            </svg> -->
+                <div class="icon"><i class="fab fa-galactic-republic fa-3x"></i></div>
+
+                Legacy
+            </div>
+
+        </div>
+
+
+
+
+        <div class="row align-items-center">
+            <div class="col-md-3">
+                <div class="row">
+                    <div class="col-md-6 mb-6" *ngFor="let header of headers">
+                        <ng-container *ngIf="headerData">
+                            <div class="font-r" *ngIf="header.title">{{header.title}}</div>
+                            <div class="font-l h4 mb-3" style="color: #e9621f;" *ngIf="header.data">{{header.data}}
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="h5 font-sb mb-4">WorkOrder Summary (%)</div>
+                <div id="TravelerProgressBarDiv" style="height: 200px; width: 100%;" [chart]="Highcharts"></div>
+            </div>
+            <div class="col-md-3">
+                <div class="h5 font-sb mb-4">Progress</div>
+                <div class="m-auto chart_center_val">
+                    <div class="text-center center_val_cont">
+                        <div class="font-r" style="color: #e9621f;">
+                            HH:MM
+                        </div>
+                        <div class="h5 mb-0" style="color: #097c13;" id="timeSpent" *ngIf="timeSpent===0">
+                            00:00
+                        </div>
+                        <div class="h5 mb-0" style="color: #097c13;" id="timeSpent" *ngIf="timeSpent!=0">
+                            {{timeSpent}}
+                        </div>
+                    </div>
+                    <div id="CWA_chart_web"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="text-center">
+                            <div class="h4 mb-0" id="remainingId">{{remainingPercentage}}</div>
+                            <div style="color: #7c7a7e;">Remaining</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="text-center">
+                            <div class="h4 mb-0" id="completedId">{{completedPercentage}}</div>
+                            <!-- <div style="color: #097c13">Completed</div> -->
+                            <div style="color: #097c13; font-weight: bold;">Completed</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>
+
+<ng-template #GraphicalSkeletonLoader>
+    <div class="work_order_body" style="margin-left: -25px; margin-right: -25px;">
+        <div class="row align-items-center">
+            <div class="col-md-3">
+                <div class="row">
+                    <div class="col-md-6 mb-6">
+                        <div class="font-r"><ngx-skeleton-loader appearance="line"></ngx-skeleton-loader></div>
+                        <div class="font-l h4 mb-3" style="color: #e9621f;"><ngx-skeleton-loader
+                                appearance="line"></ngx-skeleton-loader>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-6">
+                        <div class="font-r"><ngx-skeleton-loader appearance="line"></ngx-skeleton-loader></div>
+                        <div class="font-l h4 mb-3" style="color: #e9621f;"><ngx-skeleton-loader
+                                appearance="line"></ngx-skeleton-loader>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-6">
+                        <div class="font-r"><ngx-skeleton-loader appearance="line"></ngx-skeleton-loader></div>
+                        <div class="font-l h4 mb-3" style="color: #e9621f;"><ngx-skeleton-loader
+                                appearance="line"></ngx-skeleton-loader></div>
+                    </div>
+                    <div class="col-md-6 mb-6">
+                        <div class="font-r"><ngx-skeleton-loader appearance="line"></ngx-skeleton-loader></div>
+                        <div class="font-l h4 mb-3" style="color: #e9621f;"><ngx-skeleton-loader
+                                appearance="line"></ngx-skeleton-loader></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="h5 font-sb mb-4">Summary (%)
+                    <ngx-skeleton-loader appearance="line"></ngx-skeleton-loader>
+                    <ngx-skeleton-loader appearance="line"></ngx-skeleton-loader>
+                    <ngx-skeleton-loader appearance="line"></ngx-skeleton-loader>
+                    <ngx-skeleton-loader appearance="line"></ngx-skeleton-loader>
+                </div>
+
+
+            </div>
+            <div class="col-md-3">
+                <div class="h5 font-sb mb-4">Progress</div>
+                <div>
+                    <ngx-skeleton-loader appearance="circle" style="width: 30px;"
+                        [theme]="{ width: '150px', height: '150px', left:'130px'}"></ngx-skeleton-loader>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="text-center">
+                            <div id="remainingId" class="h4 mb-0"><ngx-skeleton-loader
+                                    appearance="line"></ngx-skeleton-loader></div>
+                            <div style="color: #7c7a7e;">Remaining</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="text-center">
+                            <div id="completedId" class="h4 mb-0"><ngx-skeleton-loader
+                                    appearance="line"></ngx-skeleton-loader></div>
+                            <div style="color: #097c13; font-weight: bold;">Completed</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

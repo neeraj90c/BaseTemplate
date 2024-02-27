@@ -1,0 +1,47 @@
+<div class="custom-right my-2" *ngIf="EnablePageSize">
+  <label> Show
+    <select name="example_length" (change)="onPageSizeChanged($event)" class="dropdown-toggle" [(ngModel)]="pageSize">
+      <option>10</option>
+      <option>25</option>
+      <option>50</option>
+      <option>100</option>
+      <option value=1000>ALL</option>
+    </select> entries
+  </label>
+</div>
+
+<div class="container-fluid mt-2" *ngIf="EnableNavigation">
+  <div class="PagesCount">
+    Current Page : {{' ' + currentPage + ' / ' + totalPages }}
+  </div>
+  <div class="pagination justify-content-end py-5">
+    <ng-container *ngIf="totalPages > 0">
+      <ul class="pagination-list">
+        <li class="pagination-item px-1">
+          <button class="btn btn-sm" (click)="goToFirstPage()" [disabled]="currentPage === 1"
+            [ngClass]="{'btn-secondary': currentPage === 1, 'btn-primary': currentPage !== 1}">First</button>
+        </li>
+        <li class="pagination-item px-1">
+          <button class="btn btn-sm btn-primary" (click)="goToPreviousPage()" [disabled]="currentPage === 1"
+            [ngClass]="{'btn-secondary': currentPage === 1, 'btn-primary': currentPage !== 1}">Previous</button>
+        </li>
+        <ng-container>
+          <li class="pagination-item px-1" *ngFor="let page of getPagesToShow()">
+            <button class="btn btn-outline-primary btn-sm" (click)="goToNumberPage(page)"
+              [ngClass]="{'btn-primary': currentPage === page, 'btn-outline-primary': currentPage !== page}">
+              {{ page }}
+            </button>
+          </li>
+        </ng-container>
+        <li class="pagination-item px-1">
+          <button class="btn btn-sm btn-primary" [disabled]="currentPage == totalPages" (click)="goToNextPage()"
+            [ngClass]="{'btn-secondary': currentPage == totalPages, 'btn-primary': currentPage !== totalPages}">Next</button>
+        </li>
+        <li class="pagination-item">
+          <button class="btn btn-sm btn-primary" (click)="goToLastPage()" [disabled]="currentPage === totalPages"
+            [ngClass]="{'btn-secondary': currentPage == totalPages, 'btn-primary': currentPage !== totalPages}">Last</button>
+        </li>
+      </ul>
+    </ng-container>
+  </div>
+</div>
