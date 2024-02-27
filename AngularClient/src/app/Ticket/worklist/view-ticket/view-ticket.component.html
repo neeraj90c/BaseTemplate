@@ -224,6 +224,9 @@
                                     <option *ngFor="let user of resolverList" [value]="user.userId">{{user.name}}
                                     </option>
                                 </select>
+                                <div *ngIf="assigneeCrl.invalid && assigneeCrl.touched">
+                                    <p style="color: red;">Required</p>
+                                </div>
                             </div>
                             <div class="col-md-1">
                                 <label>Work Ratio</label>
@@ -238,7 +241,7 @@
                                 <br />
                                 <button class="btn btn-primary btn-sm mt-2" (click)="TicketAsigneeSaveAsignee()"
                                     id="TicketAsigneeSaveUpdateBtn"> Save</button>
-                                <button class="btn btn-sm mt-2" (click)="assignTicketToUserDivVisible  = false"
+                                <button class="btn btn-sm mt-2 ml-2" (click)="assignTicketToUserDivVisible  = false"
                                     style="outline:1px solid grey;"> Cancel</button>
                             </div>
                         </form>

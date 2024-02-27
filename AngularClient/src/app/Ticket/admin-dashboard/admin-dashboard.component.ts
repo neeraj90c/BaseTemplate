@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TicketService } from '../ticket.service';
-import { DashboardInputParams, KeyValue } from '../interface/ticket.interface';
+import { DashboardInputParams, KeyValue } from '../../interface/ticket.interface';
 import { FormGroup, FormControl } from '@angular/forms';
 import * as am4core from '@amcharts/amcharts4/core';
 import am4themes_animated from '@amcharts/amcharts4/themes/animated';

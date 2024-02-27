@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TicketService } from '../../ticket.service';
-import { GetClientListDTO, SupportTicketDTO } from '../../interface/ticket.interface';
+import { GetClientListDTO, SupportTicketDTO } from '../../../interface/ticket.interface';
 import { environment } from 'src/environments/environment';
 import { UserService } from 'src/app/services/user.service';
 

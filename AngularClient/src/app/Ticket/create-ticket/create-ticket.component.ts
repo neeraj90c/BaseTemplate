@@ -4,7 +4,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
-import { SupportTicketDTO } from '../interface/ticket.interface';
+import { SupportTicketDTO } from '../../interface/ticket.interface';
 import { TicketService } from '../ticket.service';
 import { CompanyMasterDTO } from 'src/app/interface/CompanyMasterDTO';
 import { CommonService } from 'src/app/Common/services/common.service';
