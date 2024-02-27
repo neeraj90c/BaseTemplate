@@ -58,17 +58,36 @@ export class PdfGeneratorComponent {
         const printWindow = window.open('', '_blank');
         if (printWindow) {
             printWindow.document.write('<html><head><title>TechnoTech ERP</title></head><body>');
-            const stylesheets = document.head.getElementsByTagName('link');
-            for (let i = 0; i < stylesheets.length; i++) {
-                printWindow.document.write(stylesheets[i].outerHTML);
-            }
-            const styles = document.head.getElementsByTagName('style');
-            for (let i = 0; i < styles.length; i++) {
-                const styleClone = printWindow.document.createElement('style');
-                styleClone.innerHTML = styles[i].innerHTML;
-                printWindow.document.head.appendChild(styleClone);
-            }
+            printWindow.document.write(`<h1>${this.pdfFileName}</h1>`);
 
+
+            // const stylesheets = document.head.getElementsByTagName('link');
+            // for (let i = 0; i < stylesheets.length; i++) {
+            //     printWindow.document.write(stylesheets[i].outerHTML);
+            // }
+            // const styles = document.head.getElementsByTagName('style');
+            // for (let i = 0; i < styles.length; i++) {
+            //     const styleClone = printWindow.document.createElement('style');
+            //     styleClone.innerHTML = styles[i].innerHTML;
+            //     printWindow.document.head.appendChild(styleClone);
+            // }
+
+            const stylesheets = document.head.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"]');
+        stylesheets.forEach((stylesheet) => {
+            const linkClone = printWindow.document.createElement('link');
+            linkClone.rel = 'stylesheet';
+            linkClone.type = 'text/css'; // Explicitly set the type attribute
+            linkClone.href = stylesheet.href;
+            printWindow.document.head.appendChild(linkClone);
+        });
+
+        const styles = document.head.getElementsByTagName('style');
+        for (let i = 0; i < styles.length; i++) {
+            const styleClone = printWindow.document.createElement('style');
+            styleClone.innerHTML = styles[i].innerHTML;
+            printWindow.document.head.appendChild(styleClone);
+        }
+            
             printWindow.document.write(table.outerHTML);
             printWindow.document.write('</body></html>');
             printWindow.document.close();

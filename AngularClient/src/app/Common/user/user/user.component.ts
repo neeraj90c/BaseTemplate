@@ -273,12 +273,10 @@ export class UserComponent implements OnInit {
       })
       this.UserForm.get('roleId')?.disable();
       this.previewImage = userData.profileImageBase64 ? 'data:image/png;base64,'+userData.profileImageBase64 : ""
-      console.log(this.UserForm.get('profileImage')?.value);
 
     }
     else if (actionName === 'Delete') {
       this.confirmmodalserviceService.openSwalModal(rowData.firstName as string, rowData).subscribe(res => {
-        console.log(res);
 
         if (res) {
           res.rowData.isActive = 0;
@@ -407,7 +405,6 @@ export class UserComponent implements OnInit {
 
   public CreateUserCredentials(userId: number) {
     if (this.UserForm.controls.userCredential.controls.userName.value !== null && this.UserForm.controls.userCredential.controls.userPassword.value !== null) {
-      console.log('inside validation')
       let userCred: UserCredentials = {
         userId: userId,
         userName: this.UserForm.controls.userCredential.controls.userName.value,
@@ -415,7 +412,6 @@ export class UserComponent implements OnInit {
         actionUser: this.User.userId
       }
 
-      console.log(userCred);
       this._commonService.GenerateUserCredentials(userCred).subscribe(res => {
         this.UserMasterlist = res.users
         this.filteredUsers = res.users.map(user => ({

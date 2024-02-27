@@ -160,7 +160,6 @@ export class ColorDatatableComponent {
   }
 
   generatePDF() {
-    console.log('Button clicked. Generating PDF...');
     this.pdfGeneratorService.generatePDF('TechnoTech ERP', this.tableData, this.columns);
   }
 

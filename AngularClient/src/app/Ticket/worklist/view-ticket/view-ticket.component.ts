@@ -97,7 +97,6 @@ export class ViewTicketComponent {
 
   getTicketResolverList() {
     this._ticketService.getTicketResolverList({ actionUser: this.User.userId }).subscribe(res => {
-      console.log(res.tickets);
       this.resolverList = res.tickets
 
     })
@@ -237,7 +236,6 @@ export class ViewTicketComponent {
       actionUser: this.User.userId
     }
     this._ticketService.reopenTicket(data).subscribe(res => {
-      console.log(res);
       this.GetAllUserList();
       this.getTicketResolverList();
       this.getTicketDetail(this.ticketId)
@@ -267,7 +265,6 @@ export class ViewTicketComponent {
     ticketAsignee.aStatus = "InProgress",
       ticketAsignee.actionUser = this.User.userId.toString(),
       this._ticketService.ticketStatusUpdate(ticketAsignee).subscribe(res => {
-        console.log(res.ticketAsignee[0]);
         ticketAsignee = res.ticketAsignee[0]
         this.toaster.success('Ticket Started!')
 
@@ -277,7 +274,6 @@ export class ViewTicketComponent {
     ticketAsignee.aStatus = "Close";
     ticketAsignee.actionUser = this.User.userId.toString();
     this._ticketService.ticketStatusUpdate(ticketAsignee).subscribe(res => {
-      console.log(res.ticketAsignee[0]);
       ticketAsignee = res.ticketAsignee[0]
       this.toaster.success('Ticket Closed!!')
 
@@ -287,7 +283,6 @@ export class ViewTicketComponent {
     ticketAsignee.aStatus = "Hold";
     ticketAsignee.actionUser = this.User.userId.toString(),
       this._ticketService.ticketStatusUpdate(ticketAsignee).subscribe(res => {
-        console.log(res.ticketAsignee[0]);
         ticketAsignee = res.ticketAsignee[0]
         this.toaster.success('Ticket on Hold!!')
       })

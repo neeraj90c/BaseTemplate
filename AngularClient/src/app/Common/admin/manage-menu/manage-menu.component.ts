@@ -147,7 +147,6 @@ export class ManageMenuComponent implements OnInit {
 
 
   Update(data: any){
-    console.log(data);
     this.menuModal = this.modalService.open(this.menuModalContent)
     this.createMenuForm.patchValue({
       menuId:data.menuId,
@@ -178,7 +177,6 @@ export class ManageMenuComponent implements OnInit {
 
   }
   AddNew(data: MenuManage) {
-    console.log(data);
     this.menuModal = this.modalService.open(this.menuModalContent)
 
   }

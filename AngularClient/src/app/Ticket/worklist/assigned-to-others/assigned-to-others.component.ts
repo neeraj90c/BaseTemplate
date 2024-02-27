@@ -31,8 +31,6 @@ export class AssignedToOthersComponent {
 
     this._ticketService.getClientWorklist(data).subscribe(res => {
       this.AssignedToOthers = res.assignedToOthers
-      console.log(res.assignedToOthers);
-      
     })
   }
   
