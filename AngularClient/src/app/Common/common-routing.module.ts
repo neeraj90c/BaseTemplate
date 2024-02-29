@@ -21,6 +21,8 @@ import { ViewTicketComponent } from '../ticket/worklist/view-ticket/view-ticket.
 import { WorkInProgressComponent } from '../ticket/worklist/work-in-progress/work-in-progress.component';
 import { WorklistComponent } from '../ticket/worklist/worklist.component';
 import { ManageCompanyComponent } from './admin/manage-company/manage-company.component';
+import { InProgressComponent } from '../ticket/create-ticket/in-progress/in-progress.component';
+import { ClosedTicketsComponent } from '../ticket/create-ticket/closed-tickets/closed-tickets.component';
 
 
 
@@ -42,8 +44,8 @@ const routes: Routes = [
         path: 'CSD', component: CreateTicketComponent, title: 'Create Ticket', children: [
           { path: '', redirectTo: 'active-tickets', pathMatch: 'full' },
           { path: 'active-tickets', component: ActiveTicketsComponent, title: 'Active Tickets' },
-          { path: 'in-progress', component: ActiveTicketsComponent, title: 'In Progress Tickets' },
-          { path: 'closed-tickets', component: ActiveTicketsComponent, title: 'Closed Tickets' },
+          { path: 'in-progress', component: InProgressComponent, title: 'In Progress Tickets' },
+          { path: 'closed-tickets', component: ClosedTicketsComponent, title: 'Closed Tickets' },
         ]
       },
       { path: 'SDAD', component: AdminDashboardComponent, title: 'Admin Dashboard' },
