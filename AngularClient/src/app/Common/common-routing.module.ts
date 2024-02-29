@@ -39,6 +39,7 @@ const routes: Routes = [
       { path: 'UGAD', component: ManageUsergroupComponent, title: 'Manage UserGroup' },
       {
         path: 'CSD', component: CreateTicketComponent, title: 'Create Ticket', children: [
+          { path: '', redirectTo: 'active-tickets', pathMatch: 'full' },
           { path: 'active-tickets', component: ActiveTicketsComponent, title: 'Active Tickets' },
           { path: 'in-progress', component: ActiveTicketsComponent, title: 'In Progress Tickets' },
           { path: 'closed-tickets', component: ActiveTicketsComponent, title: 'Closed Tickets' },

@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { SupportTicketDTO, GetClientListDTO } from '../../../interface/ticket.interface';
-import { TicketService } from 'src/app/ticket/ticket.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { formatDate } from '@angular/common';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
+import { TicketService } from '../../ticket.service';
 
 @Component({
   selector: 'app-closed-ticket',

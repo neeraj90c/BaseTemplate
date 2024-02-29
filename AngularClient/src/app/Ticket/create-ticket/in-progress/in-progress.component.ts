@@ -2,21 +2,20 @@ import { Component } from '@angular/core';
 import { SupportTicketDTO } from 'src/app/interface/ticket.interface';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
-import { TicketService } from '../../ticket.service';
-
+import { TicketService } from '../../ticket.service'
 
 @Component({
-  selector: 'app-active-tickets',
-  templateUrl: './active-tickets.component.html',
-  styleUrls: ['./active-tickets.component.scss']
+  selector: 'app-in-progress',
+  templateUrl: './in-progress.component.html',
+  styleUrls: ['./in-progress.component.scss']
 })
-export class ActiveTicketsComponent {
+export class InProgressComponent {
   constructor(private _ticketService: TicketService,private userService: UserService,) { }
 
 
   COMPANY_ID = environment.COMPANY_CODE
   User = this.userService.User()
-  activeTickets: SupportTicketDTO[]=[];
+  inprogressTickets: SupportTicketDTO[]=[];
 
 
   ngOnInit(): void {
@@ -27,7 +26,7 @@ export class ActiveTicketsComponent {
   GetAllTicketData() {
     let data = { actionUser: this.User.userId, companyId: parseInt(this.COMPANY_ID) }
     this._ticketService.getClientUserTicketList(data).subscribe(res => {
-      this.activeTickets = res.activeTickets
+      this.inprogressTickets = res.inprogressTickets
     })
   }
 
@@ -37,6 +36,5 @@ export class ActiveTicketsComponent {
       this._ticketService.navigateToViewTicket(rowData.ticketId)
     }
   }
-
 
 }

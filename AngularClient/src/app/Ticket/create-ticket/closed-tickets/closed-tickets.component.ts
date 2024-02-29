@@ -4,13 +4,12 @@ import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
 import { TicketService } from '../../ticket.service';
 
-
 @Component({
-  selector: 'app-active-tickets',
-  templateUrl: './active-tickets.component.html',
-  styleUrls: ['./active-tickets.component.scss']
+  selector: 'app-closed-tickets',
+  templateUrl: './closed-tickets.component.html',
+  styleUrls: ['./closed-tickets.component.scss']
 })
-export class ActiveTicketsComponent {
+export class ClosedTicketsComponent {
   constructor(private _ticketService: TicketService,private userService: UserService,) { }
 
 
@@ -23,11 +22,11 @@ export class ActiveTicketsComponent {
     this.GetAllTicketData()
   
   }
-
+  closedTickets:SupportTicketDTO[]=[]
   GetAllTicketData() {
     let data = { actionUser: this.User.userId, companyId: parseInt(this.COMPANY_ID) }
     this._ticketService.getClientUserTicketList(data).subscribe(res => {
-      this.activeTickets = res.activeTickets
+      this.closedTickets = res.closedTickets
     })
   }
 
@@ -37,6 +36,5 @@ export class ActiveTicketsComponent {
       this._ticketService.navigateToViewTicket(rowData.ticketId)
     }
   }
-
 
 }
