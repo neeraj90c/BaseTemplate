@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { TicketService } from '../ticket.service';
 import { DashboardInputParams, KeyValue } from '../../interface/ticket.interface';
 import { FormGroup, FormControl } from '@angular/forms';
 import * as am4core from '@amcharts/amcharts4/core';
@@ -8,6 +7,7 @@ import * as am4charts from '@amcharts/amcharts4/charts';
 import * as am5 from "@amcharts/amcharts5";
 import * as am5xy from "@amcharts/amcharts5/xy";
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
+import { TicketService } from '../ticket.service';
 //import * as am5xy from '@amcharts/amcharts5/.internal/charts/xy/axes/';
 
 

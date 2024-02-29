@@ -1,0 +1,16 @@
+<app-color-datatable [tableData]="ticketData" [columns]="[
+{colName:'Raised By',colData:'raisedBy'},
+{colName:'Ticket No',colData:'ticketId'},
+{colName:'Ticket Title',colData:'title'},
+{colName:'Target Date',colData:'targetDate',isDate:true},
+{colName:'Created On',colData:'createdOn',isDate:true},
+{colName:'Ticket Status',colData:'ticketStatus'},
+{colName:'Assigned To',colData:'assignedToName'},
+{colName:'Updated Action',colData:'modifiedOn',isDate:true},
+{colName:'Company',colData:'companyName'},
+]"
+[enableActionColumn]="true"
+[actionColumnLabel]="'Action'"
+[actionOptions]="[{actionName: 'View', actionIcon: 'fa fa-eye '}]"
+(actionClick)="handleActionClick($event)" [enableExports]="true"
+></app-color-datatable>

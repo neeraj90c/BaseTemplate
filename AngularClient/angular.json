@@ -53,7 +53,6 @@
               "src/assets/js/jquery.min.js",
               "src/assets/js/wow.min.js",
               "src/assets/js/jquery-ui-1.13.2.js",
-              "node_modules/google-charts/dist/googleCharts.js",
               "src/assets/richtexteditor/rte.js"
             ]
             

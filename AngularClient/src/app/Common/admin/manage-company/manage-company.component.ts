@@ -1,5 +1,4 @@
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { TicketService } from 'src/app/ticket/ticket.service';
 import { CommonService } from '../../services/common.service';
 import { CompanyMasterDTO } from 'src/app/interface/CompanyMasterDTO';
 import { UserService } from 'src/app/services/user.service';

@@ -1,15 +1,14 @@
 import { Component, ElementRef, SecurityContext, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { TicketService } from '../../ticket.service';
 import { SupportTicketDTO, TicketActivityDTO, TicketActivityList, TicketAsigneeDTO, TicketCommentDTO, TicketUserDTO, UserList } from '../../../interface/ticket.interface';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { formatDate } from '@angular/common';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { RichTextEditorComponent } from 'src/app/shared/rich-text-editor/rich-text-editor.component';
+import { TicketService } from '../../ticket.service';
 
 @Component({
   selector: 'app-view-ticket',
