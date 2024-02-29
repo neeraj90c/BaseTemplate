@@ -9,12 +9,12 @@ import { LoaderService } from 'src/app/services/loader.service';
 export class LoaderComponent {
   constructor(private loaderService: LoaderService) {
     this.loaderService.isLoading.subscribe(res => {
-      this.isLoading = true
+      this.isLoading = res
     })
   }
 
 
-  isLoading = true
+  isLoading = false
 
   
 }
