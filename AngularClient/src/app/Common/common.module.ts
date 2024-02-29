@@ -24,6 +24,9 @@ import { ManageCompanyComponent } from './admin/manage-company/manage-company.co
 import { ManageUsergroupComponent } from './admin/manage-usergroup/manage-usergroup.component';
 import { CreateTicketComponent } from '../ticket/create-ticket/create-ticket.component';
 import { AdminDashboardComponent } from '../ticket/admin-dashboard/admin-dashboard.component';
+import { ActiveTicketsComponent } from '../ticket/create-ticket/active-tickets/active-tickets.component';
+import { InProgressComponent } from '../ticket/create-ticket/in-progress/in-progress.component';
+import { ClosedTicketsComponent } from '../ticket/create-ticket/closed-tickets/closed-tickets.component';
 
 
 
@@ -48,7 +51,10 @@ import { AdminDashboardComponent } from '../ticket/admin-dashboard/admin-dashboa
     ManageCompanyComponent,
     ManageUsergroupComponent,
     CreateTicketComponent,
-    AdminDashboardComponent
+    AdminDashboardComponent,
+    ActiveTicketsComponent,
+    InProgressComponent,
+    ClosedTicketsComponent
 
   ],
   imports: [

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { SupportTicketDTO, GetClientListDTO } from '../../../interface/ticket.interface';
-import { TicketService } from '../../ticket.service';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
+import { TicketService } from '../../ticket.service';
 
 @Component({
   selector: 'app-open-ticket',

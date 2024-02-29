@@ -18,7 +18,6 @@ import { ToastrModule } from 'ngx-toastr';
 import { ColorDatatableComponent } from './color-datatable/color-datatable.component';
 import { PdfGeneratorService } from './pdf-generator/pdf-generator';
 import { PdfGeneratorComponent } from './pdf-generator/pdf-generator.component';
-import { AngularEditorModule } from '@kolkov/angular-editor';
 
 
 @NgModule({
@@ -44,8 +43,7 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     NgbModule,
     ChartModule,
     NgxSkeletonLoaderModule,
-    ToastrModule,
-    AngularEditorModule 
+    ToastrModule
 
   ],
   exports: [
@@ -65,8 +63,7 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     ExpandingTableSkeletonLoaderComponent,
     ToastrModule,
     ColorDatatableComponent,
-    PdfGeneratorComponent,
-    AngularEditorModule 
+    PdfGeneratorComponent
   ],
   providers: [PdfGeneratorService],
 })

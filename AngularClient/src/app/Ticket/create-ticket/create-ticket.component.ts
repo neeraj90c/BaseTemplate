@@ -1,13 +1,14 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { CommonService } from 'src/app/Common/services/common.service';
+import { CompanyMasterDTO } from 'src/app/interface/CompanyMasterDTO';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
 import { SupportTicketDTO } from '../../interface/ticket.interface';
 import { TicketService } from '../ticket.service';
-import { CompanyMasterDTO } from 'src/app/interface/CompanyMasterDTO';
-import { CommonService } from 'src/app/Common/services/common.service';
 
 @Component({
   selector: 'app-create-ticket',
@@ -41,7 +42,9 @@ export class CreateTicketComponent implements OnInit {
     private userService: UserService,
     private modalService: NgbModal,
     private toaster: ToastrService,
-    private _commonService: CommonService
+    private _commonService: CommonService,
+    private router: Router,
+    private route: ActivatedRoute,
   ) { }
   COMPANY_ID = environment.COMPANY_CODE
   User = this.userService.User()
@@ -56,6 +59,7 @@ export class CreateTicketComponent implements OnInit {
     this.GetCompanyList(this.CompanyDTO)
   }
   title = 'Tickets Created but Not Assigned to anyone'
+  
   changeTitle(title:string){
     this.title = title
   }

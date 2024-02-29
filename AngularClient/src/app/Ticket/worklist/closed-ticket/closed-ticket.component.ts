@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { SupportTicketDTO, GetClientListDTO } from '../../../interface/ticket.interface';
-import { TicketService } from '../../ticket.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { formatDate } from '@angular/common';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
+import { TicketService } from '../../ticket.service';
 
 @Component({
   selector: 'app-closed-ticket',
@@ -21,11 +21,12 @@ export class ClosedTicketComponent {
 
   constructor(private _ticketService: TicketService,private userService:UserService) { }
    dateForm = new FormGroup({
-    startDate: new FormControl<Date|null>(null),
-    endDate: new FormControl<Date|null>(null)
+    startDate: new FormControl(),
+    endDate: new FormControl()
   })
   User = this.userService.User()
   ngOnInit(): void {
+
 
     let data: GetClientListDTO = {
       actionUser: this.User.userId,
@@ -37,6 +38,12 @@ export class ClosedTicketComponent {
     this._ticketService.getClientWorklist(data).subscribe(res => {
       this.ClosedTickets = res.closedTickets
     })
+    this.dateForm.patchValue({
+      startDate:formatDate(this.firstDayOfMonth,'yyyy-MM-dd','en'),
+      endDate:formatDate(this.today,'yyyy-MM-dd','en')
+    })
+    console.log(this.dateForm.value);
+    
   }
 
   

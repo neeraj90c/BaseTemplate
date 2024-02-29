@@ -140,13 +140,13 @@
     <div class="tab-pane fade show active" id="TabularViewDiv" role="tabpanel">
         <!--Tabs-->
         <div class="nav nav-tabs tra_tab" id="nav-tab" role="tablist">
-            <a class="active" data-toggle="tab" href="#tab1" role="tab" aria-selected="true" (click)="changeTitle('Tickets Created but Not Assigned to anyone')">Active Tickets</a>
-            <a class="InProgress" data-toggle="tab" href="#tab2" role="tab" aria-selected="true" (click)="changeTitle('In Progress Tickets')">In Progress Tickets</a>
-            <a data-toggle="tab" href="#tab3" role="tab" aria-selected="false" (click)="changeTitle('Completed/Cancelled/Closed Tickets')">Closed Tickets</a>
+            <a routerLinkActive="active" routerLink="active-tickets" (click)="changeTitle('Tickets Created but Not Assigned to anyone')">Active Tickets</a>
+            <a routerLinkActive="active" routerLink="in-progress" (click)="changeTitle('In Progress Tickets')">In Progress Tickets</a>
+            <a routerLinkActive="active" routerLink="closed-tickets" (click)="changeTitle('Completed/Cancelled/Closed Tickets')">Closed Tickets</a>
         </div>
 
         <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="tab1" role="tabpanel" style="padding-bottom: 50px;">
+            <!-- <div class="tab-pane fade show active" id="tab1" role="tabpanel" style="padding-bottom: 50px;">
                 <app-color-datatable [tableData]="activeTickets" [columns]="[
                     {colName:'Raised By',colData:'raisedBy'},
                     {colName:'Ticket No',colData:'ticketId'},
@@ -202,6 +202,13 @@
                     [actionOptions]="[{actionName: 'View', actionIcon: 'fa fa-eye '}]"
                     (actionClick)="handleActionClick($event)" [enableExports]="true"
                     ></app-color-datatable>
+                </div>
+            </div> -->
+            <div class="tab-pane fade show active" role="tabpanel" style="padding-bottom: 50px;">
+                <div class="row">
+                    <div style="bottom: 10px;" class="col-md-12">
+                        <router-outlet></router-outlet>
+                    </div>
                 </div>
             </div>
 
