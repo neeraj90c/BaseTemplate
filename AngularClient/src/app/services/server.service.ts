@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
-import { TokenResponse, UserLoginDTO, UserResponseDTO } from '../interface/User';
+import { TokenResponse, User, UserLoginDTO, UserResponseDTO } from '../interface/User';
 import { MenuDataItem, ParentMenu } from '../interface/ManageMenuDTO';
 import { RolesDTO, RoleList } from '../interface/UserRoleDTO';
 
@@ -40,8 +40,8 @@ export class ServerService {
     return this.http.post<UserResponseDTO>(`${this.BaseURL}/users/auth`, data);
   }//
 
-  validateToken() {
-    return this.http.get<TokenResponse>(`${this.BaseURL}/users/ValidateToken`);
+  validateToken(): Observable<User>  {
+    return this.http.get<User>(`${this.BaseURL}/users/ValidateToken`);
   }//
 
 

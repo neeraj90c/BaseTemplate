@@ -3,10 +3,13 @@ export interface User {
     userId: number,
     profileImage: string,
     userName: string,
+    userNameIntial: string,
     designation: string,
     emailId: string,
     mobileNo: string,
-    roleId: string
+    roleId: string,
+    companyId:string,
+    defaultCompanyId:string
 }
 
   
@@ -69,16 +72,7 @@ export interface UserResponseDTO {
   success: boolean;
     message: string;
     statusCode: number;
-    data: {
-        token: string;
-        profileImage: string;
-        userId: number;
-        userNameIntial: string;
-        designation: string;
-        emailId: string;
-        mobileNo: string;
-        roleId: string;
-    }
+    data: User
 }
 
 
