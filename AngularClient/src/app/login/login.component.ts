@@ -50,6 +50,8 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       const formData = this.loginForm.value;
       this.serverService.userlogin(formData).subscribe(res => {
+        console.log(res);
+        
         if (res.data.token.trim() != "") {
           localStorage.setItem('access_token', res.data.token.trim())
           this.serverService.validateToken().subscribe(

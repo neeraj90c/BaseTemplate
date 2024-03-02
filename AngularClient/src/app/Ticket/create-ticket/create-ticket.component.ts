@@ -16,6 +16,7 @@ import { TicketService } from '../ticket.service';
   styleUrls: ['./create-ticket.component.scss']
 })
 export class CreateTicketComponent implements OnInit {
+
   CompanyDTO: CompanyMasterDTO = {
     companyId: 0,
     cName: '',
@@ -109,14 +110,18 @@ export class CreateTicketComponent implements OnInit {
 
 
   TicketOpenCreateTicketModal() {
+
     this.updateTicketForm.patchValue({
-      companyId:0,
+      companyId:this.User.companyId == this.User.defaultCompanyId ? 0 : parseInt(this.User.companyId),
       projectId:1,
       category:'1',
       ticketPriority:'High',
       ticketType:'Technical',
       affectsCustomer:true
     })
+    if(this.User.companyId != this.User.defaultCompanyId){
+      this.updateTicketForm.controls.companyId.disable()
+    }
     this.ticketModal = this.modalService.open(this.ticketModalContent, { size: 'xl' })
   }
   public handleActionClick(event:{ actionName:string, rowData: SupportTicketDTO}) {
