@@ -13,7 +13,6 @@ export class InProgressComponent {
   constructor(private _ticketService: TicketService,private userService: UserService,) { }
 
 
-  COMPANY_ID = environment.COMPANY_CODE
   User = this.userService.User()
   inprogressTickets: SupportTicketDTO[]=[];
 
@@ -24,7 +23,7 @@ export class InProgressComponent {
   }
 
   GetAllTicketData() {
-    let data = { actionUser: this.User.userId, companyId: parseInt(this.COMPANY_ID) }
+    let data = { actionUser: this.User.userId, companyId: parseInt(this.User.companyId) }
     this._ticketService.getClientUserTicketList(data).subscribe(res => {
       this.inprogressTickets = res.inprogressTickets
     })

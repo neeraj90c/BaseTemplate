@@ -10,7 +10,7 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./work-in-progress.component.scss']
 })
 export class WorkInProgressComponent implements OnInit {
-  COMPANY_ID = parseInt(environment.COMPANY_CODE)
+  //COMPANY_ID = parseInt(environment.COMPANY_CODE)
   today = new Date();
   firstDayOfMonth = new Date(Date.UTC(this.today.getFullYear(), this.today.getMonth(), 1, 0, 0, 0));
 
@@ -22,7 +22,7 @@ export class WorkInProgressComponent implements OnInit {
 
     let data: GetClientListDTO = {
       actionUser: this.User.userId,
-      companyId: this.COMPANY_ID,
+      companyId: parseInt(this.User.companyId),
       startDate: this.firstDayOfMonth,
       endDate: this.today
     };

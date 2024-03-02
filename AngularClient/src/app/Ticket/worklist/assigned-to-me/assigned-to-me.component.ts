@@ -10,7 +10,7 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./assigned-to-me.component.scss']
 })
 export class AssignedToMeComponent {
-  COMPANY_ID = parseInt(environment.COMPANY_CODE)
+  //COMPANY_ID = parseInt(environment.COMPANY_CODE)
 
   today = new Date();
   firstDayOfMonth = new Date(Date.UTC(this.today.getFullYear(), this.today.getMonth(), 1, 0, 0, 0));
@@ -24,7 +24,7 @@ export class AssignedToMeComponent {
 
     let data: GetClientListDTO = {
       actionUser: this.User.userId,
-      companyId: this.COMPANY_ID,
+      companyId: parseInt(this.User.companyId),
       startDate: this.firstDayOfMonth,
       endDate: this.today
     };
