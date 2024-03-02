@@ -54,6 +54,8 @@ export class TicketService {
     return this.http.post<SupportTicketDTO>(`${this.BaseURL}/ticket/ForceCloseTicket`,data)
   }
   manageTicket(data:SupportTicketDTO):Observable<TicketList> {
+    console.log(data.companyId);
+    
     return this.http.post<TicketList>(`${this.BaseURL}/ticket/ManageTicket`,data)
   }
 

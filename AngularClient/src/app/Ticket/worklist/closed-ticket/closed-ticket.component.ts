@@ -12,7 +12,7 @@ import { TicketService } from '../../ticket.service';
   styleUrls: ['./closed-ticket.component.scss']
 })
 export class ClosedTicketComponent {
-  COMPANY_ID = parseInt(environment.COMPANY_CODE)
+  //COMPANY_ID = parseInt(environment.COMPANY_CODE)
 
   today = new Date();
   firstDayOfMonth = new Date(Date.UTC(this.today.getFullYear(), this.today.getMonth(), 1, 0, 0, 0));
@@ -30,7 +30,7 @@ export class ClosedTicketComponent {
 
     let data: GetClientListDTO = {
       actionUser: this.User.userId,
-      companyId: this.COMPANY_ID,
+      companyId: parseInt(this.User.companyId),
       startDate: this.firstDayOfMonth,
       endDate: this.today
     };
@@ -59,7 +59,7 @@ export class ClosedTicketComponent {
     console.log(this.dateForm.value);
     let data: GetClientListDTO = {
       actionUser: this.User.userId,
-      companyId: this.COMPANY_ID,
+      companyId: parseInt(this.User.companyId),
       startDate: this.dateForm.controls.startDate.value as Date,
       endDate: this.dateForm.controls.endDate.value as Date
     };

@@ -13,7 +13,6 @@ export class ClosedTicketsComponent {
   constructor(private _ticketService: TicketService,private userService: UserService,) { }
 
 
-  COMPANY_ID = environment.COMPANY_CODE
   User = this.userService.User()
   activeTickets: SupportTicketDTO[]=[];
 
@@ -24,7 +23,7 @@ export class ClosedTicketsComponent {
   }
   closedTickets:SupportTicketDTO[]=[]
   GetAllTicketData() {
-    let data = { actionUser: this.User.userId, companyId: parseInt(this.COMPANY_ID) }
+    let data = { actionUser: this.User.userId, companyId: parseInt(this.User.companyId) }
     this._ticketService.getClientUserTicketList(data).subscribe(res => {
       this.closedTickets = res.closedTickets
     })

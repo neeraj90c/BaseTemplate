@@ -47,7 +47,6 @@ export class CreateTicketComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
   ) { }
-  COMPANY_ID = environment.COMPANY_CODE
   User = this.userService.User()
 
   activeTickets: SupportTicketDTO[] = []
@@ -65,13 +64,13 @@ export class CreateTicketComponent implements OnInit {
     this.title = title
   }
   GetAllTicketData() {
-    let data = { actionUser: this.User.userId, companyId: parseInt(this.COMPANY_ID) }
-    this._ticketService.getClientUserTicketList(data).subscribe(res => {
-      this.activeTickets = res.activeTickets
-      this.inprogressTickets = res.inprogressTickets
-      this.closedTickets = res.closedTickets
-      this.workInProgress = res.workInProgress
-    })
+    //let data = { actionUser: this.User.userId, companyId: parseInt(this.User.companyId) }
+    // this._ticketService.getClientUserTicketList(data).subscribe(res => {
+    //   this.activeTickets = res.activeTickets
+    //   this.inprogressTickets = res.inprogressTickets
+    //   this.closedTickets = res.closedTickets
+    //   this.workInProgress = res.workInProgress
+    // })
   }
 
   @ViewChild('CreateTicketModal') ticketModalContent!: ElementRef
@@ -122,6 +121,7 @@ export class CreateTicketComponent implements OnInit {
     if(this.User.companyId != this.User.defaultCompanyId){
       this.updateTicketForm.controls.companyId.disable()
     }
+
     this.ticketModal = this.modalService.open(this.ticketModalContent, { size: 'xl' })
   }
   public handleActionClick(event:{ actionName:string, rowData: SupportTicketDTO}) {
@@ -144,6 +144,7 @@ export class CreateTicketComponent implements OnInit {
     if (this.updateTicketForm.valid) {
       let formData = { ...this.updateTicketForm.value }
 
+console.log(this.updateTicketForm.value);
 
       let data: SupportTicketDTO = {
         title: formData.title as string,
@@ -172,7 +173,7 @@ export class CreateTicketComponent implements OnInit {
         isActive: 0,
         isDeleted: 0,
         ticketOwner: '',
-        companyId: formData.companyId as number,
+        companyId: formData.companyId ? formData.companyId as number : parseInt(this.User.companyId),
         companyName: '',
         companyCode: '',
         projectName: '',
@@ -194,12 +195,19 @@ export class CreateTicketComponent implements OnInit {
       this._ticketService.manageTicket(data).subscribe(res => {
         this.ticketModal.close();
         this.toaster.success('Ticket Created!')
-        // this.getTicketDetail(this.ticketId)
         this.GetAllTicketData()
+        this.updateTicketForm.reset()
+        this.reloadCurrentRoute()
       })
     }
 
 
+  }
+  private reloadCurrentRoute() {
+    const currentUrl = this.router.url;
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate([currentUrl]);
+    });
   }
 
 
