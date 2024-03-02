@@ -62,6 +62,7 @@ const routes: Routes = [
       },
       { path: 'view-ticket/:id', component: ViewTicketComponent, title: 'View Ticket' },
       { path: 'MCAD', component: ManageCompanyComponent, title: 'Manage Company' },
+      { path: 'SD', redirectTo: 'CSD', pathMatch: 'full' },
     ]
   }
 ];

@@ -46,13 +46,13 @@ export class NavbarComponent {
             this._userService.authorizedPages = userMenu.items.map((res) => { return res.subRoleCode });
 
             this.parentMenu = userMenu.items.filter((res) => {
-              return res.isParent === 1;
+              return res.isParent === 1 || res.childIsParent === 1;
             }).map((res) => {
-              res.childMenuList = userMenu.items.filter((usermenu:any) => {
+              res.childMenuList = userMenu.items.filter((usermenu) => {
                 return usermenu.parentMenuId === res.menuId;
               });
               return res;
-            });
+            });            
 
           }
         )
