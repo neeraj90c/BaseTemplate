@@ -1,11 +1,13 @@
 using Application.Interfaces;
 using Application.Interfaces.Admin;
 using Application.Interfaces.Common;
+using Application.Interfaces.LeadGeneration;
 using Application.Interfaces.SupportDesk;
 using Application.Interfaces.User;
 using Infrastructure.Persistance.Services;
 using Infrastructure.Persistance.Services.Admin;
 using Infrastructure.Persistance.Services.Common;
+using Infrastructure.Persistance.Services.LeadGeneration;
 using Infrastructure.Persistance.Services.SupportDesk;
 using Infrastructure.Persistance.Services.User;
 using Microsoft.AspNetCore.Authorization;
@@ -64,6 +66,9 @@ namespace WebAPI
             services.AddTransient<ISubRole, SubRoleService>();
             services.AddTransient<IUserGroup, UserGroupService>();
             services.AddTransient<IWorkCenter, WorkCenterService>();
+
+            services.AddTransient<ISalesLead, LeadGenerationService>();
+
 
 
             //For Directory Browsing, comment out for Prod Release
