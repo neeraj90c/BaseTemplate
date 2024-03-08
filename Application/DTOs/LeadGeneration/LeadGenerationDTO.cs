@@ -66,6 +66,16 @@ namespace Application.DTOs.LeadGeneration
 
     }
 
+    public class AssignLeadDTO
+    {
+        public int ?LAid { get; set; }
+        public int LeadId { get; set; }
+        public string AssignedTo { get; set; }
+        public string ADesc { get; set; }
+        public string AStatus { get; set; }
+        public int ActionUser { get; set; }
+    }
+
 
     public class SalesLeadList
     {

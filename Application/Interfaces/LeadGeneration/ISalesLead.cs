@@ -14,6 +14,11 @@ namespace Application.Interfaces.LeadGeneration
         public Task<SalesLeadDTO> UpdateSalesLead(SalesLeadDTO salesLeadDTO);
         public Task DeleteSalesLead(long leadId, int actionUser);
         public Task<SalesLeadList> GetAllSalesLead();
-        public Task<SalesLeadDTO> ReadSalesLeadByLeadId(int LeadId);
+        public Task<SalesLeadDTO> ReadSalesLeadByLeadId(long LeadId);
+        public Task<LeadAsigneeList> AssignLead(AssignLeadDTO assignLeadDTO);
+        public Task<LeadAsigneeList> UpdateLeadAssignee(AssignLeadDTO assignLeadDTO);
+        public Task<LeadAsigneeList> DeleteLeadAssignee(AssignLeadDTO assignLeadDTO);
+        public Task<LeadAsigneeList> GetAssingeeListByLeadId(AssignLeadDTO assignLeadDTO);
+
     }
 }

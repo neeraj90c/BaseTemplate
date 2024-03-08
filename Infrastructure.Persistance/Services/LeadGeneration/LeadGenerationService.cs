@@ -20,7 +20,7 @@ namespace Infrastructure.Persistance.Services.LeadGeneration
     public class LeadGenerationService : DABase , ISalesLead
     {
         APISettings _settings;
-        private ILogger<TicketService> _logger;
+        private ILogger<LeadGenerationService> _logger;
         private const string SP_CreateSalesLead = "lg.CreateSalesLead";
         private const string SP_DeleteSalesLead = "lg.DeleteSalesLead";
         private const string SP_UpdateSalesLead = "lg.UpdateSalesLead";
@@ -28,7 +28,14 @@ namespace Infrastructure.Persistance.Services.LeadGeneration
         private const string SP_GetAllSalesLead = "lg.GetAllSalesLead";
 
 
-        public LeadGenerationService(IOptions<ConnectionSettings> connectionSettings, ILogger<TicketService> logger, IOptions<APISettings> settings) : base(connectionSettings.Value.AppKeyPath)
+        private const string SP_AssignSalesLead = "lg.AssignSalesLead";
+        private const string SP_UpdateLeadAssignee = "lg.UpdateLeadAssignee";
+        private const string SP_DeleteLeadAssignee = "lg.DeleteLeadAssignee";
+        private const string SP_ReadAssigneeByLeadId = "lg.ReadAssigneeByLeadId";
+
+
+
+        public LeadGenerationService(IOptions<ConnectionSettings> connectionSettings, ILogger<LeadGenerationService> logger, IOptions<APISettings> settings) : base(connectionSettings.Value.AppKeyPath)
         {
             _logger = logger;
             _settings = settings.Value;
@@ -148,7 +155,7 @@ namespace Infrastructure.Persistance.Services.LeadGeneration
             return response;
         }
 
-        public async Task<SalesLeadDTO> ReadSalesLeadByLeadId(int LeadId)
+        public async Task<SalesLeadDTO> ReadSalesLeadByLeadId(long LeadId)
         {
             SalesLeadDTO response = new SalesLeadDTO();
             _logger.LogInformation($"Started fetching SalesLead for leadid {LeadId}");
@@ -171,5 +178,107 @@ namespace Infrastructure.Persistance.Services.LeadGeneration
             }
             return response;
         }
+
+        public async Task<LeadAsigneeList> AssignLead(AssignLeadDTO assignLeadDTO)
+        {
+            LeadAsigneeList response  = new LeadAsigneeList();
+            _logger.LogInformation($"Started creating Lead Assignment for leadid {assignLeadDTO.LeadId}");
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(base.ConnectionString))
+                {
+                    response.Items = await connection.QueryAsync<LeadAsigneeDTO>(SP_AssignSalesLead , new
+                    {
+                        LeadId  = assignLeadDTO.LeadId,
+                        AssignedTo = assignLeadDTO.AssignedTo,
+                        ADesc   = assignLeadDTO.ADesc,
+                        AStatus = assignLeadDTO.AStatus,
+                        ActionUser = assignLeadDTO.ActionUser
+
+                    },commandType:CommandType.StoredProcedure);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
+        }
+
+        public async Task<LeadAsigneeList> UpdateLeadAssignee(AssignLeadDTO assignLeadDTO)
+        {
+            LeadAsigneeList response = new LeadAsigneeList();
+            _logger.LogInformation($"Started updating Lead Assignment for LAid {assignLeadDTO.LAid}");
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(base.ConnectionString))
+                {
+                    response.Items = await connection.QueryAsync<LeadAsigneeDTO>(SP_UpdateLeadAssignee, new
+                    {
+                        LAid = assignLeadDTO.LAid,
+                        LeadId = assignLeadDTO.LeadId,
+                        AssignedTo = assignLeadDTO.AssignedTo,
+                        ADesc = assignLeadDTO.ADesc,
+                        AStatus = assignLeadDTO.AStatus,
+                        ActionUser = assignLeadDTO.ActionUser
+
+                    }, commandType: CommandType.StoredProcedure);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
+        }
+        public async Task<LeadAsigneeList> DeleteLeadAssignee(AssignLeadDTO assignLeadDTO)
+        {
+            LeadAsigneeList response = new LeadAsigneeList();
+            _logger.LogInformation($"Started updating Lead Assignment for LAid {assignLeadDTO.LAid}");
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(base.ConnectionString))
+                {
+                    response.Items = await connection.QueryAsync<LeadAsigneeDTO>(SP_DeleteLeadAssignee, new
+                    {
+                        LAid = assignLeadDTO.LAid,
+                        ActionUser = assignLeadDTO.ActionUser
+
+                    }, commandType: CommandType.StoredProcedure);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
+        }
+
+        public async Task<LeadAsigneeList> GetAssingeeListByLeadId(AssignLeadDTO assignLeadDTO)
+        {
+            LeadAsigneeList response = new LeadAsigneeList();
+            _logger.LogInformation($"Started updating Lead Assignment for LAid {assignLeadDTO.LAid}");
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(base.ConnectionString))
+                {
+                    response.Items = await connection.QueryAsync<LeadAsigneeDTO>(SP_ReadAssigneeByLeadId, new
+                    {
+                        LeadId = assignLeadDTO.LeadId,
+
+                    }, commandType: CommandType.StoredProcedure);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
+        }
+
     }
 }
