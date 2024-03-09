@@ -1,6 +1,7 @@
 using Application.Interfaces;
 using Application.Interfaces.Admin;
 using Application.Interfaces.Common;
+using Application.Interfaces.LeadActivity;
 using Application.Interfaces.LeadGeneration;
 using Application.Interfaces.SupportDesk;
 using Application.Interfaces.User;
@@ -68,6 +69,7 @@ namespace WebAPI
             services.AddTransient<IWorkCenter, WorkCenterService>();
 
             services.AddTransient<ISalesLead, LeadGenerationService>();
+            services.AddTransient<ILeadActivity, LeadActivityService>();
 
 
 

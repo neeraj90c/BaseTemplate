@@ -89,4 +89,26 @@ namespace Application.DTOs.LeadGeneration
     {
         public IEnumerable<LeadAsigneeDTO> Items { get; set; }
     }
+
+
+
+    public class CreateActivityDTO
+    {
+        public int LeadId { get; set; }
+        public string LeadComments {  get; set; }
+        public int ActionUser { get; set; }
+    }
+
+    public class UpdateActivityDTO
+    {
+        public int LeadActivityId {  get; set; }
+        public int LeadId { get; set; }
+        public string LeadComments { get; set; }
+        public int ActionUser { get; set; }
+    }
+    public class DeleteActivityDTO
+    {
+        public int LeadActivityId { get; set; }
+        public int ActionUser { get; set; }
+    }
 }
