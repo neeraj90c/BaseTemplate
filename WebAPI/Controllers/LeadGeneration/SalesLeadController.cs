@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 using System;
 using Application.Features.LeadAssignment.Commands;
+using Application.Features.SupportDesk;
 
 namespace WebAPI.Controllers.LeadGeneration
 {
@@ -64,10 +65,10 @@ namespace WebAPI.Controllers.LeadGeneration
             return Ok(response);
         }
 
-        [HttpGet("ReadAll")]
-        public async Task<IActionResult> ReadAll()
+        [HttpPost("ReadAll")]
+        public async Task<IActionResult> ReadAll([FromBody] GetAllSalesLeadByUserIdDTO getAllSalesLeadByUserIdDTO)
         {
-            var response = await mediator.Send(new ReadAllCommand());
+            var response = await mediator.Send(new ReadAllCommand { getAllSalesLeadByUserIdDTO = getAllSalesLeadByUserIdDTO });
             if (response == null)
                 return NotFound($"Failed to find sales lead.");
 
@@ -103,15 +104,27 @@ namespace WebAPI.Controllers.LeadGeneration
             return Ok(response);
         }
 
-        [HttpPost("GetAssigneeListByLeadId")]
-        public async Task<IActionResult> GetAssigneeListByLeadId([FromBody] AssignLeadDTO assignLeadDTO)
+        [HttpGet("GetAssigneeListByLeadId/{LeadId}")]
+        public async Task<IActionResult> GetAssigneeListByLeadId(int LeadId)
         {
-            var response = await mediator.Send(new ReadAssigneeByLeadIdCommand { assignLeadDTO = assignLeadDTO });
+            var response = await mediator.Send(new ReadAssigneeByLeadIdCommand { LeadId = LeadId });
             if (response == null)
                 return NotFound($"Failed to find sales lead.");
 
             return Ok(response);
         }
+
+        [HttpGet("ReadAllProjectList")]
+        public async Task<IActionResult> ReadAllProjectList()
+        {
+            var response = await mediator.Send(new GetAllProjectListCommand());
+            if (response == null)
+                return NotFound($"Failed to find Projects.");
+
+            return Ok(response);
+        }
+
+
 
 
     }

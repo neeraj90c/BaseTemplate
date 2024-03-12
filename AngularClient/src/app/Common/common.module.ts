@@ -27,6 +27,13 @@ import { AdminDashboardComponent } from '../ticket/admin-dashboard/admin-dashboa
 import { ActiveTicketsComponent } from '../ticket/create-ticket/active-tickets/active-tickets.component';
 import { InProgressComponent } from '../ticket/create-ticket/in-progress/in-progress.component';
 import { ClosedTicketsComponent } from '../ticket/create-ticket/closed-tickets/closed-tickets.component';
+import { LeadGenerationComponent } from '../salesLead/lead-generation/lead-generation.component';
+import { LeadDetailsComponent } from '../salesLead/lead-details/lead-details.component';
+import { ActiveLeadsComponent } from '../salesLead/lead-generation/active-leads/active-leads.component';
+import { OpenLeadsComponent } from '../salesLead/lead-generation/open-leads/open-leads.component';
+import { InprogressLeadsComponent } from '../salesLead/lead-generation/inprogress-leads/inprogress-leads.component';
+import { ClosedLeadsComponent } from '../salesLead/lead-generation/closed-leads/closed-leads.component';
+import { SuccessLeadsComponent } from '../salesLead/lead-generation/success-leads/success-leads.component';
 
 
 
@@ -54,7 +61,14 @@ import { ClosedTicketsComponent } from '../ticket/create-ticket/closed-tickets/c
     AdminDashboardComponent,
     ActiveTicketsComponent,
     InProgressComponent,
-    ClosedTicketsComponent
+    ClosedTicketsComponent,
+    LeadGenerationComponent,
+    LeadDetailsComponent,
+    ActiveLeadsComponent,
+    OpenLeadsComponent,
+    InprogressLeadsComponent,
+    ClosedLeadsComponent,
+    SuccessLeadsComponent
 
   ],
   imports: [

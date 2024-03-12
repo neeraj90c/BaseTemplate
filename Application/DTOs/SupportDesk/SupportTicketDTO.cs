@@ -77,7 +77,24 @@ namespace Application.DTOs.SupportDesk
 
     }
 
+    public class ProjectListDTO
+    {
+        public int ProjectId {get; set;}
+        public string PName {get; set;}
+        public string PCode {get; set;}
+        public string PDesc {get; set;}
+        public int IsActive {get; set;}
+        public int IsDeleted {get; set;}
+        public string CreatedBy {get; set;}
+        public DateTime CreatedOn {get; set;}
+        public string ModifiedBy {get; set;}
+        public DateTime ModifiedOn { get; set; }    
+    }
 
+    public class ProjectList
+    {
+        public IEnumerable<ProjectListDTO> Items { get; set;}
+    }
 
 
 

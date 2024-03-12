@@ -1,0 +1,22 @@
+<app-color-datatable 
+[tableData]="SalesList"
+[enableActionColumn]="true"
+(actionClick)="handleActionClick($event)"
+
+[actionOptions]="[
+    { actionName: 'View',actionIcon: 'fa fa-eye' },
+    ]"
+[columns]="[
+    {colName:'project',colData:'pName'},
+    {colName:'company',colData:'cName'},
+    {colName:'Title',colData:'lTitle'},
+    {colName:'category',colData:'category'},
+    {colName:'tagList',colData:'tagList'},
+    {colName:'AssignedTo',colData:'assignedToName'},
+    {colName:'leadOwner',colData:'leadOwner'},
+    {colName:'leadStatus',colData:'leadStatus'},
+    {colName:'leadPriority',colData:'leadPriority'},
+    {colName:'leadDate',colData:'leadDate',isDate:true},
+    {colName:'nextFollowUpDate',colData:'nextFollowUpDate',isDate:true}
+    ]" 
+></app-color-datatable>

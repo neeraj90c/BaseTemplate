@@ -12,7 +12,7 @@ namespace Application.Features.LeadAssignment.Commands
 {
     public class ReadAssigneeByLeadIdCommand : IRequest<LeadAsigneeList>
     {
-        public AssignLeadDTO assignLeadDTO { get; set; }
+        public int LeadId { get; set; }
 
     }
 
@@ -28,7 +28,7 @@ namespace Application.Features.LeadAssignment.Commands
         }
         public async Task<LeadAsigneeList> Handle(ReadAssigneeByLeadIdCommand request, CancellationToken cancellationToken)
         {
-            return await _salesLead.GetAssingeeListByLeadId(request.assignLeadDTO);
+            return await _salesLead.GetAssingeeListByLeadId(request.LeadId);
         }
     }
 }

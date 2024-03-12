@@ -25,13 +25,16 @@ namespace Infrastructure.Persistance.Services.LeadGeneration
         private const string SP_DeleteSalesLead = "lg.DeleteSalesLead";
         private const string SP_UpdateSalesLead = "lg.UpdateSalesLead";
         private const string SP_ReadSalesLeadByLeadId = "lg.ReadSalesLeadByLeadId";
-        private const string SP_GetAllSalesLead = "lg.GetAllSalesLead";
+        private const string SP_GetAllSalesLeadByUserId = "lg.GetAllSalesLeadByUserId";
 
 
         private const string SP_AssignSalesLead = "lg.AssignSalesLead";
         private const string SP_UpdateLeadAssignee = "lg.UpdateLeadAssignee";
         private const string SP_DeleteLeadAssignee = "lg.DeleteLeadAssignee";
         private const string SP_ReadAssigneeByLeadId = "lg.ReadAssigneeByLeadId";
+
+        private const string SP_GetAllProjectList = "spd.GetAllProjectList";
+
 
 
 
@@ -135,7 +138,7 @@ namespace Infrastructure.Persistance.Services.LeadGeneration
                 throw;
             }
         }
-        public async Task<SalesLeadList> GetAllSalesLead()
+        public async Task<SalesLeadList> GetAllSalesLead(GetAllSalesLeadByUserIdDTO getAllSalesLeadByUserIdDTO)
         {
             SalesLeadList response = new SalesLeadList();
             _logger.LogInformation($"Started fetching SalesLead");
@@ -144,7 +147,15 @@ namespace Infrastructure.Persistance.Services.LeadGeneration
             {
                 using (SqlConnection connection = new SqlConnection(base.ConnectionString))
                 {
-                    response.Items = await connection.QueryAsync<SalesLeadDTO>(SP_GetAllSalesLead, commandType: CommandType.StoredProcedure);
+                    var reader = await connection.QueryMultipleAsync(SP_GetAllSalesLeadByUserId, new
+                    {
+                        ActionUser = getAllSalesLeadByUserIdDTO.ActionUser,
+                        CompanyId = getAllSalesLeadByUserIdDTO.CompanyId
+                    }, commandType: CommandType.StoredProcedure) ;
+                    response.NewAndOpen = await reader.ReadAsync<SalesLeadDTO>();
+                    response.InProgress = await reader.ReadAsync<SalesLeadDTO>();
+                    response.Closed = await reader.ReadAsync<SalesLeadDTO>();
+                    response.Success = await reader.ReadAsync<SalesLeadDTO>();
                 }
             }
             catch (Exception ex)
@@ -257,17 +268,17 @@ namespace Infrastructure.Persistance.Services.LeadGeneration
             return response;
         }
 
-        public async Task<LeadAsigneeList> GetAssingeeListByLeadId(AssignLeadDTO assignLeadDTO)
+        public async Task<LeadAsigneeList> GetAssingeeListByLeadId(int LeadId)
         {
             LeadAsigneeList response = new LeadAsigneeList();
-            _logger.LogInformation($"Started updating Lead Assignment for LAid {assignLeadDTO.LAid}");
+            _logger.LogInformation($"Started updating Lead Assignment for LAid {LeadId}");
             try
             {
                 using (SqlConnection connection = new SqlConnection(base.ConnectionString))
                 {
                     response.Items = await connection.QueryAsync<LeadAsigneeDTO>(SP_ReadAssigneeByLeadId, new
                     {
-                        LeadId = assignLeadDTO.LeadId,
+                        LeadId = LeadId,
 
                     }, commandType: CommandType.StoredProcedure);
                 }
@@ -278,6 +289,25 @@ namespace Infrastructure.Persistance.Services.LeadGeneration
                 throw ex;
             }
             return response;
+        }
+
+        public async Task<ProjectList> GetAllProjectList()
+        {
+            ProjectList response = new ProjectList();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(base.ConnectionString))
+                {
+                    response.Items = await connection.QueryAsync<ProjectListDTO>(SP_GetAllProjectList, commandType: CommandType.StoredProcedure);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
+
         }
 
     }

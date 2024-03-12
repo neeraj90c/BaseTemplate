@@ -10,11 +10,14 @@ namespace Application.DTOs.LeadGeneration
     {
         public long LeadId { get; set; }
         public int ProjectId { get; set; }
+        public string PName {  get; set; }
         public int CompanyId { get; set; }
+        public string CName { get; set; }
         public string LTitle { get; set; }
         public string LDesc { get; set; }
         public string Category { get; set; }
         public string TagList { get; set; }
+        public string AssignedToName { get; set; }
         public string LeadOwner { get; set; }
         public string LeadStatus { get; set; }
         public string LeadPriority { get; set; }
@@ -79,7 +82,10 @@ namespace Application.DTOs.LeadGeneration
 
     public class SalesLeadList
     {
-        public IEnumerable<SalesLeadDTO> Items { get; set; }
+        public IEnumerable<SalesLeadDTO> NewAndOpen { get; set; }
+        public IEnumerable<SalesLeadDTO> InProgress { get; set; }
+        public IEnumerable<SalesLeadDTO> Closed { get; set; }
+        public IEnumerable<SalesLeadDTO> Success { get; set; }
     }
     public class LeadActivityList
     {
@@ -110,5 +116,12 @@ namespace Application.DTOs.LeadGeneration
     {
         public int LeadActivityId { get; set; }
         public int ActionUser { get; set; }
+    }
+
+
+    public class GetAllSalesLeadByUserIdDTO
+    {
+        public int ActionUser { get; set; }
+        public int CompanyId { get; set; }
     }
 }

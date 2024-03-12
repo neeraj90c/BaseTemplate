@@ -13,7 +13,7 @@ namespace Application.Features.LeadGeneration.Commands
 
     public class ReadAllCommand : IRequest<SalesLeadList>
     {
-        
+        public GetAllSalesLeadByUserIdDTO getAllSalesLeadByUserIdDTO {  get; set; }
     }
     internal class ReadAllCommandHandler : IRequestHandler<ReadAllCommand, SalesLeadList>
     {
@@ -26,7 +26,7 @@ namespace Application.Features.LeadGeneration.Commands
 
         public async Task<SalesLeadList> Handle(ReadAllCommand request, CancellationToken cancellationToken)
         {
-            return await _salesLead.GetAllSalesLead();
+            return await _salesLead.GetAllSalesLead(request.getAllSalesLeadByUserIdDTO);
         }
 
     }
