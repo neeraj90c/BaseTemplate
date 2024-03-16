@@ -1,0 +1,39 @@
+
+<form class="d-flex mb-4" [formGroup]="dateForm">
+    <div class=" d-flex align-items-center">
+        <div>Start Date: </div>
+        <div>
+            <input type="date" class="form-control form-control-sm ml-2" formControlName="startDate">
+        </div>
+    </div>
+    <div class=" d-flex align-items-center ml-4">
+        <div>End Date: </div>
+        <div>
+            <input type="date" class="form-control form-control-sm ml-2" formControlName="endDate">
+        </div>
+    </div>
+    <div class="ml-4">
+        <button class="btn btn-primary btn-sm" (click)="LoadDataWithDate()">Load Data</button>
+    </div>
+</form>
+<app-color-datatable
+[loading]="dataTableLoading" 
+[tableData]="closedLeads"
+[enableActionColumn]="true"
+(actionClick)="handleActionClick($event)"
+[actionOptions]="[
+    { actionName: 'View',actionIcon: 'fa fa-eye' },
+    ]"
+[columns]="[
+    {colName:'project',colData:'pName'},
+    {colName:'company',colData:'cName'},
+    {colName:'Title',colData:'lTitle'},
+    {colName:'category',colData:'category'},
+    {colName:'tagList',colData:'tagList'},
+    {colName:'AssignedTo',colData:'assignedToName'},
+    {colName:'leadStatus',colData:'leadStatus'},
+    {colName:'leadPriority',colData:'leadPriority'},
+    {colName:'leadDate',colData:'leadDate',isDate:true},
+    {colName:'nextFollowUpDate',colData:'nextFollowUpDate',isDate:true}
+    ]" 
+></app-color-datatable>

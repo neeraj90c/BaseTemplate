@@ -1,5 +1,5 @@
 
-  <div class="custom-right my-2" >
+  <div class="custom-right my-2 d-flex justify-content-between" >
     <label> 
       Show
       <select name="example_length" (change)="onPageSizeChanged($event)" class="dropdown-toggle from-control form-control-sm">
@@ -17,6 +17,11 @@
     <ng-container *ngIf="enableExports">
       <app-pdf-generator [pdfFileName]="'TechnoTechERP'" [data]="tableData" [columns]="columns"></app-pdf-generator>
     </ng-container>
+    <!-- Add this to your search input in the template -->
+<div class="ml-auto">
+  <input class="form-control form-control-sm" type="text" [(ngModel)]="searchTerm" (ngModelChange)="updateFilteredData()" placeholder="Search...">
+</div>
+
 
   </div>
   <div *ngIf="!loading; else skeletonLoader" #dataTable>

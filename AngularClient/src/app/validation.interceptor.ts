@@ -16,7 +16,14 @@ export class ValidationInterceptor implements HttpInterceptor {
   constructor(private router:Router, private loaderService:LoaderService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    this.loaderService.isLoading.next(true)
+    
+    this.loaderService.turnOffLoader.subscribe(search => {
+      if(search){
+        this.loaderService.isLoading.next(false)
+      }else{
+        this.loaderService.isLoading.next(true)
+      }
+    })
     const token = localStorage.getItem('access_token');
     if (token) {
       request = request.clone({

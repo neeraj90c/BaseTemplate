@@ -7,5 +7,6 @@ import { BehaviorSubject } from 'rxjs';
 export class LoaderService {
 
   isLoading = new BehaviorSubject<boolean>(false);
+  turnOffLoader = new BehaviorSubject<boolean>(false);
 
 }

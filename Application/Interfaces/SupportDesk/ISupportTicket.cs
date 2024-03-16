@@ -16,5 +16,6 @@ namespace Application.Interfaces.SupportDesk
         public Task<SupportTicketDTO> SupportTickets_ReOpenTicket(SupportTicketDTO supportTicketDTO);
         public Task<SupportTicketDTO> SupportTickets_AssignToUser(SupportTicketDTO supportTicketDTO);
 
+
     }
 }

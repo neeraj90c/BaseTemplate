@@ -15,7 +15,7 @@ export class ColorDatatableComponent {
   selectedPageSize: number = 10;
   sortingColumn: string = '';
   sortingOrder: 'asc' | 'desc' = 'asc'; // Initial sorting order
-  loading = true
+  @Input() loading = true
   WCColors = ["c584d3", "a084d2", "60a5e8", "60d9d9", "5ce7a1", "aae272", "fce153", "f8c459", "febc5a", "eb8a5b"];
   filteredData!: any[] | undefined;
 
@@ -60,13 +60,25 @@ export class ColorDatatableComponent {
   calculateTotalPages(): void {
     this.totalPages = Math.ceil(this.tableData?.length / this.selectedPageSize);
   }
+// Add this property in your ColorDatatableComponent class
+searchTerm: string = '';
 
   updateFilteredData(): void {
     const startIndex = (this.currentPage - 1) * this.selectedPageSize;
-    this.filteredData = this.tableData?.slice(startIndex, startIndex + this.selectedPageSize);
-    setTimeout(() => {
-      this.loading = false
-    }, 2200)
+
+  // Filter data based on the search term
+  this.filteredData = this.tableData
+    ?.filter(item =>
+      Object.values(item).some(value =>
+        (typeof value === 'string' || typeof value === 'number') &&
+        value.toString().toLowerCase().includes(this.searchTerm.toLowerCase())
+      )
+    )
+    .slice(startIndex, startIndex + this.selectedPageSize);
+
+  setTimeout(() => {
+    this.loading = false;
+  }, 2200);
   }
 
   goToFirstPage(): void {
@@ -172,6 +184,8 @@ export class ColorDatatableComponent {
       this.printService.printTable(table);
     }
   }
+
+  
 
 }
 function formateDate(arg0: Date, arg1: string, arg2: string) {
