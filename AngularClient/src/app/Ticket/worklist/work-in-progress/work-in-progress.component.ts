@@ -34,8 +34,11 @@ export class WorkInProgressComponent implements OnInit {
 
   
 
-  public handleActionClick(event:any){
-    console.log(event);
+  public handleActionClick(event:{ actionName:string, rowData: SupportTicketDTO}) {
+    let { actionName, rowData} = event
+    if(actionName === 'View'){
+      this._ticketService.navigateToViewTicket(rowData.ticketId)
+    }
   }
 
 }
