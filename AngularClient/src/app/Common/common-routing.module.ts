@@ -29,6 +29,13 @@ import { InprogressLeadsComponent } from '../salesLead/lead-generation/inprogres
 import { ClosedLeadsComponent } from '../salesLead/lead-generation/closed-leads/closed-leads.component';
 import { SuccessLeadsComponent } from '../salesLead/lead-generation/success-leads/success-leads.component';
 import { LeadDetailsComponent } from '../salesLead/lead-details/lead-details.component';
+import { LeadWorklistComponent } from '../salesLead/lead-worklist/lead-worklist.component';
+import { LeadInProgressComponent } from '../salesLead/lead-worklist/lead-in-progress/lead-in-progress.component';
+import { LeadAssignedToMeComponent } from '../salesLead/lead-worklist/lead-assigned-to-me/lead-assigned-to-me.component';
+import { LeadAssignedToOthersComponent } from '../salesLead/lead-worklist/lead-assigned-to-others/lead-assigned-to-others.component';
+import { LeadSuccessComponent } from '../salesLead/lead-worklist/lead-success/lead-success.component';
+import { CloseLeadsComponent } from '../salesLead/lead-worklist/close-leads/close-leads.component';
+import { OpenLeadsComponent } from '../salesLead/lead-worklist/open-leads/open-leads.component';
 
 
 
@@ -78,7 +85,16 @@ const routes: Routes = [
           { path: 'success-leads', component: SuccessLeadsComponent, title: 'Success Leads' },
         ]
       },
-      { path: 'view-lead/:id', component: LeadDetailsComponent, title: 'Lead Details' }
+      { path: 'view-lead/:id', component: LeadDetailsComponent, title: 'Lead Details' },
+      { path: 'LWK', component: LeadWorklistComponent, title: 'Lead Worklist',children: [
+        { path: '', redirectTo: 'work-in-progress', pathMatch: 'full' },
+        { path: 'work-in-progress', component: LeadInProgressComponent, title: 'Work In Progress' },
+        { path: 'assigned-to-me', component: LeadAssignedToMeComponent, title: 'Assigned To Me' },
+        { path: 'open-leads', component: OpenLeadsComponent, title: 'Open Leads' },
+        { path: 'closed-leads', component: CloseLeadsComponent, title: 'Closed Leads' },
+        { path: 'assigned-to-others', component: LeadAssignedToOthersComponent, title: 'Assigned To Others' },
+        { path: 'success-leads', component: LeadSuccessComponent, title: 'Assigned To Others' }
+      ] }
 
     ]
   }

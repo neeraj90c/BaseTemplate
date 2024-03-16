@@ -8,6 +8,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { formatDate } from '@angular/common';
 import { UserService } from 'src/app/services/user.service';
 import { LoaderService } from 'src/app/services/loader.service';
+import { Router } from '@angular/router';
+import { notEqualToZeroValidator } from 'src/app/validators/validators';
 
 @Component({
   selector: 'app-lead-generation',
@@ -16,7 +18,7 @@ import { LoaderService } from 'src/app/services/loader.service';
 })
 export class LeadGenerationComponent implements OnInit {
 
-  constructor(private _salesleadService: SalesleadService, private modalService: NgbModal, private _commonService: CommonService,private _userService:UserService, private loaderService:LoaderService) { 
+  constructor(private _salesleadService: SalesleadService, private modalService: NgbModal, private _commonService: CommonService,private _userService:UserService, private loaderService:LoaderService,private router:Router) { 
     this.today = new Date();
     this.startDate = new Date(Date.UTC(this.today.getFullYear(), this.today.getMonth(), 1, 0, 0, 0));
 
@@ -62,7 +64,7 @@ export class LeadGenerationComponent implements OnInit {
   }
 
   leadForm = new FormGroup({
-    projectId: new FormControl(0,[Validators.pattern(/^[1-9]\d*$/)]),
+    projectId: new FormControl(0,[notEqualToZeroValidator]),
     lTitle: new FormControl('',[Validators.required]),
     lDesc: new FormControl(),
     category: new FormControl(),
@@ -76,6 +78,13 @@ export class LeadGenerationComponent implements OnInit {
     addField3: new FormControl(),
   })
 
+  get lTitleCtrl(): FormControl {
+    return this.leadForm.get('lTitle') as FormControl;
+  }
+
+  get projectIdCtrl(): FormControl {
+    return this.leadForm.get('projectId') as FormControl;
+  }
 
   GetCompanyList(data: CompanyMasterDTO) {
     this._commonService.companyCRUD(data).subscribe(res => {
@@ -92,6 +101,8 @@ export class LeadGenerationComponent implements OnInit {
     this.leadForm.patchValue({
       projectId:0,
       leadStatus:'New',
+      category:'Retailer',
+      leadPriority:'High',
       leadDate : formatDate(this.today,'yyyy-MM-dd','en'),
       nextFollowUpDate:formatDate(this.nextFollowUpDate,'yyyy-MM-dd','en')
     })
@@ -111,7 +122,7 @@ export class LeadGenerationComponent implements OnInit {
       let leadData:SalesLeadDTO = {
         leadId: 0,
         projectId: formData.projectId as number,
-        companyId: parseInt(this.User.defaultCompanyId),
+        companyId: parseInt(this.User.companyId),
         lTitle: formData.lTitle as string,
         lDesc: event.value,
         category: formData.category,
@@ -136,6 +147,10 @@ export class LeadGenerationComponent implements OnInit {
       console.log(leadData);
       this._salesleadService.createSalesLead(leadData).subscribe(res=>{
         console.log(res);
+        event.clearText()
+      
+        this.LeadModal.close()
+        this.reloadCurrentRoute()
         
       })
       
@@ -144,4 +159,20 @@ export class LeadGenerationComponent implements OnInit {
 
   }
 
+  private reloadCurrentRoute() {
+    const currentUrl = this.router.url;
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate([currentUrl]);
+    });
+  }
+
+  leadDateChanged(event:any){
+    let leadDate = new Date(this.leadForm.controls.leadDate.value)
+    let nextDate = new Date()
+    nextDate.setDate(leadDate.getDate() + 3);
+    this.leadForm.patchValue({
+      nextFollowUpDate: formatDate(nextDate,'yyyy-MM-dd','en')
+    })
+    
+  }
 }

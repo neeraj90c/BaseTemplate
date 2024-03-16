@@ -19,8 +19,8 @@ export class ClosedTicketComponent {
 
   ClosedTickets: SupportTicketDTO[] = []
 
-  constructor(private _ticketService: TicketService,private userService:UserService) { }
-   dateForm = new FormGroup({
+  constructor(private _ticketService: TicketService, private userService: UserService) { }
+  dateForm = new FormGroup({
     startDate: new FormControl(),
     endDate: new FormControl()
   })
@@ -39,23 +39,23 @@ export class ClosedTicketComponent {
       this.ClosedTickets = res.closedTickets
     })
     this.dateForm.patchValue({
-      startDate:formatDate(this.firstDayOfMonth,'yyyy-MM-dd','en'),
-      endDate:formatDate(this.today,'yyyy-MM-dd','en')
+      startDate: formatDate(this.firstDayOfMonth, 'yyyy-MM-dd', 'en'),
+      endDate: formatDate(this.today, 'yyyy-MM-dd', 'en')
     })
     console.log(this.dateForm.value);
-    
+
   }
 
-  
 
-  public handleActionClick(event:{ actionName:string, rowData: SupportTicketDTO}) {
-    let { actionName, rowData} = event
-    if(actionName === 'View'){
+
+  public handleActionClick(event: { actionName: string, rowData: SupportTicketDTO }) {
+    let { actionName, rowData } = event
+    if (actionName === 'View') {
       this._ticketService.navigateToViewTicket(rowData.ticketId)
     }
   }
 
-  LoadDataWithDate(){
+  LoadDataWithDate() {
     console.log(this.dateForm.value);
     let data: GetClientListDTO = {
       actionUser: this.User.userId,
@@ -67,6 +67,6 @@ export class ClosedTicketComponent {
     this._ticketService.getClientWorklist(data).subscribe(res => {
       this.ClosedTickets = res.closedTickets
     })
-    
+
   }
 }

@@ -125,6 +125,89 @@ namespace WebAPI.Controllers.LeadGeneration
         }
 
 
+        [HttpGet("GetLeadResolverList")]
+        public async Task<IActionResult> GetLeadResolverList()
+        {
+            var response = await mediator.Send(new GetLeadResolverCommand());
+            if (response == null)
+                return NotFound($"Failed to find Projects.");
+
+            return Ok(response);
+        }
+
+
+        [HttpPost("UpdateStatus")]
+        public async Task<IActionResult> UpdateStatus([FromBody] LeadAsigneeDTO leadAsigneeDTO)
+        {
+            LeadAsigneeList response = new LeadAsigneeList();
+
+
+            response = await mediator.Send(new LeadAssignee_UpdateStatusCommand
+            {
+                leadAsigneeDTO = leadAsigneeDTO
+            });
+
+            if (response == null)
+                return Ok(APIResponse<string>.Unauthorized("Please check login credentials"));
+
+            return Ok(response);
+        }
+
+        [HttpPost("GetLeadWorklist")]
+        public async Task<IActionResult> GetLeadWorklist([FromBody] GetWorkListDTO getWorkListDTO)
+        {
+            LeadWorkList response = new LeadWorkList();
+
+
+            response = await mediator.Send(new GetSalesLeadWorkListCommand
+            {
+                getWorkListDTO = getWorkListDTO
+         
+            });
+
+            if (response == null)
+                return Ok(APIResponse<string>.Unauthorized("Please check login credentials"));
+
+            return Ok(response);
+        }
+
+        [HttpPost("SalesLeads_AssignToUser")]
+        public async Task<IActionResult> SalesLeads_AssignToUser([FromBody] AssignLeadDTO assignLeadDTO)
+        {
+            SalesLeadDTO response = new SalesLeadDTO();
+
+
+            response = await mediator.Send(new SalesLeads_AssignToUserCommand
+            {
+                assignLeadDTO = assignLeadDTO
+
+            });
+
+            if (response == null)
+                return Ok(APIResponse<string>.Unauthorized("Please check login credentials"));
+
+            return Ok(response);
+        }
+
+        [HttpPost("SalesLead_Forceclose")]
+        public async Task<IActionResult> SalesLead_Forceclose([FromBody] AssignLeadDTO assignLeadDTO)
+        {
+            SalesLeadDTO response = new SalesLeadDTO();
+
+
+            response = await mediator.Send(new SalesLead_ForcecloseCommand
+            {
+                assignLeadDTO = assignLeadDTO
+
+            });
+
+            if (response == null)
+                return Ok(APIResponse<string>.Unauthorized("Please check login credentials"));
+
+            return Ok(response);
+        }
+
+
 
 
     }

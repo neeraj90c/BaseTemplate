@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Application.DTOs.SupportDesk;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +12,7 @@ namespace Application.DTOs.LeadGeneration
     {
         public long LeadId { get; set; }
         public int ProjectId { get; set; }
-        public string PName {  get; set; }
+        public string PName { get; set; }
         public int CompanyId { get; set; }
         public string CName { get; set; }
         public string LTitle { get; set; }
@@ -32,7 +34,9 @@ namespace Application.DTOs.LeadGeneration
         public DateTime CreatedOn { get; set; }
         public string ModifiedBy { get; set; }
         public DateTime ModifiedOn { get; set; }
-        public int ActionUser {  get; set; }
+        public int ActionUser { get; set; }
+        public string ?CreatedByName {  get; set; }
+        public string ?CompanyCode {  get; set; }
     }
 
     // LeadActivity DTO
@@ -71,7 +75,7 @@ namespace Application.DTOs.LeadGeneration
 
     public class AssignLeadDTO
     {
-        public int ?LAid { get; set; }
+        public int? LAid { get; set; }
         public int LeadId { get; set; }
         public string AssignedTo { get; set; }
         public string ADesc { get; set; }
@@ -87,6 +91,25 @@ namespace Application.DTOs.LeadGeneration
         public IEnumerable<SalesLeadDTO> Closed { get; set; }
         public IEnumerable<SalesLeadDTO> Success { get; set; }
     }
+
+    public class GetWorkListDTO
+    {
+        public int ActionUser { get; set; }
+	    public int CompanyId { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+    }
+
+    public class LeadWorkList
+    {
+        public IEnumerable<SalesLeadDTO> WorkInProgress { get; set; }
+        public IEnumerable<SalesLeadDTO> AssignedToMe { get; set; }
+        public IEnumerable<SalesLeadDTO> OpenLeads { get; set; }
+        public IEnumerable<SalesLeadDTO> ClosedLeads { get; set; }
+        public IEnumerable<SalesLeadDTO> AssignedToOthers { get; set; }
+        public IEnumerable<SalesLeadDTO> Success { get; set; }
+
+    }
     public class LeadActivityList
     {
         public IEnumerable<LeadActivityDTO> Items { get; set; }
@@ -101,13 +124,13 @@ namespace Application.DTOs.LeadGeneration
     public class CreateActivityDTO
     {
         public int LeadId { get; set; }
-        public string LeadComments {  get; set; }
+        public string LeadComments { get; set; }
         public int ActionUser { get; set; }
     }
 
     public class UpdateActivityDTO
     {
-        public int LeadActivityId {  get; set; }
+        public int LeadActivityId { get; set; }
         public int LeadId { get; set; }
         public string LeadComments { get; set; }
         public int ActionUser { get; set; }
@@ -124,4 +147,17 @@ namespace Application.DTOs.LeadGeneration
         public int ActionUser { get; set; }
         public int CompanyId { get; set; }
     }
+
+    public class LeadResolverDTO
+    {
+        public string Name { get; set; }
+        public int UserId { get; set; }
+    }
+
+    public class LeadResolverList
+    {
+        public IEnumerable<LeadResolverDTO> Items {  get; set; }
+    }
+
+
 }

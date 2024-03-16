@@ -68,24 +68,29 @@
                     </div>
                 </div> -->
                 <div class="form-group col-md-4">
-                    <label for="project">Project Name</label>
+                    <label for="project">Project Name<span style="color: red;">*</span></label>
                     <select class="form-control" id="project" formControlName="projectId">
                         <option [value]="0">Default</option>
                         <option *ngFor="let project of ProjectList" [value]="project.projectId">{{project.pName}}</option>
                     </select>
+                    <div class="text-danger" *ngIf="(projectIdCtrl.touched && projectIdCtrl.invalid )">
+                        <ng-container *ngIf="projectIdCtrl.errors"> Please select a project</ng-container>
+                    </div>
                 </div>
                 <div class="form-group col-md-4">
-                    <label for="title">Title<span style="color: red;">*</span></label>
+                    <label for="title">Lead Name<span style="color: red;">*</span></label>
                     <input type="text" class="form-control" id="title" formControlName="lTitle">
+                    <div class="text-danger" *ngIf="(lTitleCtrl.touched && lTitleCtrl.invalid )">
+                        <ng-container *ngIf="lTitleCtrl.errors"> Lead Name is required</ng-container>
+                    </div>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-4">
                     <label for="category">Category</label>
                     <select class="form-control" id="category" formControlName="category">
-                        <option value="1">Software</option>
-                        <option value="2">Hardware</option>
-                        <option value="2">Network</option>
+                        <option value="Retailer">Retailer</option>
+                        <option value="Wholesaler">Wholesaler</option>
                     </select>
                 </div>
                 <div class="form-group col-md-4">
@@ -101,8 +106,8 @@
                     <select class="form-control" id="ticketType" formControlName="leadStatus">
                         <option>New</option>
                         <option>Open</option>
-                        <option>In Progress</option>
-                        <option>Closed</option>
+                        <option>InProgress</option>
+                        <option>Close</option>
                         <option>Success</option>
                     </select>
                 </div>
@@ -112,14 +117,14 @@
 
                 <div class="form-group col-md-4">
                     <label for="targetDate">Lead Date</label>
-                    <input type="date" class="form-control" id="leadDate" formControlName="leadDate">
+                    <input type="date" class="form-control" id="leadDate" formControlName="leadDate" (change)="leadDateChanged($event)">
                 </div>
                 <div class="form-group col-md-4">
                     <label for="targetDate">Next Follow Up Date</label>
                     <input type="date" class="form-control" id="leadDate" formControlName="nextFollowUpDate">
                 </div>
                 <div class="form-group col-md-4">
-                    <label for="tags">Tag List <span style="color: red;">*</span></label>
+                    <label for="tags">Tag List</label>
                     <input type="text" class="form-control" id="tags" formControlName="tagList">
                 </div>
 
@@ -130,11 +135,11 @@
                     <input type="text" class="form-control" id="department" formControlName="addField1">
                 </div>
                 <div class="form-group col-md-4">
-                    <label for="AddField2">addField2 By <span style="color: red;">*</span></label>
+                    <label for="AddField2">addField2 By </label>
                     <input type="text" class="form-control" id="raisedBy" formControlName="addField2">
                 </div>
                 <div class="form-group col-md-4">
-                    <label for="AddField2">addField3<span style="color: red;">*</span></label>
+                    <label for="AddField2">addField3</label>
                     <input type="text" class="form-control" id="raisedByContactNo" formControlName="addField3">
                 </div>
             </div>

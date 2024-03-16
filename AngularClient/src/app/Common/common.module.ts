@@ -30,10 +30,16 @@ import { ClosedTicketsComponent } from '../ticket/create-ticket/closed-tickets/c
 import { LeadGenerationComponent } from '../salesLead/lead-generation/lead-generation.component';
 import { LeadDetailsComponent } from '../salesLead/lead-details/lead-details.component';
 import { ActiveLeadsComponent } from '../salesLead/lead-generation/active-leads/active-leads.component';
-import { OpenLeadsComponent } from '../salesLead/lead-generation/open-leads/open-leads.component';
 import { InprogressLeadsComponent } from '../salesLead/lead-generation/inprogress-leads/inprogress-leads.component';
 import { ClosedLeadsComponent } from '../salesLead/lead-generation/closed-leads/closed-leads.component';
 import { SuccessLeadsComponent } from '../salesLead/lead-generation/success-leads/success-leads.component';
+import { LeadWorklistComponent } from '../salesLead/lead-worklist/lead-worklist.component';
+import { LeadInProgressComponent } from '../salesLead/lead-worklist/lead-in-progress/lead-in-progress.component';
+import { LeadAssignedToMeComponent } from '../salesLead/lead-worklist/lead-assigned-to-me/lead-assigned-to-me.component';
+import { CloseLeadsComponent } from '../salesLead/lead-worklist/close-leads/close-leads.component';
+import { LeadAssignedToOthersComponent } from '../salesLead/lead-worklist/lead-assigned-to-others/lead-assigned-to-others.component';
+import { LeadSuccessComponent } from '../salesLead/lead-worklist/lead-success/lead-success.component';
+import { OpenLeadsComponent } from '../salesLead/lead-worklist/open-leads/open-leads.component';
 
 
 
@@ -65,10 +71,16 @@ import { SuccessLeadsComponent } from '../salesLead/lead-generation/success-lead
     LeadGenerationComponent,
     LeadDetailsComponent,
     ActiveLeadsComponent,
-    OpenLeadsComponent,
     InprogressLeadsComponent,
     ClosedLeadsComponent,
-    SuccessLeadsComponent
+    SuccessLeadsComponent,
+    LeadWorklistComponent,
+    LeadInProgressComponent,
+    LeadAssignedToMeComponent,
+    CloseLeadsComponent,
+    LeadAssignedToOthersComponent,
+    LeadSuccessComponent,
+    OpenLeadsComponent
 
   ],
   imports: [

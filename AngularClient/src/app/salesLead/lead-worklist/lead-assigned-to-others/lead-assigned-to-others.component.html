@@ -1,8 +1,8 @@
-<app-color-datatable 
-[tableData]="SalesList"
+<app-color-datatable
+[loading]="dataTableLoading" 
+[tableData]="LeadData"
 [enableActionColumn]="true"
 (actionClick)="handleActionClick($event)"
-
 [actionOptions]="[
     { actionName: 'View',actionIcon: 'fa fa-eye' },
     ]"

@@ -21,6 +21,14 @@ namespace Application.Interfaces.LeadGeneration
         public Task<LeadAsigneeList> DeleteLeadAssignee(AssignLeadDTO assignLeadDTO);
         public Task<LeadAsigneeList> GetAssingeeListByLeadId(int LeadId);
         public Task<ProjectList> GetAllProjectList();
+        public Task<LeadResolverList> GetLeadResolverList();
+        public Task<LeadAsigneeList> LeadAsignee_UpdateStatus(LeadAsigneeDTO leadAsigneeDTO);
+        public Task<LeadWorkList> GetSalesLeadWorkList(GetWorkListDTO getWorkListDTO);
+        public Task<SalesLeadDTO> SalesLeads_AssignToUser(AssignLeadDTO assignLeadDTO);
+        public Task<SalesLeadDTO> SalesLead_Forceclose(AssignLeadDTO assignLeadDTO);
+
+
+
 
 
     }

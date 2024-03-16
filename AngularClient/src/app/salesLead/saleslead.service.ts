@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
-import { AssignLeadDTO, LeadActivityList, LeadAsigneeList, ProjectList, SalesLeadDTO, SalesLeadList } from '../interface/leadgeneration.interface';
+import { AssignLeadDTO, GetWorkListDTO, LeadActivityList, LeadAsigneeDTO, LeadAsigneeList, LeadResolverList, LeadWorkList, ProjectList, SalesLeadDTO, SalesLeadList } from '../interface/leadgeneration.interface';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -44,4 +44,31 @@ export class SalesleadService {
     return this.http.get<LeadAsigneeList>(`${this.BaseURL}/SalesLead/GetAssigneeListByLeadId/${leadId}`)
   }
 
+  assignLeadToUser(data:{lAid: number,leadId: number,assignedTo: string,aDesc: string,aStatus: string,actionUser: number}):Observable<void>{
+    return this.http.post<void>(`${this.BaseURL}/SalesLead/AssignLead`,data)
+  }
+
+  insertLeadActivity(data:{leadId: number,leadComments: string,actionUser: number}): Observable<LeadAsigneeList>{
+    return this.http.post<LeadAsigneeList>(`${this.BaseURL}/LeadActivity/CreateActivity`,data)
+  }
+
+  getLeadResolverList():Observable<LeadResolverList>{
+    return this.http.get<LeadResolverList>(`${this.BaseURL}/SalesLead/GetLeadResolverList`)
+  }
+
+  leadStatusUpdate(data:LeadAsigneeDTO):Observable<LeadAsigneeList>{
+    return this.http.post<LeadAsigneeList>(`${this.BaseURL}/SalesLead/UpdateStatus`,data)
+  }
+
+  getLeadWorkList(data:GetWorkListDTO):Observable<LeadWorkList>{
+    return this.http.post<LeadWorkList>(`${this.BaseURL}/SalesLead/GetLeadWorklist`,data)
+  }
+  
+  salesLeads_AssignToUser(data:AssignLeadDTO):Observable<SalesLeadDTO>{
+    return this.http.post<SalesLeadDTO>(`${this.BaseURL}/SalesLead/SalesLeads_AssignToUser`,data)
+  }
+
+  salesLeads_ForceClose(data:AssignLeadDTO):Observable<SalesLeadDTO>{
+    return this.http.post<SalesLeadDTO>(`${this.BaseURL}/SalesLead/SalesLead_Forceclose`,data)
+  }
 }
