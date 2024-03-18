@@ -14,6 +14,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Infrastructure.Persistance.Services.LeadGeneration
 {
@@ -43,6 +44,8 @@ namespace Infrastructure.Persistance.Services.LeadGeneration
         private const string SP_SalesLead_ForceClose = "lg.SalesLead_ForceClose";
 
 
+        private const string SP_LeadContact_Insert = "lg.LeadContact_Insert";
+        private const string SP_LeadContact_ReadByLeadId = "lg.LeadContact_ReadByLeadId";
 
 
 
@@ -434,6 +437,56 @@ namespace Infrastructure.Persistance.Services.LeadGeneration
                     {
                         LeadId = assignLeadDTO.LeadId,
                         ActionUser = assignLeadDTO.ActionUser,
+                    }, commandType: CommandType.StoredProcedure);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
+        }
+
+        public async Task<LeadContactDetailList>LeadContactInsert(LeadContactDetailDTO leadContactDetailDTO)
+        {
+            LeadContactDetailList response = new LeadContactDetailList();
+            _logger.LogInformation($"Contact detail for leadId : {leadContactDetailDTO.LeadId}, ContactName : {leadContactDetailDTO.CName}");
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(base.ConnectionString))
+                {
+                    response.Items = await connection.QueryAsync<LeadContactDetailDTO>(SP_LeadContact_Insert, new
+                    {
+                        LeadId = leadContactDetailDTO.LeadId,
+                        CName = leadContactDetailDTO.CName,
+                        CNumber = leadContactDetailDTO.CNumber,
+                        CEmail = leadContactDetailDTO.CEmail,
+                        CDesignation = leadContactDetailDTO.CDesignation,
+                        CDesc = leadContactDetailDTO.CDesc,
+                        ActionUser = leadContactDetailDTO.ActionUser
+                    }, commandType: CommandType.StoredProcedure);
+
+                }
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+            return response;
+        }
+
+        public async Task<LeadContactDetailList> LeadContactReadByLeadId(LeadContactDetailDTO leadContactDetailDTO)
+        {
+            LeadContactDetailList response = new LeadContactDetailList();
+            _logger.LogInformation($"Contact detail for leadId : {leadContactDetailDTO.LeadId}, ContactName : {leadContactDetailDTO.CName}");
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(base.ConnectionString))
+                {
+                    response.Items = await connection.QueryAsync<LeadContactDetailDTO>(SP_LeadContact_ReadByLeadId, new
+                    {
+                        LeadId = leadContactDetailDTO.LeadId,
                     }, commandType: CommandType.StoredProcedure);
 
                 }

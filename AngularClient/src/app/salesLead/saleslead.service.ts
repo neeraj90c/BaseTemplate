@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
-import { AssignLeadDTO, GetWorkListDTO, LeadActivityList, LeadAsigneeDTO, LeadAsigneeList, LeadResolverList, LeadWorkList, ProjectList, SalesLeadDTO, SalesLeadList } from '../interface/leadgeneration.interface';
+import { AssignLeadDTO, GetWorkListDTO, LeadActivityList, LeadAsigneeDTO, LeadAsigneeList, LeadContactDetail, LeadContactDetailList, LeadResolverList, LeadWorkList, ProjectList, SalesLeadDTO, SalesLeadList } from '../interface/leadgeneration.interface';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -17,8 +17,8 @@ export class SalesleadService {
     this.router.navigate(['view-lead', id]);
   }
 
-  createSalesLead(data: SalesLeadDTO): Observable<SalesLeadList> {
-    return this.http.post<SalesLeadList>(`${this.BaseURL}/SalesLead/CreateLead`, data);
+  createSalesLead(data: SalesLeadDTO): Observable<SalesLeadDTO> {
+    return this.http.post<SalesLeadDTO>(`${this.BaseURL}/SalesLead/CreateLead`, data);
   }
   deleteSalesLead(leadID: number, actionUser: number): Observable<SalesLeadList> {
     return this.http.delete<SalesLeadList>(`${this.BaseURL}/SalesLead/DeleteLead/${leadID}/${actionUser}`)
@@ -70,5 +70,11 @@ export class SalesleadService {
 
   salesLeads_ForceClose(data:AssignLeadDTO):Observable<SalesLeadDTO>{
     return this.http.post<SalesLeadDTO>(`${this.BaseURL}/SalesLead/SalesLead_Forceclose`,data)
+  }
+  leadContactInsert(data:LeadContactDetail):Observable<LeadContactDetailList>{
+    return this.http.post<LeadContactDetailList>(`${this.BaseURL}/SalesLead/LeadContactInsert`,data)
+  }
+  leadContactReadByLeadId(data:LeadContactDetail):Observable<LeadContactDetailList>{
+    return this.http.post<LeadContactDetailList>(`${this.BaseURL}/SalesLead/LeadContactReadByLeadId`,data)
   }
 }

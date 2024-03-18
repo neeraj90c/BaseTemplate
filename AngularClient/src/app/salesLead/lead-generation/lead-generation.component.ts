@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { SalesleadService } from '../saleslead.service';
-import { ProjectListDTO, SalesLeadDTO } from 'src/app/interface/leadgeneration.interface';
+import { LeadContactDetail, ProjectListDTO, SalesLeadDTO } from 'src/app/interface/leadgeneration.interface';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CommonService } from 'src/app/Common/services/common.service';
 import { CompanyMasterDTO } from 'src/app/interface/CompanyMasterDTO';
@@ -64,7 +64,7 @@ export class LeadGenerationComponent implements OnInit {
   }
 
   leadForm = new FormGroup({
-    projectId: new FormControl(0,[notEqualToZeroValidator]),
+    projectId: new FormControl(0),
     lTitle: new FormControl('',[Validators.required]),
     lDesc: new FormControl(),
     category: new FormControl(),
@@ -76,7 +76,19 @@ export class LeadGenerationComponent implements OnInit {
     addField1: new FormControl(),
     addField2: new FormControl(),
     addField3: new FormControl(),
+    cName: new FormControl('',[Validators.required]),
+    cNumber: new FormControl('',[Validators.required]),
+    cEmail: new FormControl(),
+    cDesignation: new FormControl(),
   })
+
+  get cNameCtrl():FormControl{
+    return this,this.leadForm.controls.cName as FormControl
+  }
+
+  get cNumberCtrl():FormControl{
+    return this,this.leadForm.controls.cNumber as FormControl
+  }
 
   get lTitleCtrl(): FormControl {
     return this.leadForm.get('lTitle') as FormControl;
@@ -144,13 +156,31 @@ export class LeadGenerationComponent implements OnInit {
         actionUser: this.User.userId
       }
 
-      console.log(leadData);
+
       this._salesleadService.createSalesLead(leadData).subscribe(res=>{
-        console.log(res);
-        event.clearText()
-      
-        this.LeadModal.close()
-        this.reloadCurrentRoute()
+        let contactDetail:LeadContactDetail = {
+          contactId: 0,
+          leadId: res.leadId,
+          cName: formData.cName as string,
+          cNumber: formData.cNumber as string,
+          cEmail: formData.cEmail,
+          cDesignation: formData.cDesignation,
+          cDesc: '',
+          isActive: 1,
+          isDeleted: 0,
+          createdBy: 0,
+          createdOn: new Date,
+          modifiedBy: 0,
+          modifiedOn: new Date,
+          actionUser: this.User.userId
+        }
+        this._salesleadService.leadContactInsert(contactDetail).subscribe(i=>{
+          console.log(res);
+          event.clearText()
+        
+          this.LeadModal.close()
+          this.reloadCurrentRoute()
+        })
         
       })
       

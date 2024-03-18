@@ -18,7 +18,7 @@
                         <div class="col">
                             <div class="mb-1"><span id="detailTicketPriority">{{leadDetail.leadPriority}}</span>
                                 Priority
-                                 Lead
+                                Lead
                             </div>
                             <div class="d-flex mb-1">
                                 <div class="font-b me-2">Assigned To :</div>
@@ -81,15 +81,15 @@
                         <td><span id="detailTicketCreatedBy">{{leadDetail.leadOwner}}</span></td>
                     </tr>
                     <tr>
-                        <th>Contact No.</th>
+                        <th>Website</th>
                         <td><span id="detailTicketCreatedOn">{{leadDetail.addField1}}</span></td>
                     </tr>
                     <tr>
-                        <th>Address</th>
+                        <th>Industry</th>
                         <td><span id="detailTicketEstimatedDuration">{{leadDetail.addField2}}</span></td>
                     </tr>
                     <tr>
-                        <th>Email</th>
+                        <th>Other</th>
                         <td><span id="detailTicketActualDuration">{{leadDetail.addField3}}</span></td>
                     </tr>
                     <tr>
@@ -123,10 +123,10 @@
                         <button type="button" id="TicketEditBtn" class="btn btn-outline-primary btn-sm"
                             (click)="OpenEditLeadModal()">Edit</button>
                     </ng-container>
-                        <ng-container *ngIf="leadDetail.leadStatus == 'Close'|| leadDetail.leadStatus == 'Success'">
-                            <button type="button" id="TicketReOpenBtn" class="btn btn-outline-primary btn-sm"
-                                (click)="SupportTicket_ReOpen()" >ReOpen</button>
-                        </ng-container>
+                    <ng-container *ngIf="leadDetail.leadStatus == 'Close'|| leadDetail.leadStatus == 'Success'">
+                        <button type="button" id="TicketReOpenBtn" class="btn btn-outline-primary btn-sm"
+                            (click)="SupportTicket_ReOpen()">ReOpen</button>
+                    </ng-container>
                 </div>
             </div>
             <div class="col-md-4" style="text-align:right;">
@@ -195,7 +195,7 @@
 
                             <div class="col-md-6">
                                 <label>Description</label><br />
-                                <input  class="form-control" formControlName="aDesc" />
+                                <input class="form-control" formControlName="aDesc" />
                             </div>
                             <div class="col-md-2">
                                 <br />
@@ -238,19 +238,19 @@
                                                     *ngIf="leadAsignee.aStatus === 'Open' || leadAsignee.aStatus === 'Hold'">
                                                     Start</button>
                                                 <button class="btn btn-info btn-sm mt-2"
-                                                (click)="LeadAsigneeCloseTask(leadAsignee)"
-
+                                                    (click)="LeadAsigneeCloseTask(leadAsignee)"
                                                     *ngIf="leadAsignee.aStatus === 'InProgress'">
                                                     Close</button>
                                                 <button class="btn btn-success btn-sm mt-2 ml-2"
-                                                (click)="LeadAsigneeSuccessTask(leadAsignee)"
+                                                    (click)="LeadAsigneeSuccessTask(leadAsignee)"
                                                     *ngIf="leadAsignee.aStatus === 'InProgress'">
                                                     Success</button>
-                                                    <!-- <button class="btn btn-warning btn-sm mt-2  ml-2"
+                                                <!-- <button class="btn btn-warning btn-sm mt-2  ml-2"
                                                 (click)="LeadAsigneeHoldTask(leadAsignee)"
                                                     *ngIf="leadAsignee.aStatus === 'InProgress'">
                                                     Hold</button> -->
-                                                    <ng-container *ngIf="leadAsignee.aStatus === 'Success'">{{leadAsignee.aStatus}}</ng-container>
+                                                <ng-container
+                                                    *ngIf="leadAsignee.aStatus === 'Success'">{{leadAsignee.aStatus}}</ng-container>
                                             </td>
                                             <td class="text-center">
                                                 <div class="btn-group dots_dropdown">
@@ -303,34 +303,103 @@
     </div>
 
     <div>
-        <div class="font-b h5 mb-3">Activity</div>
-        <div id="ticketDetailActivity">
-            <ng-container *ngIf="!activityLoading;else activityLoader">
-                <div class="card mb-3" *ngFor="let activity of leadActivity">
-                    <div class="card-header">
-                        <div><b>{{GetUserNameById(activity.createdBy)}}</b></div>
-                        <small class="text-muted">{{activity.createdOn | date:'medium'}}</small>
-                    </div>
-                    <div class="card-body" [innerHTML]="returnSanitizedDom(activity.leadComments)">
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="TabularViewDiv" role="tabpanel">
+                <!--Tabs-->
+                <div class="nav nav-tabs tra_tab" id="nav-tab" role="tablist">
+                    <a class="active" data-toggle="tab" href="#tab1" role="tab" aria-selected="true">Activity</a>
+                    <a data-toggle="tab" href="#tab2" role="tab" aria-selected="true">Add Contact</a>
 
+                </div>
+
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="tab1" role="tabpanel" style="padding-bottom: 50px;">
+                        <div id="ticketDetailActivity">
+                            <ng-container *ngIf="!activityLoading;else activityLoader">
+                                <div class="card mb-3" *ngFor="let activity of leadActivity">
+                                    <div class="card-header">
+                                        <div><b>{{GetUserNameById(activity.createdBy)}}</b></div>
+                                        <small class="text-muted">{{activity.createdOn | date:'medium'}}</small>
+                                    </div>
+                                    <div class="card-body" [innerHTML]="returnSanitizedDom(activity.leadComments)">
+
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <ng-template #activityLoader>
+                                <div class="card mb-3" *ngFor="let _ of [].constructor(3); let i = index">
+                                    <div class="card-header">
+                                        <div><b><ngx-skeleton-loader></ngx-skeleton-loader> </b></div>
+                                        <small class="text-muted"><ngx-skeleton-loader></ngx-skeleton-loader> </small>
+                                    </div>
+                                    <div class="card-body">
+                                        <ngx-skeleton-loader></ngx-skeleton-loader>
+                                        <ngx-skeleton-loader></ngx-skeleton-loader>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="tab2" role="tabpanel">
+                        <form class="form-group col-md-6" [formGroup]="contactForm">
+                            <div class="form-row">
+                                <div class="form-group col-md-8">
+                                    <label for="AddField2">Contact Name</label>
+                                    <input type="text" class="form-control" id="raisedBy" formControlName="cName">
+                                    <div class="text-danger" *ngIf="(cNameCtrl.touched && cNameCtrl.invalid )">
+                                        <ng-container *ngIf="cNameCtrl.errors">Customer Name Required</ng-container>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-4">
+
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label for="AddField2">Contact No.</label>
+                                    <input type="text" class="form-control" id="raisedBy" formControlName="cNumber">
+                                    <div class="text-danger" *ngIf="(cNumberCtrl.touched && cNumberCtrl.invalid )">
+                                        <ng-container *ngIf="cNumberCtrl.errors">Customer Contact
+                                            Required</ng-container>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="AddField2">Email</label>
+                                    <input type="text" class="form-control" id="raisedByContactNo"
+                                        formControlName="cEmail">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="AddField2">Designation</label>
+                                    <input type="text" class="form-control" id="raisedBy"
+                                        formControlName="cDesignation">
+                                </div>
+                            </div>
+                            <div class="form-row mt-3">
+                                <label>Description</label>
+                                <app-rich-text-editor #ContactRTE (submit)="handleContactsubmit($event)">
+                                </app-rich-text-editor>
+                            </div>
+                        </form>
+                        <div class="col-md-6">
+                            <app-color-table [tableData]="ContactList" [columns]="[
+                                {colName: 'Name',colData: 'cName'},
+                                {colName: 'Contact',colData: 'cName'},
+                                {colName: 'Email',colData: 'cName'},
+                                {colName: 'Designation',colData: 'cDesignation'},
+                                {colName: 'Description',colData: 'cDescription'},
+                                ]">
+                            </app-color-table>
+                        </div>
                     </div>
                 </div>
-            </ng-container>
-            <ng-template #activityLoader>
-                <div class="card mb-3" *ngFor="let _ of [].constructor(3); let i = index">
-                    <div class="card-header">
-                        <div><b><ngx-skeleton-loader></ngx-skeleton-loader> </b></div>
-                        <small class="text-muted"><ngx-skeleton-loader></ngx-skeleton-loader> </small>
-                    </div>
-                    <div class="card-body">
-                        <ngx-skeleton-loader></ngx-skeleton-loader>
-                        <ngx-skeleton-loader></ngx-skeleton-loader>
-                    </div>
-                </div>
-            </ng-template>
-
-
+            </div>
         </div>
+
+
+
+
     </div>
 </div>
 
@@ -345,7 +414,7 @@
     <div class="tick_topband">
         <div class="row align-items-center">
             <div class="col">
-                    <ngx-skeleton-loader></ngx-skeleton-loader> 
+                <ngx-skeleton-loader></ngx-skeleton-loader>
             </div>
         </div>
     </div>
@@ -361,7 +430,7 @@
                             <span id="detailTicketType"><ngx-skeleton-loader></ngx-skeleton-loader></span>
                             <ngx-skeleton-loader></ngx-skeleton-loader>
                         </div>
-                        
+
                     </div>
                     <div class="col-auto text-end assign_side_action_btn">
                         <a href="#"><i class="fas fa-book me-1"></i> <ngx-skeleton-loader></ngx-skeleton-loader></a>
@@ -376,7 +445,7 @@
             </div>
         </div>
         <div class="col-4 side_status">
-            <table class="table mb-0 " >
+            <table class="table mb-0 ">
                 <tr>
                     <th>Status</th>
                     <td><ngx-skeleton-loader></ngx-skeleton-loader></td>
@@ -466,7 +535,8 @@
                     <label for="project">Project Name<span style="color: red;">*</span></label>
                     <select class="form-control" id="project" formControlName="projectId">
                         <option [value]="0">Default</option>
-                        <option *ngFor="let project of ProjectList" [value]="project.projectId">{{project.pName}}</option>
+                        <option *ngFor="let project of ProjectList" [value]="project.projectId">{{project.pName}}
+                        </option>
                     </select>
                     <div class="text-danger" *ngIf="(projectIdCtrl.touched && projectIdCtrl.invalid )">
                         <ng-container *ngIf="projectIdCtrl.errors"> Please select a project</ng-container>
@@ -482,15 +552,15 @@
             </div>
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    <label for="AddField1">Contact No.</label>
+                    <label for="AddField1">Website</label>
                     <input type="text" class="form-control" id="department" formControlName="addField1">
                 </div>
                 <div class="form-group col-md-4">
-                    <label for="AddField2">Address</label>
-                    <textarea type="text" class="form-control" id="raisedBy" formControlName="addField2"></textarea>
+                    <label for="AddField2">Industry</label>
+                    <input type="text" class="form-control" id="raisedBy" formControlName="addField2">
                 </div>
                 <div class="form-group col-md-4">
-                    <label for="AddField2">Email</label>
+                    <label for="AddField2">Other</label>
                     <input type="text" class="form-control" id="raisedByContactNo" formControlName="addField3">
                 </div>
             </div>
@@ -528,7 +598,8 @@
 
                 <div class="form-group col-md-4">
                     <label for="targetDate">Lead Date</label>
-                    <input type="date" class="form-control" id="leadDate" formControlName="leadDate" (change)="leadDateChanged($event)">
+                    <input type="date" class="form-control" id="leadDate" formControlName="leadDate"
+                        (change)="leadDateChanged($event)">
                 </div>
                 <div class="form-group col-md-4">
                     <label for="targetDate">Next Follow Up Date</label>
@@ -550,8 +621,8 @@
             <label>Lead Description</label>
             <div class="form-row">
                 <app-rich-text-editor #editor2 (submit)="LeadUpdate($event)" [setRTEHtml]="leadDetail.lDesc">
-                    <button type="button" class="btn btn-sm btn-secondary my-2 ml-2" id="SupportTicketCloseBtn" data-dismiss="modal"
-                    (click)="LeadModal.close()">Close</button>
+                    <button type="button" class="btn btn-sm btn-secondary my-2 ml-2" id="SupportTicketCloseBtn"
+                        data-dismiss="modal" (click)="LeadModal.close()">Close</button>
                 </app-rich-text-editor>
             </div>
 
