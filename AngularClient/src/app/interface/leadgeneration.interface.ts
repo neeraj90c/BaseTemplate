@@ -150,3 +150,23 @@ export interface GetWorkListDTO {
   endDate: Date;
 }
 
+export interface LeadContactDetail {
+  contactId: number;
+  leadId: number;
+  cName: string;
+  cNumber: string;
+  cEmail: string;
+  cDesignation: string;
+  cDesc: string;
+  isActive: number;
+  isDeleted: number;
+  createdBy: number;
+  createdOn: Date;
+  modifiedBy: number;
+  modifiedOn: Date;
+  actionUser: number
+}
+
+export interface LeadContactDetailList {
+  items: LeadContactDetail[]
+}

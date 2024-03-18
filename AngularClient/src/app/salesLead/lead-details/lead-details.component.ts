@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SalesleadService } from '../saleslead.service';
-import { AssignLeadDTO, LeadActivityDTO, LeadAsigneeDTO, LeadResolverDTO, ProjectListDTO, SalesLeadDTO } from 'src/app/interface/leadgeneration.interface';
+import { AssignLeadDTO, LeadActivityDTO, LeadAsigneeDTO, LeadContactDetail, LeadResolverDTO, ProjectListDTO, SalesLeadDTO } from 'src/app/interface/leadgeneration.interface';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
@@ -38,6 +38,7 @@ export class LeadDetailsComponent implements OnInit {
     addField2: new FormControl(),
     addField3: new FormControl(),
   })
+  ContactList!: LeadContactDetail[];
 
   get lTitleCtrl(): FormControl {
     return this.leadForm.get('lTitle') as FormControl;
@@ -135,6 +136,29 @@ export class LeadDetailsComponent implements OnInit {
   leadResolverList: LeadResolverDTO[] = [];
   LeadAssigneeTableLoading: boolean = false;
 
+  getAllLeadContact() {
+    let data: LeadContactDetail = {
+      contactId: 0,
+      leadId: this.leadDetail.leadId,
+      cName: '',
+      cNumber: '',
+      cEmail: '',
+      cDesignation: '',
+      cDesc: '',
+      isActive: 0,
+      isDeleted: 0,
+      createdBy: 0,
+      createdOn: new Date,
+      modifiedBy: 0,
+      modifiedOn: new Date,
+      actionUser: 0
+    }
+
+    this._salesleadService.leadContactReadByLeadId(data).subscribe(res => {
+      this.ContactList = res.items
+    })
+  }
+
 
 
   getLeadDetailById(id: number) {
@@ -143,6 +167,7 @@ export class LeadDetailsComponent implements OnInit {
       this.getLeadActivity()
       this.getLeadResolvereList()
       this.getAssignedUsers()
+      this.getAllLeadContact()
 
 
 
@@ -391,6 +416,51 @@ export class LeadDetailsComponent implements OnInit {
     this._salesleadService.getAllProjectList().subscribe(res => {
       this.ProjectList = res.items
     })
+  }
+
+  contactForm = new FormGroup({
+    cName: new FormControl('', [Validators.required]),
+    cNumber: new FormControl('', [Validators.required]),
+    cEmail: new FormControl(),
+    cDesignation: new FormControl(),
+    cDesc: new FormControl(),
+  })
+
+  get cNameCtrl(): FormControl {
+    return this, this.contactForm.controls.cName as FormControl
+  }
+
+  get cNumberCtrl(): FormControl {
+    return this, this.contactForm.controls.cNumber as FormControl
+  }
+
+
+  handleContactsubmit(event: { value: string, clearText: () => void, setHtml: (text: string) => void }) {
+    Object.values(this.contactForm.controls).forEach(control => {
+      control.markAsTouched()
+    })
+    if (this.contactForm.valid) {
+      let { cName, cNumber, cDesignation, cEmail, cDesc } = this.contactForm.value
+      let contactDetail: LeadContactDetail = {
+        contactId: 0,
+        leadId: this.leadDetail.leadId,
+        cName: cName as string,
+        cNumber: cNumber as string,
+        cEmail: cEmail,
+        cDesignation: cDesignation,
+        cDesc: cDesc as string,
+        isActive: 1,
+        isDeleted: 0,
+        createdBy: 0,
+        createdOn: new Date,
+        modifiedBy: 0,
+        modifiedOn: new Date,
+        actionUser: this.User.userId
+      }
+      this._salesleadService.leadContactInsert(contactDetail).subscribe((res => {
+        this.ContactList = res.items
+      }))
+    }
   }
 
 }

@@ -84,18 +84,42 @@
                         <ng-container *ngIf="lTitleCtrl.errors"> Lead Name is required</ng-container>
                     </div>
                 </div>
+                <div class="form-group col-md-4">
+                    <label for="cName">Contact name </label>
+                    <input type="text" class="form-control" id="cName" formControlName="cName">
+                    <div class="text-danger" *ngIf="(cNameCtrl.touched && cNameCtrl.invalid )">
+                        <ng-container *ngIf="cNameCtrl.errors">Customer Name Required</ng-container>
+                    </div>
+                </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    <label for="AddField1">Contact No.</label>
-                    <input type="text" class="form-control" id="department" formControlName="addField1">
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="AddField2">Address</label>
-                    <textarea type="text" class="form-control" id="raisedBy" formControlName="addField2"></textarea>
+                    <label for="AddField2">Contact No.</label>
+                    <input type="text" class="form-control" id="raisedBy" formControlName="cNumber">
+                    <div class="text-danger" *ngIf="(cNumberCtrl.touched && cNumberCtrl.invalid )">
+                        <ng-container *ngIf="cNumberCtrl.errors">Customer Contact Required</ng-container>
+                    </div>
                 </div>
                 <div class="form-group col-md-4">
                     <label for="AddField2">Email</label>
+                    <input type="text" class="form-control" id="raisedByContactNo" formControlName="cEmail">
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="AddField2">Designation</label>
+                    <input type="text" class="form-control" id="raisedBy" formControlName="cDesignation">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="AddField1">Website </label>
+                    <input type="text" class="form-control" id="department" formControlName="addField1">
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="AddField2">Industry</label>
+                    <input type="text" class="form-control" id="raisedBy" formControlName="addField2">
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="AddField2">Other</label>
                     <input type="text" class="form-control" id="raisedByContactNo" formControlName="addField3">
                 </div>
             </div>

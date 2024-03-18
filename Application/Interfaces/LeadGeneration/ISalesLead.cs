@@ -26,6 +26,9 @@ namespace Application.Interfaces.LeadGeneration
         public Task<LeadWorkList> GetSalesLeadWorkList(GetWorkListDTO getWorkListDTO);
         public Task<SalesLeadDTO> SalesLeads_AssignToUser(AssignLeadDTO assignLeadDTO);
         public Task<SalesLeadDTO> SalesLead_Forceclose(AssignLeadDTO assignLeadDTO);
+        public Task<LeadContactDetailList> LeadContactInsert(LeadContactDetailDTO leadContactDetailDTO);
+        public Task<LeadContactDetailList> LeadContactReadByLeadId(LeadContactDetailDTO leadContactDetailDTO);
+
 
 
 
