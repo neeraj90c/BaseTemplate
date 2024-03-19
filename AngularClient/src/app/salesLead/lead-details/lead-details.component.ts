@@ -467,6 +467,7 @@ export class LeadDetailsComponent implements OnInit {
         this.contactForm.reset()
         event.clearText()
         this.toaster.success('Contact Added!!')
+        this.contactFormModal.close()
       }))
     }
   }
