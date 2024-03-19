@@ -434,7 +434,12 @@ export class LeadDetailsComponent implements OnInit {
     return this, this.contactForm.controls.cNumber as FormControl
   }
 
+  @ViewChild('addContactForm') contactFormContent!:ElementRef
+  contactFormModal!:NgbModalRef
 
+  OpenContactForm(){
+    this.contactFormModal = this.modalService.open(this.contactFormContent,{size:'xl'})
+  }
   handleContactsubmit(event: { value: string, clearText: () => void, setHtml: (text: string) => void }) {
     Object.values(this.contactForm.controls).forEach(control => {
       control.markAsTouched()
