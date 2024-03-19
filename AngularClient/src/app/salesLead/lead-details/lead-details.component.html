@@ -308,7 +308,7 @@
                 <!--Tabs-->
                 <div class="nav nav-tabs tra_tab" id="nav-tab" role="tablist">
                     <a class="active" data-toggle="tab" href="#tab1" role="tab" aria-selected="true">Activity</a>
-                    <a data-toggle="tab" href="#tab2" role="tab" aria-selected="true">Add Contact</a>
+                    <a data-toggle="tab" href="#tab2" role="tab" aria-selected="true">Contact Details</a>
 
                 </div>
 
@@ -340,49 +340,11 @@
                             </ng-template>
                         </div>
                     </div>
-
                     <div class="tab-pane fade" id="tab2" role="tabpanel">
-                        <form class="form-group col-md-6" [formGroup]="contactForm">
-                            <div class="form-row">
-                                <div class="form-group col-md-8">
-                                    <label for="AddField2">Contact Name</label>
-                                    <input type="text" class="form-control" id="raisedBy" formControlName="cName">
-                                    <div class="text-danger" *ngIf="(cNameCtrl.touched && cNameCtrl.invalid )">
-                                        <ng-container *ngIf="cNameCtrl.errors">Customer Name Required</ng-container>
-                                    </div>
-                                </div>
-
-                                <div class="form-group col-md-4">
-
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-4">
-                                    <label for="AddField2">Contact No.</label>
-                                    <input type="text" class="form-control" id="raisedBy" formControlName="cNumber">
-                                    <div class="text-danger" *ngIf="(cNumberCtrl.touched && cNumberCtrl.invalid )">
-                                        <ng-container *ngIf="cNumberCtrl.errors">Customer Contact
-                                            Required</ng-container>
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="AddField2">Email</label>
-                                    <input type="text" class="form-control" id="raisedByContactNo"
-                                        formControlName="cEmail">
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="AddField2">Designation</label>
-                                    <input type="text" class="form-control" id="raisedBy"
-                                        formControlName="cDesignation">
-                                </div>
-                            </div>
-                            <div class="form-row mt-3">
-                                <label>Description</label>
-                                <app-rich-text-editor #ContactRTE (submit)="handleContactsubmit($event)">
-                                </app-rich-text-editor>
-                            </div>
-                        </form>
-                        <div class="col-md-6">
+                        <div class="d-flex justify-content-end mb-3">
+                            <button class="btn btn-primary btn-sm" (click)="OpenContactForm()">Add Contact</button>
+                        </div>
+                        
                             <app-color-table [tableData]="ContactList" [columns]="[
                                 {colName: 'Name',colData: 'cName'},
                                 {colName: 'Contact',colData: 'cName'},
@@ -391,8 +353,10 @@
                                 {colName: 'Description',colData: 'cDescription'},
                                 ]">
                             </app-color-table>
-                        </div>
+                        
                     </div>
+
+                   
                 </div>
             </div>
         </div>
@@ -638,4 +602,61 @@
         <button type="button" class="btn btn-primary" id="SupportTicketSaveBtn" (click)="TicketUpdate()">Create
             Ticket</button>
     </div> -->
+</ng-template>
+
+
+<ng-template #addContactForm>
+    <div class="modal-header text-light" style="background-color: #01018f;">
+        <h5 class="modal-title font-weight-bold" id="WorkflowInstructionsModalLabel">Update Lead</h5>
+        <button type="button" class="close text-light" aria-label="Close" data-dismiss="modal"
+            (click)="contactFormModal.close()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+   
+        <form class="form-group" [formGroup]="contactForm">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="AddField2">Contact Name</label>
+                    <input type="text" class="form-control" id="raisedBy" formControlName="cName">
+                    <div class="text-danger" *ngIf="(cNameCtrl.touched && cNameCtrl.invalid )">
+                        <ng-container *ngIf="cNameCtrl.errors">Customer Name Required</ng-container>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-4">
+
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="AddField2">Contact No.</label>
+                    <input type="text" class="form-control" id="raisedBy" formControlName="cNumber">
+                    <div class="text-danger" *ngIf="(cNumberCtrl.touched && cNumberCtrl.invalid )">
+                        <ng-container *ngIf="cNumberCtrl.errors">Customer Contact
+                            Required</ng-container>
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="AddField2">Email</label>
+                    <input type="text" class="form-control" id="raisedByContactNo"
+                        formControlName="cEmail">
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="AddField2">Designation</label>
+                    <input type="text" class="form-control" id="raisedBy"
+                        formControlName="cDesignation">
+                </div>
+            </div>
+            <div class="form-row mt-3">
+                <label>Description</label>
+                    <app-rich-text-editor #ContactRTE (submit)="handleContactsubmit($event)">
+                        <button class="btn btn-sm btn-secondary ml-2" (click)="contactFormModal.close()">Close</button>
+                    </app-rich-text-editor>
+            </div>
+        </form>
+        
+
+    </div>
 </ng-template>
