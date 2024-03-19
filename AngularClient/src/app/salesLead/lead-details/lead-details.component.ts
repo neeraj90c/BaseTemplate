@@ -461,6 +461,7 @@ export class LeadDetailsComponent implements OnInit {
         this.ContactList = res.items
         this.contactForm.reset()
         event.clearText()
+        this.toaster.success('Contact Added!')
       }))
     }
   }
