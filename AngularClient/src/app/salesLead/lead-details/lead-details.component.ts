@@ -459,6 +459,8 @@ export class LeadDetailsComponent implements OnInit {
       }
       this._salesleadService.leadContactInsert(contactDetail).subscribe((res => {
         this.ContactList = res.items
+        this.contactForm.reset()
+        event.clearText()
       }))
     }
   }
