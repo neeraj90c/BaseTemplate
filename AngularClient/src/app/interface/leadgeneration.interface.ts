@@ -24,7 +24,7 @@ export interface SalesLeadDTO {
   createdOn: Date;
   modifiedBy: string;
   modifiedOn: Date;
-  actionUser: number;
+  actionUser: string;
   createdByName?: string
   CompanyCode?: string
 }

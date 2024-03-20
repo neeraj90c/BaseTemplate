@@ -32,6 +32,7 @@ export class ActiveLeadsComponent implements OnInit {
   }
 
   getAllSalesLead() {
+    this.dataTableLoading = true
     this.loaderService.turnOffLoader.next(true)
     let body: { actionUser: number, companyId: number } = {
       actionUser: this.User.userId,
@@ -39,8 +40,8 @@ export class ActiveLeadsComponent implements OnInit {
     }
     this._salesleadService.getAllSalesLead(body).subscribe(res => {
       this.SalesList = res.newAndOpen;
-      this.loaderService.turnOffLoader.next(false)
       this.dataTableLoading = false
+      this.loaderService.turnOffLoader.next(false)
     })
   }
 

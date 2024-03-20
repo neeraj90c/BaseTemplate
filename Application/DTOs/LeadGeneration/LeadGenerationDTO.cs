@@ -34,7 +34,7 @@ namespace Application.DTOs.LeadGeneration
         public DateTime CreatedOn { get; set; }
         public string ModifiedBy { get; set; }
         public DateTime ModifiedOn { get; set; }
-        public int ActionUser { get; set; }
+        public string ActionUser { get; set; }
         public string ?CreatedByName {  get; set; }
         public string ?CompanyCode {  get; set; }
     }
