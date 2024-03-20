@@ -124,7 +124,7 @@ export class LeadDetailsComponent implements OnInit {
     createdOn: new Date,
     modifiedBy: '',
     modifiedOn: new Date,
-    actionUser: 0
+    actionUser: ''
   }
   leadAssigneeForm = new FormGroup({
     assignedTo: new FormControl(),
@@ -389,7 +389,7 @@ export class LeadDetailsComponent implements OnInit {
         createdOn: new Date(),
         modifiedBy: '',
         modifiedOn: new Date(),
-        actionUser: this.User.userId
+        actionUser: this.User.userId.toString()
       }
 
       console.log(leadData);

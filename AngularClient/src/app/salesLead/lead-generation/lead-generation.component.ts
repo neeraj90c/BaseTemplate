@@ -10,6 +10,7 @@ import { UserService } from 'src/app/services/user.service';
 import { LoaderService } from 'src/app/services/loader.service';
 import { Router } from '@angular/router';
 import { notEqualToZeroValidator } from 'src/app/validators/validators';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-lead-generation',
@@ -18,7 +19,7 @@ import { notEqualToZeroValidator } from 'src/app/validators/validators';
 })
 export class LeadGenerationComponent implements OnInit {
 
-  constructor(private _salesleadService: SalesleadService, private modalService: NgbModal, private _commonService: CommonService,private _userService:UserService, private loaderService:LoaderService,private router:Router) { 
+  constructor(private _salesleadService: SalesleadService, private modalService: NgbModal, private _commonService: CommonService,private _userService:UserService, private loaderService:LoaderService,private router:Router,private toaster:ToastrService) { 
     this.today = new Date();
     this.startDate = new Date(Date.UTC(this.today.getFullYear(), this.today.getMonth(), 1, 0, 0, 0));
 
@@ -110,6 +111,7 @@ export class LeadGenerationComponent implements OnInit {
   }
 
   OpenCreateLeadModal() {
+    this.leadForm.reset()
     this.leadForm.patchValue({
       projectId:0,
       leadStatus:'New',
@@ -153,37 +155,41 @@ export class LeadGenerationComponent implements OnInit {
         createdOn: new Date(),
         modifiedBy: '',
         modifiedOn: new Date(),
-        actionUser: this.User.userId
+        actionUser: this.User.userId.toString()
       }
 
 
       this._salesleadService.createSalesLead(leadData).subscribe(res=>{
-        let contactDetail:LeadContactDetail = {
-          contactId: 0,
-          leadId: res.leadId,
-          cName: formData.cName as string,
-          cNumber: formData.cNumber as string,
-          cEmail: formData.cEmail,
-          cDesignation: formData.cDesignation,
-          cDesc: '',
-          isActive: 1,
-          isDeleted: 0,
-          createdBy: 0,
-          createdOn: new Date,
-          modifiedBy: 0,
-          modifiedOn: new Date,
-          actionUser: this.User.userId
-        }
-        this._salesleadService.leadContactInsert(contactDetail).subscribe(i=>{
-          console.log(res);
-          event.clearText()
-        
+
+        if(res.leadId != 0){
+          let contactDetail:LeadContactDetail = {
+            contactId: 0,
+            leadId: res.leadId,
+            cName: formData.cName as string,
+            cNumber: formData.cNumber as string,
+            cEmail: formData.cEmail,
+            cDesignation: formData.cDesignation,
+            cDesc: '',
+            isActive: 1,
+            isDeleted: 0,
+            createdBy: 0,
+            createdOn: new Date,
+            modifiedBy: 0,
+            modifiedOn: new Date,
+            actionUser: this.User.userId
+          }
+          this._salesleadService.leadContactInsert(contactDetail).subscribe(i=>{
+            console.log(res);
+            event.clearText()
+          })
+          this.toaster.success('Lead Created Successfully!!')
           this.LeadModal.close()
           this.reloadCurrentRoute()
-        })
-        
+        }
+        else if(res.leadId == 0 && res.lTitle != ''){
+          this.toaster.warning(res.lTitle)
+        }
       })
-      
     }
 
 
