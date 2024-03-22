@@ -42,10 +42,12 @@ namespace Infrastructure.Persistance.Services.LeadGeneration
         private const string SP_SalesLead_WorkList = "lg.SalesLead_WorkList";
         private const string SP_SalesLead_AssignToUser = "lg.SalesLead_AssignToUser";
         private const string SP_SalesLead_ForceClose = "lg.SalesLead_ForceClose";
+        private const string SP_SalesLead_Reopen = "lg.SalesLead_Reopen";
 
 
         private const string SP_LeadContact_Insert = "lg.LeadContact_Insert";
         private const string SP_LeadContact_ReadByLeadId = "lg.LeadContact_ReadByLeadId";
+
 
 
 
@@ -498,6 +500,29 @@ namespace Infrastructure.Persistance.Services.LeadGeneration
             return response;
         }
 
+        public async Task<SalesLeadDTO> SalesLead_ReOpen(AssignLeadDTO assignLeadDTO)
+        {
+            SalesLeadDTO response = new SalesLeadDTO();
+
+            _logger.LogInformation($"Assign the ticket : {assignLeadDTO.LeadId} to User : {assignLeadDTO.AssignedTo}");
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(base.ConnectionString))
+                {
+                    response = await connection.QueryFirstOrDefaultAsync<SalesLeadDTO>(SP_SalesLead_Reopen, new
+                    {
+                        LeadId = assignLeadDTO.LeadId,
+                        ActionUser = assignLeadDTO.ActionUser,
+                    }, commandType: CommandType.StoredProcedure);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
+        }
 
 
 

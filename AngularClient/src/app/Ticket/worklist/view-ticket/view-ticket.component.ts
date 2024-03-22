@@ -311,8 +311,14 @@ export class ViewTicketComponent {
       }
       this.assigneeTableLoading = true
       this._ticketService.assignTicketToUser(data).subscribe(res => {
-        this.ticketAsignees = res.ticketAsignee
-        this.toaster.success('Ticket Assigned!!')
+
+        if(res.ticketAsignee[0].taId == 0 && res.ticketAsignee[0].assignDesc != ''){
+          this.toaster.warning(res.ticketAsignee[0].assignDesc)
+        }else if(res.ticketAsignee[0].taId != 0){
+          this.ticketAsignees = res.ticketAsignee
+          this.toaster.success('Ticket Assigned!!')
+        }
+
         this.assigneeTableLoading = false
         this.ticketAssigneeForm.reset();
         this.ticketAssigneeForm.patchValue({

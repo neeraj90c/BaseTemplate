@@ -292,6 +292,19 @@ export class LeadDetailsComponent implements OnInit {
 
   SupportTicket_ReOpen() {
 
+    let data: AssignLeadDTO = {
+      leadId: this.leadDetail.leadId,
+      assignedTo: '',
+      aDesc: '',
+      aStatus: '',
+      actionUser: this.User.userId
+    }
+    this._salesleadService.salesLeads_ReOpen(data).subscribe(res => {
+      // this.leadDetail = res
+      this.toaster.success('Lead ReOpened')
+      this.reloadCurrentRoute()
+
+    })
   }
 
 
@@ -438,9 +451,11 @@ export class LeadDetailsComponent implements OnInit {
   contactFormModal!:NgbModalRef
 
   OpenContactForm(){
+    this.contactForm.reset()
     this.contactFormModal = this.modalService.open(this.contactFormContent,{size:'xl'})
   }
   handleContactsubmit(event: { value: string, clearText: () => void, setHtml: (text: string) => void }) {
+    
     Object.values(this.contactForm.controls).forEach(control => {
       control.markAsTouched()
     })
@@ -463,11 +478,17 @@ export class LeadDetailsComponent implements OnInit {
         actionUser: this.User.userId
       }
       this._salesleadService.leadContactInsert(contactDetail).subscribe((res => {
-        this.ContactList = res.items
-        this.contactForm.reset()
-        event.clearText()
-        this.toaster.success('Contact Added!!')
-        this.contactFormModal.close()
+
+        if(res.items[0].contactId == 0 &&  res.items[0].cDesc != ''){
+          this.toaster.warning( res.items[0].cDesc)
+        }else if(res.items.length > 0 && res.items[0].contactId != 0){
+          this.ContactList = res.items
+          this.contactForm.reset()
+          event.clearText()
+          this.toaster.success('Contact Added!!')
+          this.contactFormModal.close()
+        }
+        
       }))
     }
   }

@@ -19,7 +19,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class LeadGenerationComponent implements OnInit {
 
-  constructor(private _salesleadService: SalesleadService, private modalService: NgbModal, private _commonService: CommonService,private _userService:UserService, private loaderService:LoaderService,private router:Router,private toaster:ToastrService) { 
+  constructor(private _salesleadService: SalesleadService, private modalService: NgbModal, private _commonService: CommonService, private _userService: UserService, private loaderService: LoaderService, private router: Router, private toaster: ToastrService) {
     this.today = new Date();
     this.startDate = new Date(Date.UTC(this.today.getFullYear(), this.today.getMonth(), 1, 0, 0, 0));
 
@@ -40,7 +40,7 @@ export class LeadGenerationComponent implements OnInit {
   @ViewChild('CreateLeadModal') createLeadModal!: ElementRef
   LeadModal!: NgbModalRef
   CompanyList: CompanyMasterDTO[] = [];
-  ProjectList: ProjectListDTO[]=[];
+  ProjectList: ProjectListDTO[] = [];
 
   CompanyMaster: CompanyMasterDTO = {
     companyId: 0,
@@ -66,7 +66,7 @@ export class LeadGenerationComponent implements OnInit {
 
   leadForm = new FormGroup({
     projectId: new FormControl(0),
-    lTitle: new FormControl('',[Validators.required]),
+    lTitle: new FormControl('', [Validators.required]),
     lDesc: new FormControl(),
     category: new FormControl(),
     tagList: new FormControl(),
@@ -77,18 +77,19 @@ export class LeadGenerationComponent implements OnInit {
     addField1: new FormControl(),
     addField2: new FormControl(),
     addField3: new FormControl(),
-    cName: new FormControl('',[Validators.required]),
-    cNumber: new FormControl('',[Validators.required]),
+    cName: new FormControl('', [Validators.required]),
+    cNumber: new FormControl('', [Validators.required]),
     cEmail: new FormControl(),
     cDesignation: new FormControl(),
+    assignToMe: new FormControl()
   })
 
-  get cNameCtrl():FormControl{
-    return this,this.leadForm.controls.cName as FormControl
+  get cNameCtrl(): FormControl {
+    return this, this.leadForm.controls.cName as FormControl
   }
 
-  get cNumberCtrl():FormControl{
-    return this,this.leadForm.controls.cNumber as FormControl
+  get cNumberCtrl(): FormControl {
+    return this, this.leadForm.controls.cNumber as FormControl
   }
 
   get lTitleCtrl(): FormControl {
@@ -113,12 +114,12 @@ export class LeadGenerationComponent implements OnInit {
   OpenCreateLeadModal() {
     this.leadForm.reset()
     this.leadForm.patchValue({
-      projectId:0,
-      leadStatus:'New',
-      category:'Retailer',
-      leadPriority:'High',
-      leadDate : formatDate(this.today,'yyyy-MM-dd','en'),
-      nextFollowUpDate:formatDate(this.nextFollowUpDate,'yyyy-MM-dd','en')
+      projectId: 0,
+      leadStatus: 'New',
+      category: 'Retailer',
+      leadPriority: 'High',
+      leadDate: formatDate(this.today, 'yyyy-MM-dd', 'en'),
+      nextFollowUpDate: formatDate(this.nextFollowUpDate, 'yyyy-MM-dd', 'en')
     })
     this.LeadModal = this.modalService.open(this.createLeadModal, { size: 'xl' })
   }
@@ -126,14 +127,13 @@ export class LeadGenerationComponent implements OnInit {
 
   LeadUpdate(event: { value: string, clearText: () => void, setHtml: (text: string) => void }) {
     // console.log(event.value);
-    // console.log(this.leadForm.value);
 
     Object.values(this.leadForm.controls).forEach(control => {
       control.markAsTouched()
     })
     if (this.leadForm.valid) {
       let formData = { ...this.leadForm.value }
-      let leadData:SalesLeadDTO = {
+      let leadData: SalesLeadDTO = {
         leadId: 0,
         projectId: formData.projectId as number,
         companyId: parseInt(this.User.companyId),
@@ -159,10 +159,10 @@ export class LeadGenerationComponent implements OnInit {
       }
 
 
-      this._salesleadService.createSalesLead(leadData).subscribe(res=>{
+      this._salesleadService.createSalesLead(leadData).subscribe(res => {
 
-        if(res.leadId != 0){
-          let contactDetail:LeadContactDetail = {
+        if (res.leadId != 0) {
+          let contactDetail: LeadContactDetail = {
             contactId: 0,
             leadId: res.leadId,
             cName: formData.cName as string,
@@ -178,15 +178,30 @@ export class LeadGenerationComponent implements OnInit {
             modifiedOn: new Date,
             actionUser: this.User.userId
           }
-          this._salesleadService.leadContactInsert(contactDetail).subscribe(i=>{
+          this._salesleadService.leadContactInsert(contactDetail).subscribe(i => {
             console.log(res);
             event.clearText()
           })
+          if (formData.assignToMe) {
+
+            let assigneedata: { lAid: number, leadId: number, assignedTo: string, aDesc: string, aStatus: string, actionUser: number } = {
+              lAid: 0,
+              leadId: res.leadId,
+              assignedTo: this.User.userId.toString(),
+              aDesc: '',
+              aStatus: 'Open',
+              actionUser: this.User.userId
+            }
+            this._salesleadService.assignLeadToUser(assigneedata).subscribe(l => {
+              this.toaster.success('Lead assigned to Self!!')
+              this._salesleadService.navigateToViewLead(res.leadId)
+            })
+          }
           this.toaster.success('Lead Created Successfully!!')
           this.LeadModal.close()
           this.reloadCurrentRoute()
         }
-        else if(res.leadId == 0 && res.lTitle != ''){
+        else if (res.leadId == 0 && res.lTitle != '') {
           this.toaster.warning(res.lTitle)
         }
       })
@@ -202,13 +217,13 @@ export class LeadGenerationComponent implements OnInit {
     });
   }
 
-  leadDateChanged(event:any){
+  leadDateChanged(event: any) {
     let leadDate = new Date(this.leadForm.controls.leadDate.value)
     let nextDate = new Date()
     nextDate.setDate(leadDate.getDate() + 3);
     this.leadForm.patchValue({
-      nextFollowUpDate: formatDate(nextDate,'yyyy-MM-dd','en')
+      nextFollowUpDate: formatDate(nextDate, 'yyyy-MM-dd', 'en')
     })
-    
+
   }
 }

@@ -240,6 +240,24 @@ namespace WebAPI.Controllers.LeadGeneration
             return Ok(response);
         }
 
+        [HttpPost("SalesLead_Reopen")]
+        public async Task<IActionResult> SalesLead_Reopen([FromBody] AssignLeadDTO assignLeadDTO)
+        {
+            SalesLeadDTO response = new SalesLeadDTO();
+
+
+            response = await mediator.Send(new SalesLead_ReopenCommand
+            {
+                assignLeadDTO = assignLeadDTO
+
+            });
+
+            if (response == null)
+                return Ok(APIResponse<string>.Unauthorized("Please check login credentials"));
+
+            return Ok(response);
+        }
+
 
 
 
