@@ -80,4 +80,7 @@ export class SalesleadService {
   leadContactReadByLeadId(data:LeadContactDetail):Observable<LeadContactDetailList>{
     return this.http.post<LeadContactDetailList>(`${this.BaseURL}/SalesLead/LeadContactReadByLeadId`,data)
   }
+  deleteLeadAssignee(data:AssignLeadDTO):Observable<LeadAsigneeList>{
+    return this.http.post<LeadAsigneeList>(`${this.BaseURL}/SalesLead/DeleteLeadAssignee`,data)
+  }
 }

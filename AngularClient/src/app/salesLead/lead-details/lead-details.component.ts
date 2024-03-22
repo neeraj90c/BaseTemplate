@@ -307,6 +307,15 @@ export class LeadDetailsComponent implements OnInit {
     })
   }
 
+  LeadAsigneeDeleteOnClick(leadAsignee: LeadAsigneeDTO) {
+    leadAsignee.actionUser = this.User.userId
+    this._salesleadService.deleteLeadAssignee(leadAsignee).subscribe(res => {
+      this.assigneeList = res.items
+      this.toaster.warning('Assignee Removed!!')
+    })
+  }
+
+
 
   // TicketAsigneeCloseTask(ticketAsignee: TicketAsigneeDTO) {
   //   ticketAsignee.aStatus = "Close";
@@ -447,15 +456,15 @@ export class LeadDetailsComponent implements OnInit {
     return this, this.contactForm.controls.cNumber as FormControl
   }
 
-  @ViewChild('addContactForm') contactFormContent!:ElementRef
-  contactFormModal!:NgbModalRef
+  @ViewChild('addContactForm') contactFormContent!: ElementRef
+  contactFormModal!: NgbModalRef
 
-  OpenContactForm(){
+  OpenContactForm() {
     this.contactForm.reset()
-    this.contactFormModal = this.modalService.open(this.contactFormContent,{size:'xl'})
+    this.contactFormModal = this.modalService.open(this.contactFormContent, { size: 'xl' })
   }
   handleContactsubmit(event: { value: string, clearText: () => void, setHtml: (text: string) => void }) {
-    
+
     Object.values(this.contactForm.controls).forEach(control => {
       control.markAsTouched()
     })
@@ -479,16 +488,16 @@ export class LeadDetailsComponent implements OnInit {
       }
       this._salesleadService.leadContactInsert(contactDetail).subscribe((res => {
 
-        if(res.items[0].contactId == 0 &&  res.items[0].cDesc != ''){
-          this.toaster.warning( res.items[0].cDesc)
-        }else if(res.items.length > 0 && res.items[0].contactId != 0){
+        if (res.items[0].contactId == 0 && res.items[0].cDesc != '') {
+          this.toaster.warning(res.items[0].cDesc)
+        } else if (res.items.length > 0 && res.items[0].contactId != 0) {
           this.ContactList = res.items
           this.contactForm.reset()
           event.clearText()
           this.toaster.success('Contact Added!!')
           this.contactFormModal.close()
         }
-        
+
       }))
     }
   }
