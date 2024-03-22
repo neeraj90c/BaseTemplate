@@ -292,6 +292,15 @@ export class ViewTicketComponent {
       })
   }
 
+  
+  TicketAsigneeDeleteOnClick(ticketAsignee: TicketAsigneeDTO){
+    ticketAsignee.actionUser = this.User.userId.toString()
+    this._ticketService.deleteTicketAssignee(ticketAsignee).subscribe(res => {
+      this.ticketAsignees = res.ticketAsignee
+      this.toaster.warning('Assignee Deleted!!')
+    })
+  }
+
   TicketAsigneeSaveAsignee() {
     Object.values(this.ticketAssigneeForm.controls).forEach(control => {
       control.markAsTouched()
@@ -357,6 +366,7 @@ export class ViewTicketComponent {
     })
 
   }
+
 
 
 }

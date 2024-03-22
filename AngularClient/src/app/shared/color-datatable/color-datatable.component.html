@@ -47,9 +47,9 @@
                 <tr *ngFor="let rows of filteredData; let i = index" [style.border-left]="'5px solid #' + WCColors[i % WCColors.length]">
   
                     <td>{{ (currentPage - 1) * selectedPageSize + i + 1 }}</td>
-                    <td *ngFor="let col of columns">
-                        <div [ngClass]="enableBadge===col.colName? 'badge badge-secondary font-l':''"
-                        [style.background-color]="enableBadge===col.colName? '#' + WCColors[i % WCColors.length]:''">{{ col.enableCurrency ? (isNumber(rows[col.colData]) ? (rows[col.colData] | currency) : rows[col.colData]) : (col.isDate ? (rows[col.colData] | date:'dd/MM/yyyy') : rows[col.colData]) || rows[col.colData]  }}</div>
+                    <td *ngFor="let col of columns" (click)="redirectToLink(col,rows)">
+                        <div [ngClass]="enableBadge===col.colName? 'badge badge-secondary font-l':''" [style.color]="col.enableRedirect ? 'blue':''"  [style.cursor]="col.enableRedirect ? 'pointer':''"
+                        [style.background-color]="enableBadge===col.colName? '#' + WCColors[i % WCColors.length]:''" >{{ col.enableCurrency ? (isNumber(rows[col.colData]) ? (rows[col.colData] | currency) : rows[col.colData]) : (col.isDate ? (rows[col.colData] | date:'dd/MM/yyyy') : rows[col.colData]) || rows[col.colData]  }}</div>
                     </td>
                     <td *ngIf="enableCheckboxColumn" class="text-center">
                         <input type="checkbox" [(ngModel)]="rows[checkboxStateBinding]" (change)="onCheckboxChange(rows)" [checked]="rows[checkboxStateBinding]===1" />

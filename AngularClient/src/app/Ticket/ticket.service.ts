@@ -37,33 +37,35 @@ export class TicketService {
     return this.http.get<UserList>(`${this.BaseURL}/users/GetAllUserList`);
   }
 
-  takeOverTicket(data:{ticketId: number, actionUser: string, assignedTo: string}):Observable<SupportTicketDTO> {
-    return this.http.post<SupportTicketDTO>(`${this.BaseURL}/Ticket/AssignToUser`,data);
+  takeOverTicket(data: { ticketId: number, actionUser: string, assignedTo: string }): Observable<SupportTicketDTO> {
+    return this.http.post<SupportTicketDTO>(`${this.BaseURL}/Ticket/AssignToUser`, data);
   }
 
-  ticketStatusUpdate(data:TicketAsigneeDTO):Observable<TicketAsigneeList>{
-    return this.http.post<TicketAsigneeList>(`${this.BaseURL}/TicketAsignee/UpdateStatus`,data)
+  ticketStatusUpdate(data: TicketAsigneeDTO): Observable<TicketAsigneeList> {
+    return this.http.post<TicketAsigneeList>(`${this.BaseURL}/TicketAsignee/UpdateStatus`, data)
   }
-  assignTicketToUser(data:TicketAsigneeDTO):Observable<TicketAsigneeList>{
-    return this.http.post<TicketAsigneeList>(`${this.BaseURL}/TicketAsignee/Insert`,data)
+  assignTicketToUser(data: TicketAsigneeDTO): Observable<TicketAsigneeList> {
+    return this.http.post<TicketAsigneeList>(`${this.BaseURL}/TicketAsignee/Insert`, data)
   }
-  reopenTicket(data:{ ticketId: number, actionUser: number }):Observable<any> {
-    return this.http.post<any>(`${this.BaseURL}/ticket/ReOpenTicket`,data)
+  reopenTicket(data: { ticketId: number, actionUser: number }): Observable<any> {
+    return this.http.post<any>(`${this.BaseURL}/ticket/ReOpenTicket`, data)
   }
-  forceCloseTicket(data:SupportTicketDTO):Observable<SupportTicketDTO> {
-    return this.http.post<SupportTicketDTO>(`${this.BaseURL}/ticket/ForceCloseTicket`,data)
+  forceCloseTicket(data: SupportTicketDTO): Observable<SupportTicketDTO> {
+    return this.http.post<SupportTicketDTO>(`${this.BaseURL}/ticket/ForceCloseTicket`, data)
   }
-  manageTicket(data:SupportTicketDTO):Observable<TicketList> {
-    console.log(data.companyId);
-    
-    return this.http.post<TicketList>(`${this.BaseURL}/ticket/ManageTicket`,data)
+  manageTicket(data: SupportTicketDTO): Observable<TicketList> {
+    return this.http.post<TicketList>(`${this.BaseURL}/ticket/ManageTicket`, data)
   }
 
-  getClientUserTicketList(data:{actionUser: number, companyId: number}):Observable<ClientUserTicketList> {
-    return this.http.post<ClientUserTicketList>(`${this.BaseURL}/Ticket/ClientUserTicketList`,data)
+  getClientUserTicketList(data: { actionUser: number, companyId: number }): Observable<ClientUserTicketList> {
+    return this.http.post<ClientUserTicketList>(`${this.BaseURL}/Ticket/ClientUserTicketList`, data)
   }
-  getAdminDashboard(data:DashboardInputParams):Observable<DashboardDTO>{
-    return this.http.post<DashboardDTO>(`${this.BaseURL}/ticket/GetAdminDashboardData`,data)
+  getAdminDashboard(data: DashboardInputParams): Observable<DashboardDTO> {
+    return this.http.post<DashboardDTO>(`${this.BaseURL}/ticket/GetAdminDashboardData`, data)
+  }
+
+  deleteTicketAssignee(data: TicketAsigneeDTO): Observable<TicketAsigneeList> {
+    return this.http.post<TicketAsigneeList>(`${this.BaseURL}/TicketAsignee/Delete`, data)
   }
 
 

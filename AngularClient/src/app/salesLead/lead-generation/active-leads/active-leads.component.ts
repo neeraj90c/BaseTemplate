@@ -13,11 +13,12 @@ import { Router } from '@angular/router';
 })
 export class ActiveLeadsComponent implements OnInit {
 
+
   today: Date;
   startDate: Date;
   nextFollowUpDate: Date;
   dataTableLoading = false
-  constructor(private _salesleadService: SalesleadService, private _userService: UserService, private loaderService: LoaderService,private router:Router) {
+  constructor(private _salesleadService: SalesleadService, private _userService: UserService, private loaderService: LoaderService, private router: Router) {
     this.today = new Date();
     this.startDate = new Date(Date.UTC(this.today.getFullYear(), this.today.getMonth(), 1, 0, 0, 0));
     this.nextFollowUpDate = new Date(this.today);
@@ -48,8 +49,12 @@ export class ActiveLeadsComponent implements OnInit {
   handleActionClick(event: { actionName: string; rowData: SalesLeadDTO; }) {
     if (event.actionName == 'View') {
       console.log(event.rowData);
-      
+
       this._salesleadService.navigateToViewLead(event.rowData.leadId)
     }
+  }
+
+  handleRedirect(event: { rowData: SalesLeadDTO; }) {
+    this._salesleadService.navigateToViewLead(event.rowData.leadId)
   }
 }
