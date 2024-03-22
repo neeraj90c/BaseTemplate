@@ -69,4 +69,8 @@ export class CloseLeadsComponent {
     }
   }
 
+  handleRedirect(event: { rowData: SalesLeadDTO; }) {
+    this._salesleadService.navigateToViewLead(event.rowData.leadId)
+  }
+
 }

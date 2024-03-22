@@ -68,4 +68,8 @@ export class LeadInProgressComponent {
       this._salesleadService.navigateToViewLead(event.rowData.leadId)
     }
   }
+  
+  handleRedirect(event: { rowData: SalesLeadDTO; }) {
+    this._salesleadService.navigateToViewLead(event.rowData.leadId)
+  }
 }

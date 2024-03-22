@@ -9,7 +9,7 @@
 [columns]="[
     {colName:'project',colData:'pName'},
     {colName:'company',colData:'cName'},
-    {colName:'Title',colData:'lTitle'},
+    {colName:'Title',colData:'lTitle',enableRedirect:true},
     {colName:'category',colData:'category'},
     {colName:'tagList',colData:'tagList'},
     {colName:'AssignedTo',colData:'assignedToName'},
@@ -18,4 +18,5 @@
     {colName:'leadDate',colData:'leadDate',isDate:true},
     {colName:'nextFollowUpDate',colData:'nextFollowUpDate',isDate:true}
     ]" 
+    (redirectAction)="handleRedirect($event)"
 ></app-color-datatable>
