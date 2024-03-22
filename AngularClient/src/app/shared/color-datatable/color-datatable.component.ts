@@ -22,7 +22,7 @@ export class ColorDatatableComponent {
   //WCColors = ["c584d3", "a084d2", "60a5e8", "60d9d9", "5ce7a1", "aae272", "fce153", "f8c459", "febc5a", "eb8a5b"];
   //filteredData: any[] = [];
 
-  @Input() columns!: { colName: string, colData: string, enableCurrency?: boolean, isDate?: boolean }[];
+  @Input() columns!: { colName: string, colData: string, enableCurrency?: boolean, isDate?: boolean,enableRedirect?:boolean }[];
   @Input() tableData!: any[];
   @Input() enableCheckboxColumn: boolean = false;
   @Input() checkboxColumnLabel: string = 'Select';
@@ -34,6 +34,9 @@ export class ColorDatatableComponent {
 
   @Output() checkboxChange: EventEmitter<{ rowData: any, isChecked: boolean }> = new EventEmitter<{ rowData: any, isChecked: boolean }>();
   @Output() actionClick: EventEmitter<{ actionName: string, rowData: any }> = new EventEmitter<{ actionName: string, rowData: any }>();
+  @Output() redirectAction:EventEmitter<{rowData:any}> = new EventEmitter<{ rowData:any }>;
+
+
   startingSerialNumber: any;
   @Input() enableExports : boolean = false;
 
@@ -185,10 +188,13 @@ searchTerm: string = '';
     }
   }
 
+  redirectToLink(col:{ colName: string, colData: string, enableCurrency?: boolean, isDate?: boolean,enableRedirect?:boolean },rowData:any){
+    if(col.enableRedirect){
+      this.redirectAction.emit({rowData})
+    }
+  }
+
   
 
-}
-function formateDate(arg0: Date, arg1: string, arg2: string) {
-  throw new Error('Function not implemented.');
 }
 

@@ -292,6 +292,15 @@ export class ViewTicketComponent {
       })
   }
 
+  
+  TicketAsigneeDeleteOnClick(ticketAsignee: TicketAsigneeDTO){
+    ticketAsignee.actionUser = this.User.userId.toString()
+    this._ticketService.deleteTicketAssignee(ticketAsignee).subscribe(res => {
+      this.ticketAsignees = res.ticketAsignee
+      this.toaster.warning('Assignee Deleted!!')
+    })
+  }
+
   TicketAsigneeSaveAsignee() {
     Object.values(this.ticketAssigneeForm.controls).forEach(control => {
       control.markAsTouched()
@@ -311,8 +320,14 @@ export class ViewTicketComponent {
       }
       this.assigneeTableLoading = true
       this._ticketService.assignTicketToUser(data).subscribe(res => {
-        this.ticketAsignees = res.ticketAsignee
-        this.toaster.success('Ticket Assigned!!')
+
+        if(res.ticketAsignee[0].taId == 0 && res.ticketAsignee[0].assignDesc != ''){
+          this.toaster.warning(res.ticketAsignee[0].assignDesc)
+        }else if(res.ticketAsignee[0].taId != 0){
+          this.ticketAsignees = res.ticketAsignee
+          this.toaster.success('Ticket Assigned!!')
+        }
+
         this.assigneeTableLoading = false
         this.ticketAssigneeForm.reset();
         this.ticketAssigneeForm.patchValue({
@@ -351,6 +366,7 @@ export class ViewTicketComponent {
     })
 
   }
+
 
 
 }

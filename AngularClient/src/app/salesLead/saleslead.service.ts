@@ -71,6 +71,9 @@ export class SalesleadService {
   salesLeads_ForceClose(data:AssignLeadDTO):Observable<SalesLeadDTO>{
     return this.http.post<SalesLeadDTO>(`${this.BaseURL}/SalesLead/SalesLead_Forceclose`,data)
   }
+  salesLeads_ReOpen(data:AssignLeadDTO):Observable<SalesLeadDTO>{
+    return this.http.post<SalesLeadDTO>(`${this.BaseURL}/SalesLead/SalesLead_Reopen`,data)
+  }
   leadContactInsert(data:LeadContactDetail):Observable<LeadContactDetailList>{
     return this.http.post<LeadContactDetailList>(`${this.BaseURL}/SalesLead/LeadContactInsert`,data)
   }
