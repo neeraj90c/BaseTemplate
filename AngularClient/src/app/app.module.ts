@@ -9,11 +9,13 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { SharedModule } from './shared/shared.module';
 import { ValidationInterceptor } from './validation.interceptor';
+import { DaybookComponent } from './salesLead/daybook/daybook.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
+    DaybookComponent,
   ],
   imports: [
     BrowserModule,

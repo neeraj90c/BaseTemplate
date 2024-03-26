@@ -36,6 +36,7 @@ import { LeadAssignedToOthersComponent } from '../salesLead/lead-worklist/lead-a
 import { LeadSuccessComponent } from '../salesLead/lead-worklist/lead-success/lead-success.component';
 import { CloseLeadsComponent } from '../salesLead/lead-worklist/close-leads/close-leads.component';
 import { OpenLeadsComponent } from '../salesLead/lead-worklist/open-leads/open-leads.component';
+import { DaybookComponent } from '../salesLead/daybook/daybook.component';
 
 
 
@@ -86,15 +87,18 @@ const routes: Routes = [
         ]
       },
       { path: 'view-lead/:id', component: LeadDetailsComponent, title: 'Lead Details' },
-      { path: 'LWK', component: LeadWorklistComponent, title: 'Lead Worklist',children: [
-        { path: '', redirectTo: 'work-in-progress', pathMatch: 'full' },
-        { path: 'work-in-progress', component: LeadInProgressComponent, title: 'Work In Progress' },
-        { path: 'assigned-to-me', component: LeadAssignedToMeComponent, title: 'Assigned To Me' },
-        { path: 'open-leads', component: OpenLeadsComponent, title: 'Open Leads' },
-        { path: 'closed-leads', component: CloseLeadsComponent, title: 'Closed Leads' },
-        { path: 'assigned-to-others', component: LeadAssignedToOthersComponent, title: 'Assigned To Others' },
-        { path: 'success-leads', component: LeadSuccessComponent, title: 'Assigned To Others' }
-      ] }
+      {
+        path: 'LWK', component: LeadWorklistComponent, title: 'Lead Worklist', children: [
+          { path: '', redirectTo: 'work-in-progress', pathMatch: 'full' },
+          { path: 'work-in-progress', component: LeadInProgressComponent, title: 'Work In Progress' },
+          { path: 'assigned-to-me', component: LeadAssignedToMeComponent, title: 'Assigned To Me' },
+          { path: 'open-leads', component: OpenLeadsComponent, title: 'Open Leads' },
+          { path: 'closed-leads', component: CloseLeadsComponent, title: 'Closed Leads' },
+          { path: 'assigned-to-others', component: LeadAssignedToOthersComponent, title: 'Assigned To Others' },
+          { path: 'success-leads', component: LeadSuccessComponent, title: 'Assigned To Others' }
+        ]
+      },
+      { path: 'daybook', component: DaybookComponent, title: 'Sales Daybook' }
 
     ]
   }
