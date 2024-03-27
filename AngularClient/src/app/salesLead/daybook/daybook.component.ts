@@ -43,8 +43,8 @@ export class DaybookComponent implements OnInit {
   handleActionClick($event: { actionName: string; rowData: any; }) {
     throw new Error('Method not implemented.');
   }
-  handleRedirect($event: { rowData: any; }) {
-    throw new Error('Method not implemented.');
+  handleRedirect(event: { rowData: SalesLeadDTO; }) {
+    this._salesLeadService.navigateToViewLead(event.rowData.leadId)
   }
 
   openSendDaybookModal() {

@@ -312,6 +312,7 @@ export class LeadDetailsComponent implements OnInit {
     this._salesleadService.deleteLeadAssignee(leadAsignee).subscribe(res => {
       this.assigneeList = res.items
       this.toaster.warning('Assignee Removed!!')
+      this.getAssignedUsers()
     })
   }
 
