@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
-import { AssignLeadDTO, GetWorkListDTO, LeadActivityList, LeadAsigneeDTO, LeadAsigneeList, LeadContactDetail, LeadContactDetailList, LeadResolverList, LeadWorkList, ProjectList, SalesLeadDTO, SalesLeadList } from '../interface/leadgeneration.interface';
+import { AssignLeadDTO, DaybookList, GetWorkListDTO, LeadActivityList, LeadAsigneeDTO, LeadAsigneeList, LeadContactDetail, LeadContactDetailList, LeadResolverList, LeadWorkList, ProjectList, SalesLeadDTO, SalesLeadList } from '../interface/leadgeneration.interface';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -82,5 +82,9 @@ export class SalesleadService {
   }
   deleteLeadAssignee(data:AssignLeadDTO):Observable<LeadAsigneeList>{
     return this.http.post<LeadAsigneeList>(`${this.BaseURL}/SalesLead/DeleteLeadAssignee`,data)
+  }
+
+  Daybook_ByUserId(actionUser:number):Observable<DaybookList>{
+    return this.http.get<DaybookList>(`${this.BaseURL}/Daybook/Daybook_ByUserId/${actionUser}`)
   }
 }

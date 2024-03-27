@@ -170,3 +170,8 @@ export interface LeadContactDetail {
 export interface LeadContactDetailList {
   items: LeadContactDetail[]
 }
+
+export interface DaybookList {
+  freshLeads: SalesLeadDTO[];
+  followUp: SalesLeadDTO[];
+}
