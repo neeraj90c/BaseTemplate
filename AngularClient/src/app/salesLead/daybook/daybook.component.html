@@ -1,0 +1,59 @@
+<div class="d-flex align-items-center justify-content-between my-3" style="border-bottom:1px solid #CDD5E9">
+    <div class="main-heading">Daily Cold Calling Status</div>
+    <button type="button" class="btn btn-primary btn-sm" > <i class="fa fa-paper-plane mr-2"></i> Send</button>
+</div>
+
+
+<div>
+
+    <h3>Fresh Leads</h3>
+    
+    <app-color-datatable
+    [loading]="dataTableLoading" 
+    [tableData]="FreshLeads"
+    [enableActionColumn]="true"
+    (actionClick)="handleActionClick($event)"
+    [actionOptions]="[
+        { actionName: 'View',actionIcon: 'fa fa-eye' },
+        ]"
+    [columns]="[
+        {colName:'Created Date',colData:'createdOn',isDate:true},
+        {colName:'company',colData:'cName'},
+        {colName:'Title',colData:'lTitle',enableRedirect:true},
+        {colName:'category',colData:'category'},
+        {colName:'Contact',colData:'addField1'},
+        {colName:'tagList',colData:'tagList'},
+        {colName:'leadStatus',colData:'leadStatus'},
+        {colName:'leadPriority',colData:'leadPriority'},
+        {colName:'nextFollowUpDate',colData:'nextFollowUpDate',isDate:true}
+        ]" 
+    (redirectAction)="handleRedirect($event)"
+    ></app-color-datatable>
+</div>
+
+<div>
+
+    <h3>Follow Up Leads</h3>
+    
+    <app-color-datatable
+    [loading]="dataTableLoading" 
+    [tableData]="FollowUpLeads"
+    [enableActionColumn]="true"
+    (actionClick)="handleActionClick($event)"
+    [actionOptions]="[
+        { actionName: 'View',actionIcon: 'fa fa-eye' },
+        ]"
+    [columns]="[
+        {colName:'company',colData:'cName'},
+        {colName:'Title',colData:'lTitle',enableRedirect:true},
+        {colName:'category',colData:'category'},
+        {colName:'tagList',colData:'tagList'},
+        {colName:'AssignedTo',colData:'assignedToName'},
+        {colName:'leadStatus',colData:'leadStatus'},
+        {colName:'leadPriority',colData:'leadPriority'},
+        {colName:'leadDate',colData:'leadDate',isDate:true},
+        {colName:'nextFollowUpDate',colData:'nextFollowUpDate',isDate:true}
+        ]" 
+    (redirectAction)="handleRedirect($event)"
+    ></app-color-datatable>
+</div>

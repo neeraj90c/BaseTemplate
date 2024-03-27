@@ -159,5 +159,11 @@ namespace Application.DTOs.LeadGeneration
         public IEnumerable<LeadResolverDTO> Items {  get; set; }
     }
 
+    public class DaybookLeadList
+    {
+        public IEnumerable<SalesLeadDTO> FreshLeads { get; set; }
+        public IEnumerable<SalesLeadDTO> FollowUp { get; set; }
+    }
+
 
 }
