@@ -18,7 +18,7 @@
                     <td>{{i+1}}</td>
                     <td *ngFor="let col of columns">
                         <div [ngClass]="enableBadge===col.colName? 'badge badge-secondary font-l':''"
-                        [style.background-color]="enableBadge===col.colName? '#' + WCColors[i % WCColors.length]:''">{{ rows[col.colData] }}</div>
+                        [style.background-color]="enableBadge===col.colName? '#' + WCColors[i % WCColors.length]:''">{{ col.isDate ? (rows[col.colData] | date:'dd/MM/yyyy') : rows[col.colData] }}</div>
                     </td>
                     <td *ngIf="enableCheckboxColumn" class="text-center">
                         <input type="checkbox" [(ngModel)]="rows[checkboxStateBinding]" (change)="onCheckboxChange(rows)" [checked]="rows[checkboxStateBinding]===1" />
