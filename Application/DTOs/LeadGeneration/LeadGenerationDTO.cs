@@ -37,6 +37,11 @@ namespace Application.DTOs.LeadGeneration
         public string ActionUser { get; set; }
         public string ?CreatedByName {  get; set; }
         public string ?CompanyCode {  get; set; }
+        public string ?ConName { get; set; }
+        public string ?CNumber { get; set; }
+        public string ?CEmail { get; set; }
+        public string ?CDesignation { get; set; }
+        public string ?Address { get; set; }
     }
 
     // LeadActivity DTO

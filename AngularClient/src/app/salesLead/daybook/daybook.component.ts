@@ -1,8 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { SalesleadService } from '../saleslead.service';
 import { SalesLeadDTO } from 'src/app/interface/leadgeneration.interface';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-daybook',
@@ -11,26 +13,33 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 })
 export class DaybookComponent implements OnInit {
 
-
-
-  constructor(private _userService: UserService, private _salesLeadService: SalesleadService,private _modalService:NgbModal) { }
+  constructor(private _userService: UserService, private _salesLeadService: SalesleadService, private _modalService: NgbModal, private sanitizer: DomSanitizer) { }
 
 
   dataTableLoading: boolean = false;
   User = this._userService.User()
-  FreshLeads : SalesLeadDTO[]=[]
-  FollowUpLeads : SalesLeadDTO[]=[]
+  FreshLeads: SalesLeadDTO[] = []
+  FollowUpLeads: SalesLeadDTO[] = []
 
   DayBookSendModal!: NgbModalRef
-  @ViewChild('sendDaybook') daybookModalcontent! : ElementRef
 
+  @ViewChild('sendDaybook') daybookModalcontent!: ElementRef
+
+  @ViewChild('emailDaybookData', { static: false }) emailDaybookDataRef!: ElementRef;
+
+
+  DaybookForm = new FormGroup({
+    sendTo: new FormControl(),
+    subject: new FormControl(),
+    emailBody: new FormControl()
+  })
 
 
   ngOnInit(): void {
     this.getDaybookByUserId(this.User.userId)
   }
 
-  getDaybookByUserId(id:number){
+  getDaybookByUserId(id: number) {
     this._salesLeadService.Daybook_ByUserId(id).subscribe(res => {
       this.FreshLeads = res.freshLeads
       this.FollowUpLeads = res.followUp
@@ -48,7 +57,26 @@ export class DaybookComponent implements OnInit {
   }
 
   openSendDaybookModal() {
-    this.DayBookSendModal = this._modalService.open(this.daybookModalcontent,{size:'lg'})
-    }
+    this.DayBookSendModal = this._modalService.open(this.daybookModalcontent, { size: 'xl' })
+  }
+
+  returnSanitizedDom(data: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(data)
+  }
+
+  submitDaybookEmail() {
+    
+    const htmlContent = document.querySelector('.modal-body')
+    console.log(htmlContent?.querySelector('.daybookDataEmailBody')?.innerHTML);
+    this.DaybookForm.patchValue({
+      sendTo: 'abc@gmail.com',
+      subject: 'Subject',
+      emailBody: htmlContent?.querySelector('.daybookDataEmailBody')?.innerHTML,
+
+    })
+    console.log(this.DaybookForm.value);
+  }
+
+
 
 }

@@ -1,25 +1,25 @@
 <div class="d-flex align-items-center justify-content-between my-3" style="border-bottom:1px solid #CDD5E9">
-    <div class="main-heading">Daily Cold Calling Status</div>
-    <button type="button" class="btn btn-primary btn-sm" (click)="openSendDaybookModal()"> <i
-            class="fa fa-paper-plane mr-2"></i> Send</button>
+  <div class="main-heading">Daily Cold Calling Status</div>
+  <button type="button" class="btn btn-primary btn-sm" (click)="openSendDaybookModal()"> <i
+      class="fa fa-paper-plane mr-2"></i> Send</button>
 </div>
 
 <div class="tab-content" id="nav-tabContent">
-    <div class="tab-pane fade show active" id="TabularViewDiv" role="tabpanel">
-        <!--Tabs-->
-        <div class="nav nav-tabs tra_tab" id="nav-tab" role="tablist">
-            <a class="active" data-toggle="tab" href="#tab1" role="tab" aria-selected="true">Fresh Leads</a>
-            <a data-toggle="tab" href="#tab2" role="tab" aria-selected="true">FollowUp Leads</a>
-        </div>
+  <div class="tab-pane fade show active" id="TabularViewDiv" role="tabpanel">
+    <!--Tabs-->
+    <div class="nav nav-tabs tra_tab" id="nav-tab" role="tablist">
+      <a class="active" data-toggle="tab" href="#tab1" role="tab" aria-selected="true">Fresh Leads</a>
+      <a data-toggle="tab" href="#tab2" role="tab" aria-selected="true">FollowUp Leads</a>
+    </div>
 
-        <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="tab1" role="tabpanel" style="padding-bottom: 50px;">
-                <div class="row">
-                    <div style="bottom: 10px;" class="col-md-12">
-                        <h3>Fresh Leads</h3>
+    <div class="tab-content" id="nav-tabContent">
+      <div class="tab-pane fade show active" id="tab1" role="tabpanel" style="padding-bottom: 50px;">
+        <div class="row">
+          <div style="bottom: 10px;" class="col-md-12">
+            <h3>Fresh Leads</h3>
 
-                    <app-color-datatable [loading]="dataTableLoading" [tableData]="FreshLeads"
-                            [enableActionColumn]="true" (actionClick)="handleActionClick($event)" [actionOptions]="[
+            <app-color-datatable [loading]="dataTableLoading" [tableData]="FreshLeads" [enableActionColumn]="true"
+              (actionClick)="handleActionClick($event)" [actionOptions]="[
                         { actionName: 'View',actionIcon: 'fa fa-eye' },
                         ]" [columns]="[
                         {colName:'Created Date',colData:'createdOn',isDate:true},
@@ -32,16 +32,16 @@
                         {colName:'leadPriority',colData:'leadPriority'},
                         {colName:'nextFollowUpDate',colData:'nextFollowUpDate',isDate:true}
                         ]" (redirectAction)="handleRedirect($event)">
-                    </app-color-datatable>
-                    </div>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="tab2" role="tabpanel">
-                <div class="row">
-                    <div style="bottom: 10px;" class="col-md-12">
-                        <h3>Follow Up Leads</h3>
-                        <app-color-datatable [loading]="dataTableLoading" [tableData]="FollowUpLeads"
-                            [enableActionColumn]="true" (actionClick)="handleActionClick($event)" [actionOptions]="[
+            </app-color-datatable>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="tab2" role="tabpanel">
+        <div class="row">
+          <div style="bottom: 10px;" class="col-md-12">
+            <h3>Follow Up Leads</h3>
+            <app-color-datatable [loading]="dataTableLoading" [tableData]="FollowUpLeads" [enableActionColumn]="true"
+              (actionClick)="handleActionClick($event)" [actionOptions]="[
                         { actionName: 'View',actionIcon: 'fa fa-eye' },
                         ]" [columns]="[
                         {colName:'company',colData:'cName'},
@@ -54,18 +54,102 @@
                         {colName:'leadDate',colData:'leadDate',isDate:true},
                         {colName:'nextFollowUpDate',colData:'nextFollowUpDate',isDate:true}
                         ]" (redirectAction)="handleRedirect($event)"></app-color-datatable>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
-
+      </div>
     </div>
+
+  </div>
 
 </div>
 
 
 
+<!-- <ng-template #emailDaybookData>
+  <div>
+    <h4>Fresh Leads</h4>
+    <div style="margin-top: 20px; margin-bottom: 20px;">
+      <table class="table table-bordered table-sm FollowupTable" style="width: 100vw;">
+        <thead>
+          <tr>
+            <th scope="col">Contact Date</th>
+            <th scope="col">Company Name</th>
+            <th scope="col">Business Category</th>
+            <th scope="col">Location</th>
+            <th scope="col">Contact </th>
+            <th scope="col">Name</th>
+            <th scope="col">Designation</th>
+            <th scope="col">Discussion Details</th>
+            <th scope="col">Followup Date</th>
+            <th scope="col">Email ID</th>
+            <th scope="col">Status</th>
+            <th scope="col">Website</th>
+            <th scope="col">Generated BY</th>
 
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="page-break-inside: auto;" *ngFor="let data of FreshLeads">
+            <td scope="row">{{data.leadDate|date:'dd/MM/yyyy'}}</td>
+            <td>{{data.cName}}</td>
+            <td>{{data.category}}</td>
+            <td>{{data.addField3}}</td>
+            <td>{{data.cNumber}}</td>
+            <td>{{data.lTitle}}</td>
+            <td>{{data.cDesignation}}</td>
+            <td [innerHTML]="returnSanitizedDom(data.lDesc)"></td>
+            <td>{{data.nextFollowUpDate | date:'dd/MM/yyyy'}}</td>
+            <td>{{data.cEmail}}</td>
+            <td>{{data.leadStatus}}</td>
+            <td>{{data.addField1}}</td>
+            <td>{{data.leadOwner}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h4>FollowUp Leads</h4>
+  <div style="margin-top: 20px; margin-bottom: 20px;">
+    <table class="table table-bordered table-sm FollowupTable" style="width: 100vw;">
+      <thead>
+        <tr>
+          <th scope="col">Contact Date</th>
+          <th scope="col">Company Name</th>
+          <th scope="col">Business Category</th>
+          <th scope="col">Location</th>
+          <th scope="col">Contact </th>
+          <th scope="col">Name</th>
+          <th scope="col">Designation</th>
+          <th scope="col">Discussion Details</th>
+          <th scope="col">Followup Date</th>
+          <th scope="col">Email ID</th>
+          <th scope="col">Status</th>
+          <th scope="col">Website</th>
+          <th scope="col">Generated BY</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="page-break-inside: auto;" *ngFor="let data of FollowUpLeads">
+          <td scope="row">{{data.leadDate|date:'dd/MM/yyyy'}}</td>
+          <td>{{data.cName}}</td>
+          <td>{{data.category}}</td>
+          <td>{{data.addField3}}</td>
+          <td>{{data.cNumber}}</td>
+          <td>{{data.lTitle}}</td>
+          <td>{{data.cDesignation}}</td>
+          <td [innerHTML]="returnSanitizedDom(data.lDesc)"></td>
+          <td>{{data.nextFollowUpDate | date:'dd/MM/yyyy'}}</td>
+          <td>{{data.cEmail}}</td>
+          <td>{{data.leadStatus}}</td>
+          <td>{{data.addField1}}</td>
+          <td>{{data.leadOwner}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</ng-template> -->
 
 
 
@@ -74,42 +158,120 @@
 
 
 <ng-template #sendDaybook>
-        <div class="modal-header ">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Service Call Followup</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="emailDetail">
-            <form>
-              <div class="mb-3">
-                <label for="InputEmail" class="form-label">Send To</label>
-                <input type="email" class="form-control" id="InputEmail" aria-describedby="emailHelp" value="abc@gmail.om">
-                </div>
-              <div class="mb-3">
-                <label for="subject" class="form-label">Subject</label>
-                <textarea class="form-control" id="subject" rows="5" cols="50"></textarea>
-              </div>              
-            </form>
-          </div>
-          <div style="overflow: auto;">
-            <app-color-table [tableData]="FreshLeads"
-                          [columns]="[
-                          {colName:'Created Date',colData:'createdOn',isDate:true},
-                          {colName:'company',colData:'cName'},
-                          {colName:'Title',colData:'lTitle'},
-                          {colName:'category',colData:'category'},
-                          {colName:'Contact',colData:'addField1'},
-                          {colName:'tagList',colData:'tagList'},
-                          {colName:'leadStatus',colData:'leadStatus'},
-                          {colName:'leadPriority',colData:'leadPriority'},
-                          {colName:'nextFollowUpDate',colData:'nextFollowUpDate',isDate:true}
-                          ]">
-                      </app-color-table>
-          </div>
 
+  <div class="modal-header ">
+    <h1 class="modal-title fs-5" id="exampleModalLabel">Service Call Followup</h1>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="DayBookSendModal.close()"></button>
+  </div>
+
+
+  <div class="modal-body">
+
+    <div class="emailDetail">
+      <form [formGroup]="DaybookForm">
+        <div class="mb-3">
+          <label for="InputEmail" class="form-label">Send To</label>
+          <input type="email" class="form-control" id="InputEmail" aria-describedby="emailHelp" value="abc@gmail.com" formControlName="sendTo">
         </div>
-        <div class="modal-footer border-0 ">
-          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary btn-sm"> <i class="fa fa-paper-plane mr-2"></i> Send</button>
+        <div class="mb-3">
+          <label for="subject" class="form-label">Subject</label>
+          <textarea class="form-control" id="subject" rows="5" cols="50" formControlName="subject"></textarea>
         </div>
+      </form>
+    </div>
+
+    <div style="overflow: auto; border:1px solid #CDD5E9" class="p-1 daybookDataEmailBody">
+
+      <div>
+        <h4>Fresh Leads</h4>
+        <div style="margin-top: 20px; margin-bottom: 20px;">
+          <table class="table table-bordered table-sm FollowupTable" style="width: 100vw;">
+            <thead>
+              <tr>
+                <th scope="col">Contact Date</th>
+                <th scope="col">Company Name</th>
+                <th scope="col">Business Category</th>
+                <th scope="col">Location</th>
+                <th scope="col">Contact </th>
+                <th scope="col">Name</th>
+                <th scope="col">Designation</th>
+                <th scope="col">Discussion Details</th>
+                <th scope="col">Followup Date</th>
+                <th scope="col">Email ID</th>
+                <th scope="col">Status</th>
+                <th scope="col">Website</th>
+                <th scope="col">Generated BY</th>
+    
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="page-break-inside: auto;" *ngFor="let data of FreshLeads">
+                <td scope="row">{{data.leadDate|date:'dd/MM/yyyy'}}</td>
+                <td>{{data.cName}}</td>
+                <td>{{data.category}}</td>
+                <td>{{data.addField3}}</td>
+                <td>{{data.cNumber}}</td>
+                <td>{{data.lTitle}}</td>
+                <td>{{data.cDesignation}}</td>
+                <td [innerHTML]="returnSanitizedDom(data.lDesc)"></td>
+                <td>{{data.nextFollowUpDate | date:'dd/MM/yyyy'}}</td>
+                <td>{{data.cEmail}}</td>
+                <td>{{data.leadStatus}}</td>
+                <td>{{data.addField1}}</td>
+                <td>{{data.leadOwner}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    
+      <h4>FollowUp Leads</h4>
+      <div style="margin-top: 20px; margin-bottom: 20px;">
+        <table class="table table-bordered table-sm FollowupTable" style="width: 100vw;">
+          <thead>
+            <tr>
+              <th scope="col">Contact Date</th>
+              <th scope="col">Company Name</th>
+              <th scope="col">Business Category</th>
+              <th scope="col">Location</th>
+              <th scope="col">Contact </th>
+              <th scope="col">Name</th>
+              <th scope="col">Designation</th>
+              <th scope="col">Discussion Details</th>
+              <th scope="col">Followup Date</th>
+              <th scope="col">Email ID</th>
+              <th scope="col">Status</th>
+              <th scope="col">Website</th>
+              <th scope="col">Generated BY</th>
+    
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="page-break-inside: auto;" *ngFor="let data of FollowUpLeads">
+              <td scope="row">{{data.leadDate|date:'dd/MM/yyyy'}}</td>
+              <td>{{data.cName}}</td>
+              <td>{{data.category}}</td>
+              <td>{{data.addField3}}</td>
+              <td>{{data.cNumber}}</td>
+              <td>{{data.lTitle}}</td>
+              <td>{{data.cDesignation}}</td>
+              <td [innerHTML]="returnSanitizedDom(data.lDesc)"></td>
+              <td>{{data.nextFollowUpDate | date:'dd/MM/yyyy'}}</td>
+              <td>{{data.cEmail}}</td>
+              <td>{{data.leadStatus}}</td>
+              <td>{{data.addField1}}</td>
+              <td>{{data.leadOwner}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+  </div>
+
+  <div class="modal-footer border-0 ">
+    <button type="button" class="btn btn-secondary btn-sm" (click)="DayBookSendModal.close()">Close</button>
+    <button type="button" class="btn btn-primary btn-sm" (click)="submitDaybookEmail()"> <i class="fa fa-paper-plane mr-2"></i> Send</button>
+  </div> 
 </ng-template>
