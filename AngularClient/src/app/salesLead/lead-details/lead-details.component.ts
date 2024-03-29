@@ -25,7 +25,7 @@ export class LeadDetailsComponent implements OnInit {
   ProjectList: ProjectListDTO[] = [];
 
   leadForm = new FormGroup({
-    projectId: new FormControl(0, [notEqualToZeroValidator]),
+    projectId: new FormControl(0),
     lTitle: new FormControl('', [Validators.required]),
     lDesc: new FormControl(),
     category: new FormControl(),
@@ -312,6 +312,7 @@ export class LeadDetailsComponent implements OnInit {
     this._salesleadService.deleteLeadAssignee(leadAsignee).subscribe(res => {
       this.assigneeList = res.items
       this.toaster.warning('Assignee Removed!!')
+      this.getAssignedUsers()
     })
   }
 
@@ -390,7 +391,7 @@ export class LeadDetailsComponent implements OnInit {
     if (this.leadForm.valid) {
       let formData = { ...this.leadForm.value }
       let leadData: SalesLeadDTO = {
-        leadId: 0,
+        leadId: this.leadDetail.leadId,
         projectId: formData.projectId as number,
         companyId: parseInt(this.User.companyId),
         lTitle: formData.lTitle as string,

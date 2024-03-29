@@ -169,7 +169,7 @@ export class LeadGenerationComponent implements OnInit {
             cNumber: formData.cNumber as string,
             cEmail: formData.cEmail,
             cDesignation: formData.cDesignation,
-            cDesc: '',
+            cDesc: formData.addField3,
             isActive: 1,
             isDeleted: 0,
             createdBy: 0,

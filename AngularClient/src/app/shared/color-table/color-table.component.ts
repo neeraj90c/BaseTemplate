@@ -10,7 +10,7 @@ export class ColorTableComponent implements OnInit{
     
   }
   WCColors = ["c584d3", "a084d2", "60a5e8", "60d9d9", "5ce7a1", "aae272", "fce153", "f8c459", "febc5a", "eb8a5b"];
-  @Input() columns!: {colName:string,colData:string}[];
+  @Input() columns!: {colName:string,colData:string, isDate?: boolean}[];
   @Input() tableData: any[] = [];
   @Input() enableCheckboxColumn: boolean = false;
   @Input() checkboxColumnLabel: string = 'Select';

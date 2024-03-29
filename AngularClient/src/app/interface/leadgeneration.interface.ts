@@ -1,5 +1,5 @@
 // salesLeadDTO
-export interface SalesLeadDTO {
+export interface SalesLeadDTO{
   leadId: number;
   projectId: number;
   pName?: string;
@@ -27,6 +27,12 @@ export interface SalesLeadDTO {
   actionUser: string;
   createdByName?: string
   CompanyCode?: string
+  conName?: string;
+  cNumber?: string;
+  cEmail?: string;
+  cDesignation?: string;
+  address?: string;
+  
 }
 
 // leadActivityDTO
