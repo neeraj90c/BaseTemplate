@@ -1,4 +1,5 @@
-﻿using Application.Features.Daybook.Commands;
+﻿using Application.DTOs.LeadGeneration;
+using Application.Features.Daybook.Commands;
 using Application.Features.LeadActivity.Commands;
 using Domain.Settings;
 using Microsoft.AspNetCore.Mvc;
@@ -19,10 +20,10 @@ namespace WebAPI.Controllers.Daybook
 
 
 
-        [HttpGet("Daybook_ByUserId/{ActionUser}")]
-        public async Task<IActionResult> Daybook_ByUserId(int ActionUser)
+        [HttpPost("Daybook_ByUserId")]
+        public async Task<IActionResult> Daybook_ByUserId(GetDaybook getDaybook)
         {
-            var response = await mediator.Send(new GetDaybook_ByUserIdCommand { ActionUser = ActionUser });
+            var response = await mediator.Send(new GetDaybook_ByUserIdCommand { getDaybook = getDaybook });
 
             if (response == null)
                 return NotFound($"Failed to delete sales Activity.");

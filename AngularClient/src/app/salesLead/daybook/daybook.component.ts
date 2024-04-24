@@ -5,6 +5,7 @@ import { SalesLeadDTO } from 'src/app/interface/leadgeneration.interface';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { FormControl, FormGroup } from '@angular/forms';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-daybook',
@@ -36,11 +37,15 @@ export class DaybookComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.getDaybookByUserId(this.User.userId)
+    this.getDaybookByUserId(this.User.userId,new Date())
   }
 
-  getDaybookByUserId(id: number) {
-    this._salesLeadService.Daybook_ByUserId(id).subscribe(res => {
+  getDaybookByUserId(id: number,currentDate:Date) {
+    let data: { actionUser: number, currentDate: Date }={
+      actionUser:id,
+      currentDate: currentDate
+    }
+    this._salesLeadService.Daybook_ByUserId(data).subscribe(res => {
       this.FreshLeads = res.freshLeads
       this.FollowUpLeads = res.followUp
     })
@@ -65,7 +70,7 @@ export class DaybookComponent implements OnInit {
   }
 
   submitDaybookEmail() {
-    
+
     const htmlContent = document.querySelector('.modal-body')
     console.log(htmlContent?.querySelector('.daybookDataEmailBody')?.innerHTML);
     this.DaybookForm.patchValue({
@@ -77,6 +82,9 @@ export class DaybookComponent implements OnInit {
     console.log(this.DaybookForm.value);
   }
 
-
+  selectedDate:any = formatDate(new Date(), 'yyyy-MM-dd', 'en')
+  loadDataByDate(){
+    this.getDaybookByUserId(this.User.userId,this.selectedDate)
+  }
 
 }

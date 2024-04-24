@@ -84,7 +84,7 @@ export class SalesleadService {
     return this.http.post<LeadAsigneeList>(`${this.BaseURL}/SalesLead/DeleteLeadAssignee`,data)
   }
 
-  Daybook_ByUserId(actionUser:number):Observable<DaybookList>{
-    return this.http.get<DaybookList>(`${this.BaseURL}/Daybook/Daybook_ByUserId/${actionUser}`)
+  Daybook_ByUserId(data:{actionUser:number,currentDate:Date}):Observable<DaybookList>{
+    return this.http.post<DaybookList>(`${this.BaseURL}/Daybook/Daybook_ByUserId`,data)
   }
 }

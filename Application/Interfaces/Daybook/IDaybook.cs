@@ -9,6 +9,6 @@ namespace Application.Interfaces.Daybook
 {
     public interface IDaybook
     {
-        public Task<DaybookLeadList> GetDaybook_ByUserId(int ActionUser);
+        public Task<DaybookLeadList> GetDaybook_ByUserId(GetDaybook getDaybook);
     }
 }

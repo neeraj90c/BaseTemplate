@@ -8,6 +8,7 @@ import * as am5 from "@amcharts/amcharts5";
 import * as am5xy from "@amcharts/amcharts5/xy";
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 import { TicketService } from '../ticket.service';
+import { formatDate } from '@angular/common';
 //import * as am5xy from '@amcharts/amcharts5/.internal/charts/xy/axes/';
 
 
@@ -43,12 +44,22 @@ export class AdminDashboardComponent implements OnInit {
       startDate: this.startDate,
       endDate: this.today
     }
+    this.getAdminDash(data)
+  }
+
+
+  getAdminDash(data: DashboardInputParams) {
     this._ticketService.getAdminDashboard(data).subscribe(res => {
       this.CategoryWiseCount = res.categoryWiseCount
       this.ClientWiseCount = res.clientWiseCount
       this.SupportUserWiseCount = res.supportUserWiseCount
       this.PriorityWiseCount = res.priorityWiseCount
       this.TicketCount = res.ticketCount
+
+      this.dateForm.patchValue({
+        startDate : formatDate(data.startDate,'yyyy-MM-dd','en'),
+        endDate: formatDate(data.endDate,'yyyy-MM-dd','en')
+      })
 
       if (this.TicketCount) {
         this.openTicket = this.TicketCount?.find((ticket) => ticket.key === "Open")?.value as number;
@@ -69,8 +80,12 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   SupportDashBoardLoadAdminDashboard() {
-    console.log(this.dateForm.value);
-
+    let dateForm = { ...this.dateForm.value };
+    let data: DashboardInputParams = {
+      startDate: dateForm.startDate,
+      endDate: dateForm.endDate
+    }
+    this.getAdminDash(data)
   }
 
   readyCategoryWise(dashData: KeyValue[]) {
@@ -79,7 +94,7 @@ export class AdminDashboardComponent implements OnInit {
 
       // Themes begin
       am4core.useTheme(am4themes_animated);
-
+      am4core.disposeAllCharts()
       var chart = am4core.create("CategoryWisePieChart", am4charts.PieChart);
 
       // Add data
@@ -263,129 +278,129 @@ export class AdminDashboardComponent implements OnInit {
       chart.appear(1000, 100);
     });
   }
-readyLoadUserWise(data: KeyValue[]){
+  readyLoadUserWise(data: KeyValue[]) {
     am5.array.each(am5.registry.rootElements,
-        function (root) {
-            if (root && root.dom && root.dom.id && root.dom.id == "AgentPerformanceChart") {
-                root.dispose();
-            }
+      function (root) {
+        if (root && root.dom && root.dom.id && root.dom.id == "AgentPerformanceChart") {
+          root.dispose();
         }
+      }
     );
     am5.ready(function () {
 
 
-        // Create root element
-        // https://www.amcharts.com/docs/v5/getting-started/#Root_element
-        var root = am5.Root.new("AgentPerformanceChart");
+      // Create root element
+      // https://www.amcharts.com/docs/v5/getting-started/#Root_element
+      var root = am5.Root.new("AgentPerformanceChart");
 
 
-        // Set themes
-        // https://www.amcharts.com/docs/v5/concepts/themes/
-        root.setThemes([
-            am5themes_Animated.new(root)
-        ]);
+      // Set themes
+      // https://www.amcharts.com/docs/v5/concepts/themes/
+      root.setThemes([
+        am5themes_Animated.new(root)
+      ]);
 
 
-        // Create chart
-        // https://www.amcharts.com/docs/v5/charts/xy-chart/
-        var chart = root.container.children.push(am5xy.XYChart.new(root, {
-            panX: false,
-            panY: false,
-            wheelX: "panX",
-            wheelY: "zoomX",
-            paddingLeft: 0,
-            layout: root.verticalLayout
-        }));
+      // Create chart
+      // https://www.amcharts.com/docs/v5/charts/xy-chart/
+      var chart = root.container.children.push(am5xy.XYChart.new(root, {
+        panX: false,
+        panY: false,
+        wheelX: "panX",
+        wheelY: "zoomX",
+        paddingLeft: 0,
+        layout: root.verticalLayout
+      }));
 
-        // Add scrollbar
-        // https://www.amcharts.com/docs/v5/charts/xy-chart/scrollbars/
-        chart.set("scrollbarX", am5.Scrollbar.new(root, {
-            orientation: "horizontal"
-        }));
+      // Add scrollbar
+      // https://www.amcharts.com/docs/v5/charts/xy-chart/scrollbars/
+      chart.set("scrollbarX", am5.Scrollbar.new(root, {
+        orientation: "horizontal"
+      }));
 
 
-        // Create axes
-        // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
-        var xRenderer = am5xy.AxisRendererX.new(root, {
-            minorGridEnabled: true
-        });
-        var xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
-            categoryField: "key",
-            renderer: xRenderer,
-            tooltip: am5.Tooltip.new(root, {})
-        }));
+      // Create axes
+      // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
+      var xRenderer = am5xy.AxisRendererX.new(root, {
+        minorGridEnabled: true
+      });
+      var xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
+        categoryField: "key",
+        renderer: xRenderer,
+        tooltip: am5.Tooltip.new(root, {})
+      }));
 
-        xRenderer.grid.template.setAll({
-            location: 1
+      xRenderer.grid.template.setAll({
+        location: 1
+      })
+
+      xAxis.data.setAll(data);
+
+      var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+        min: 0,
+        renderer: am5xy.AxisRendererY.new(root, {
+          strokeOpacity: 0.1
         })
+      }));
 
-        xAxis.data.setAll(data);
 
-        var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
-            min: 0,
-            renderer: am5xy.AxisRendererY.new(root, {
-                strokeOpacity: 0.1
-            })
+      // Add legend
+      // https://www.amcharts.com/docs/v5/charts/xy-chart/legend-xy-series/
+      var legend = chart.children.push(am5.Legend.new(root, {
+        centerX: am5.p50,
+        x: am5.p50
+      }));
+
+
+      // Add series
+      // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
+      function makeSeries(name: string, fieldName: string) {
+        var series = chart.series.push(am5xy.ColumnSeries.new(root, {
+          name: name,
+          stacked: true,
+          xAxis: xAxis,
+          yAxis: yAxis,
+          valueYField: fieldName,
+          categoryXField: "key"
         }));
 
-
-        // Add legend
-        // https://www.amcharts.com/docs/v5/charts/xy-chart/legend-xy-series/
-        var legend = chart.children.push(am5.Legend.new(root, {
-            centerX: am5.p50,
-            x: am5.p50
-        }));
-
-
-        // Add series
-        // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
-        function makeSeries(name:string, fieldName:string) {
-            var series = chart.series.push(am5xy.ColumnSeries.new(root, {
-                name: name,
-                stacked: true,
-                xAxis: xAxis,
-                yAxis: yAxis,
-                valueYField: fieldName,
-                categoryXField: "key"
-            }));
-
-            series.columns.template.setAll({
-                tooltipText: "{name}, {categoryX}: {valueY}",
-                tooltipY: am5.percent(10)
-            });
-            series.data.setAll(data);
-
-            // Make stuff animate on load
-            // https://www.amcharts.com/docs/v5/concepts/animations/
-            series.appear();
-
-            series.bullets.push(function () {
-                return am5.Bullet.new(root, {
-                    sprite: am5.Label.new(root, {
-                        text: "{valueY}",
-                        fill: root.interfaceColors.get("alternativeText"),
-                        centerY: am5.p50,
-                        centerX: am5.p50,
-                        populateText: true
-                    })
-                });
-            });
-
-            legend.data.push(series);
-        }
-
-        makeSeries("Closed", "closeTickets");
-        makeSeries("Open", "openTickets");
-        makeSeries("InProgress", "inProgressTickets");
-        //makeSeries("Others", "others");
-
+        series.columns.template.setAll({
+          tooltipText: "{name}, {categoryX}: {valueY}",
+          tooltipY: am5.percent(10)
+        });
+        series.data.setAll(data);
 
         // Make stuff animate on load
         // https://www.amcharts.com/docs/v5/concepts/animations/
-        chart.appear(1000, 100);
+        series.appear();
+
+        series.bullets.push(function () {
+          return am5.Bullet.new(root, {
+            sprite: am5.Label.new(root, {
+              text: "{valueY}",
+              fill: root.interfaceColors.get("alternativeText"),
+              centerY: am5.p50,
+              centerX: am5.p50,
+              populateText: true
+            })
+          });
+        });
+
+        legend.data.push(series);
+      }
+
+      makeSeries("Closed", "closeTickets");
+      makeSeries("Open", "openTickets");
+      makeSeries("InProgress", "inProgressTickets");
+      //makeSeries("Others", "others");
+
+
+      // Make stuff animate on load
+      // https://www.amcharts.com/docs/v5/concepts/animations/
+      chart.appear(1000, 100);
 
     }); // end am5.ready()
-}
+  }
 
 
 
