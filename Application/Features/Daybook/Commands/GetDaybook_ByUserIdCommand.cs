@@ -13,7 +13,7 @@ namespace Application.Features.Daybook.Commands
 {
     public class GetDaybook_ByUserIdCommand : IRequest<DaybookLeadList>
     {
-        public int ActionUser { get; set; }
+        public GetDaybook getDaybook { get; set; }
     }
 
     internal class GetDaybook_ByUserIdCommandHandler : IRequestHandler<GetDaybook_ByUserIdCommand, DaybookLeadList>
@@ -26,7 +26,7 @@ namespace Application.Features.Daybook.Commands
 
         public async Task<DaybookLeadList> Handle(GetDaybook_ByUserIdCommand request, CancellationToken cancellationToken)
         {
-            return await _daybook.GetDaybook_ByUserId(request.ActionUser);
+            return await _daybook.GetDaybook_ByUserId(request.getDaybook);
         }
     }
 

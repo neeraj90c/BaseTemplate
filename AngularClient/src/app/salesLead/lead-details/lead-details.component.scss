@@ -18,7 +18,7 @@ body {padding: 0; margin: 0; font-size: 14px; color: #303e3d;}
 .side_status table th {text-align: right; background-color: transparent; border-bottom: none;}
 .side_status table td {background-color: transparent; border-bottom: none;}
 .assigned_block {background-color: rgba(48, 62, 61, 0.03); padding: 15px; font-size: 14px; border-bottom: 1px solid #ccc;}
-.action_buttons {background-color: rgba(48, 62, 61, 0.05); border-radius: 10px 0 10px 10px;}
+.action_buttons {background-color: rgba(48, 62, 61, 0.05); border-radius: 10px 10px 10px 10px;}
 .action_buttons button {background-color: white; border : 1px solid #a0a0a0; color: #303e3d;}
 .action_buttons button:hover, .action_buttons button:active {background-color: #303e3d !important; border : 1px solid #303e3d !important; color: white;}
 .assign_side_action_btn a {display: block; text-decoration: none; font-size: 12px; margin-bottom: 5px; color: #666;}

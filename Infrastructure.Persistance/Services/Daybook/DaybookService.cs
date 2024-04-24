@@ -30,7 +30,7 @@ namespace Infrastructure.Persistance.Services.Daybook
 
 
 
-        public async Task<DaybookLeadList> GetDaybook_ByUserId(int ActionUser)
+        public async Task<DaybookLeadList> GetDaybook_ByUserId(GetDaybook getDaybook)
         {
             DaybookLeadList response = new DaybookLeadList();
             try
@@ -39,7 +39,8 @@ namespace Infrastructure.Persistance.Services.Daybook
                 {
                     var reader = await connection.QueryMultipleAsync(SP_GetDaybook_ByUserId, new
                     {
-                        ActionUser = ActionUser
+                        ActionUser = getDaybook.ActionUser,
+                        DayBookDate = getDaybook.CurrentDate
                     }, commandType: CommandType.StoredProcedure);
                     response.FreshLeads = await reader.ReadAsync<SalesLeadDTO>();
                     response.FollowUp = await reader.ReadAsync<SalesLeadDTO>();

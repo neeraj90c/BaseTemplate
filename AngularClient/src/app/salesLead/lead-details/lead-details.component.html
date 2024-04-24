@@ -36,9 +36,274 @@
                         </div>
                     </div>
                 </div>
-                <div class="p-3" id="detailTicketDesc" [innerHTML]="returnSanitizedDom(leadDetail.lDesc)">
 
+                <div class="card my-2 p-1">
+                    <strong style="margin-left:15px;">Description</strong>
+                    <div class="p-3" id="detailTicketDesc" [innerHTML]="returnSanitizedDom(leadDetail.lDesc)">
+    
+                    </div>
                 </div>
+
+                <div class="p-3 action_buttons mb-4 border">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                <ng-container *ngIf="(leadDetail.leadStatus != 'Close') && (leadDetail.leadStatus != 'Success')">
+            
+                                    <button type="button" id="TicketCommentBtn" class="btn btn-outline-primary btn-sm"
+                                        (click)="toggleCommentDialogOnClick()">Comment</button>
+                                    <button type="button" id="TicketTakeOverBtn" class="btn btn-outline-primary btn-sm"
+                                        (click)="TakeOverButtonOnClick()">Take Over</button>
+                                    <button type="button" id="TicketAssignBtn" class="btn btn-outline-primary btn-sm"
+                                        (click)="AssignTicketToUserOnClick()">Assign To</button>
+                                    <button type="button" id="TicketForceCloseBtn" class="btn btn-outline-primary btn-sm"
+                                        (click)="SalesLead_Forceclose()">Force Close</button>
+                                    <button type="button" id="TicketEditBtn" class="btn btn-outline-primary btn-sm"
+                                        (click)="OpenEditLeadModal()">Edit</button>
+                                </ng-container>
+                                <ng-container *ngIf="leadDetail.leadStatus == 'Close'|| leadDetail.leadStatus == 'Success'">
+                                    <button type="button" id="TicketReOpenBtn" class="btn btn-outline-primary btn-sm"
+                                        (click)="SupportTicket_ReOpen()">ReOpen</button>
+                                </ng-container>
+                            </div>
+                        </div>
+                        <div class="col-md-4" style="text-align:right;">
+                            <div id="RaisedByClientDiv">
+                                Lead Raised By : <font style="color:blue;">{{leadDetail.cName}}</font>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <div id="detailActivityDiv" *ngIf="detailActivityDivVisible">
+                    <div class="container-fluid " id="test">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="ticket-details">
+                                    <div class="row mt-2">
+            
+                                        <div class="card col-md-12"
+                                            style="border: none; border-top: 0.5px solid black; border-radius: 0px;">
+                                            <div class="card-body ">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group" [formGroup]="commentForm">
+                                                                <label><Strong>Add Comment </Strong></label>
+                                                                <div id="ActivityDetailEditor">
+                                                                    <app-rich-text-editor #editor1
+                                                                        (submit)="handleRTEsubmit($event)">
+                                                                        <button class="btn btn-sm btn-secondary my-2 ml-2"
+                                                                            (click)="detailActivityDivVisible = false">Close</button>
+                                                                    </app-rich-text-editor>
+                                                                </div>
+            
+                                                                <!-- <button class="btn btn-primary btn-sm mt-2" (click)="InsertTicketActivity()"> AddComment</button>
+                                                                <button class="btn btn-sm mt-2" onclick="TicketDetails.CloseCommentDialougeOnClick()" style="outline:1px solid grey;"> Cancel</button> -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <div id="AssignTicketToUserDiv" *ngIf="assignTicketToUserDivVisible">
+                    <div class="container-fluid " id="MultiAsigneeSection">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div id="dataFormDiv">
+                                    <form class="row" [formGroup]="leadAssigneeForm">
+                                        <div class="col-md-3">
+                                            <label>Assign To</label>
+                                            <select class="form-control" id="assignToList" formControlName="assignedTo">
+                                                <option value="0">Please Select...</option>
+                                                <option *ngFor="let user of leadResolverList" [value]="user.userId">{{user.name}}
+                                                </option>
+                                            </select>
+                                            <!-- <div *ngIf="assigneeCrl.invalid && assigneeCrl.touched">
+                                                <p style="color: red;">Required</p>
+                                            </div> -->
+                                        </div>
+            
+                                        <div class="col-md-6">
+                                            <label>Description</label><br />
+                                            <input class="form-control" formControlName="aDesc" />
+                                        </div>
+                                        <div class="col-md-2">
+                                            <br />
+                                            <button class="btn btn-primary btn-sm mt-2" (click)="LeadAsigneeSaveAsignee()"
+                                                id="TicketAsigneeSaveUpdateBtn"> Save</button>
+                                            <button class="btn btn-sm mt-2 ml-2" (click)="assignTicketToUserDivVisible  = false"
+                                                style="outline:1px solid grey;"> Cancel</button>
+                                        </div>
+                                    </form>
+                                    <div class="row">
+                                        <br />
+                                    </div>
+                                </div>
+            
+                                <div id="dataTableDiv">
+            
+                                    <table id="TicketAsigneeListTbl" class="table table-bordered com_table" style="width: 100%;">
+                                        <thead>
+                                            <tr class="text-dark">
+                                                <th style="border-left: 5px solid var(--orange-col);" scope="col">Sr No</th>
+                                                <th scope="col">Assigned To</th>
+                                                <th scope="col">Description</th>
+                                                <th scope="col">Assigned By</th>
+                                                <th scope="col">Current Status</th>
+                                                <th scope="col">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="TicketAsigneeListBody">
+                                            <ng-container *ngIf="!LeadAssigneeTableLoading;else loader">
+                                                <ng-container *ngIf="assigneeList.length > 0; else noRecords">
+                                                    <tr *ngFor="let leadAsignee of assigneeList; let i = index"
+                                                        [style.border-left]="'5px solid #' + WCColors[i % WCColors.length]">
+                                                        <td>{{i+1}}</td>
+                                                        <td>{{GetUserNameById(leadAsignee.assignedTo)}} </td>
+                                                        <td>{{leadAsignee.aDesc}} </td>
+                                                        <td>{{GetUserNameById(leadAsignee.createdBy)}} </td>
+                                                        <td>
+                                                            <button class="btn btn-primary btn-sm mt-2"
+                                                                (click)="LeadAsigneeStartTask(leadAsignee)"
+                                                                *ngIf="leadAsignee.aStatus === 'Open' || leadAsignee.aStatus === 'Hold'">
+                                                                Start</button>
+                                                            <button class="btn btn-info btn-sm mt-2"
+                                                                (click)="LeadAsigneeCloseTask(leadAsignee)"
+                                                                *ngIf="leadAsignee.aStatus === 'InProgress'">
+                                                                Close</button>
+                                                            <button class="btn btn-success btn-sm mt-2 ml-2"
+                                                                (click)="LeadAsigneeSuccessTask(leadAsignee)"
+                                                                *ngIf="leadAsignee.aStatus === 'InProgress'">
+                                                                Success</button>
+                                                            <!-- <button class="btn btn-warning btn-sm mt-2  ml-2"
+                                                            (click)="LeadAsigneeHoldTask(leadAsignee)"
+                                                                *ngIf="leadAsignee.aStatus === 'InProgress'">
+                                                                Hold</button> -->
+                                                            <ng-container
+                                                                *ngIf="leadAsignee.aStatus === 'Success'">{{leadAsignee.aStatus}}</ng-container>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <div class="btn-group dots_dropdown">
+                                                                <button type="button" class="dropdown-toggle" data-toggle="dropdown"
+                                                                    data-display="static" aria-haspopup="true"
+                                                                    aria-expanded="false">
+                                                                    <i class="fas fa-ellipsis-v"></i>
+                                                                </button>
+                                                                <div class="dropdown-menu dropdown-menu-right shadow-lg">
+                                                                    <!-- <button class="dropdown-item" type="button"
+                                                                        onclick="TicketAsignee.UpdateOnClick()">
+                                                                        <i class="far fa fa-edit"></i> Update
+                                                                    </button> -->
+                                                                    <button class="dropdown-item" type="button"
+                                                                        (click)="LeadAsigneeDeleteOnClick(leadAsignee)">
+                                                                        <i class="far fa fa-trash"></i> Delete
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+            
+                                                    </tr>
+                                                </ng-container>
+                                            </ng-container>
+                                            <ng-template #noRecords>
+                                                <tr>
+                                                    <td colspan="7">
+                                                        <font style="color:red;">No Records found..</font>
+                                                    </td>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template #loader>
+                                                <tr *ngFor="let _ of [].constructor(3); let i = index"
+                                                    [style.border-left]="'5px solid #' + WCColors[i % WCColors.length]">
+                                                    <td><ngx-skeleton-loader></ngx-skeleton-loader></td>
+                                                    <td><ngx-skeleton-loader></ngx-skeleton-loader></td>
+                                                    <td><ngx-skeleton-loader></ngx-skeleton-loader></td>
+                                                    <td><ngx-skeleton-loader></ngx-skeleton-loader></td>
+                                                    <td><ngx-skeleton-loader></ngx-skeleton-loader></td>
+                                                    <td><ngx-skeleton-loader></ngx-skeleton-loader></td>
+                                                    <td><ngx-skeleton-loader></ngx-skeleton-loader></td>
+                                                </tr>
+                                            </ng-template>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <div>
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="TabularViewDiv" role="tabpanel">
+                            <!--Tabs-->
+                            <div class="nav nav-tabs tra_tab" id="nav-tab" role="tablist">
+                                <a class="active" data-toggle="tab" href="#tab1" role="tab" aria-selected="true">Activity</a>
+                                <a data-toggle="tab" href="#tab2" role="tab" aria-selected="true">Contact Details</a>
+            
+                            </div>
+            
+                            <div class="tab-content" id="nav-tabContent">
+                                <div class="tab-pane fade show active" id="tab1" role="tabpanel" style="padding-bottom: 50px;">
+                                    <div id="ticketDetailActivity">
+                                        <ng-container *ngIf="!activityLoading;else activityLoader">
+                                            <div class="card mb-3" *ngFor="let activity of leadActivity">
+                                                <div class="card-header">
+                                                    <div><b>{{GetUserNameById(activity.createdBy)}}</b></div>
+                                                    <small class="text-muted">{{activity.createdOn | date:'medium'}}</small>
+                                                </div>
+                                                <div class="card-body" [innerHTML]="returnSanitizedDom(activity.leadComments)">
+            
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                        <ng-template #activityLoader>
+                                            <div class="card mb-3" *ngFor="let _ of [].constructor(3); let i = index">
+                                                <div class="card-header">
+                                                    <div><b><ngx-skeleton-loader></ngx-skeleton-loader> </b></div>
+                                                    <small class="text-muted"><ngx-skeleton-loader></ngx-skeleton-loader> </small>
+                                                </div>
+                                                <div class="card-body">
+                                                    <ngx-skeleton-loader></ngx-skeleton-loader>
+                                                    <ngx-skeleton-loader></ngx-skeleton-loader>
+                                                </div>
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="tab2" role="tabpanel">
+                                    <div class="d-flex justify-content-end mb-3">
+                                        <button class="btn btn-primary btn-sm" (click)="OpenContactForm()">Add Contact</button>
+                                    </div>
+                                    
+                                        <app-color-table [tableData]="ContactList" [columns]="[
+                                            {colName: 'Name',colData: 'cName'},
+                                            {colName: 'Contact',colData: 'cNumber'},
+                                            {colName: 'Email',colData: 'cEmail'},
+                                            {colName: 'Designation',colData: 'cDesignation'},
+                                            {colName: 'Description',colData: 'cDescription'},
+                                            ]">
+                                        </app-color-table>
+                                    
+                                </div>
+            
+                               
+                            </div>
+                        </div>
+                    </div>
+            
+            
+            
+            
+                </div>
+
             </div>
             <div class="col-4 side_status">
                 <table class="table mb-0">
@@ -60,6 +325,10 @@
                         <td><span
                                 id="detailTicketResolutionDate">{{returnFormattedDate(leadDetail.nextFollowUpDate)}}</span>
                         </td>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <td><span [innerHTML]="returnSanitizedDom(leadDetail.lDesc)"></span></td>
                     </tr>
                     <tr>
                         <th>Updated By</th>
@@ -103,265 +372,7 @@
     </ng-container>
 
 
-    <div class="p-3 action_buttons mb-4 border">
-        <div class="row">
-            <div class="col-md-8">
-                <div class="btn-group" role="group" aria-label="Basic outlined example">
-                    <ng-container *ngIf="(leadDetail.leadStatus != 'Close') && (leadDetail.leadStatus != 'Success')">
 
-                        <button type="button" id="TicketCommentBtn" class="btn btn-outline-primary btn-sm"
-                            (click)="toggleCommentDialogOnClick()">Comment</button>
-                        <button type="button" id="TicketTakeOverBtn" class="btn btn-outline-primary btn-sm"
-                            (click)="TakeOverButtonOnClick()">Take Over</button>
-                        <button type="button" id="TicketAssignBtn" class="btn btn-outline-primary btn-sm"
-                            (click)="AssignTicketToUserOnClick()">Assign To</button>
-                        <button type="button" id="TicketForceCloseBtn" class="btn btn-outline-primary btn-sm"
-                            (click)="SalesLead_Forceclose()">Force Close</button>
-                        <button type="button" id="TicketEditBtn" class="btn btn-outline-primary btn-sm"
-                            (click)="OpenEditLeadModal()">Edit</button>
-                    </ng-container>
-                    <ng-container *ngIf="leadDetail.leadStatus == 'Close'|| leadDetail.leadStatus == 'Success'">
-                        <button type="button" id="TicketReOpenBtn" class="btn btn-outline-primary btn-sm"
-                            (click)="SupportTicket_ReOpen()">ReOpen</button>
-                    </ng-container>
-                </div>
-            </div>
-            <div class="col-md-4" style="text-align:right;">
-                <div id="RaisedByClientDiv">
-                    Lead Raised By : <font style="color:blue;">{{leadDetail.cName}}</font>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="detailActivityDiv" *ngIf="detailActivityDivVisible">
-        <div class="container-fluid " id="test">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="ticket-details">
-                        <div class="row mt-2">
-
-                            <div class="card col-md-12"
-                                style="border: none; border-top: 0.5px solid black; border-radius: 0px;">
-                                <div class="card-body ">
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group" [formGroup]="commentForm">
-                                                    <label><Strong>Add Comment </Strong></label>
-                                                    <div id="ActivityDetailEditor">
-                                                        <app-rich-text-editor #editor1
-                                                            (submit)="handleRTEsubmit($event)">
-                                                            <button class="btn btn-sm btn-secondary my-2 ml-2"
-                                                                (click)="detailActivityDivVisible = false">Close</button>
-                                                        </app-rich-text-editor>
-                                                    </div>
-
-                                                    <!-- <button class="btn btn-primary btn-sm mt-2" (click)="InsertTicketActivity()"> AddComment</button>
-                                                    <button class="btn btn-sm mt-2" onclick="TicketDetails.CloseCommentDialougeOnClick()" style="outline:1px solid grey;"> Cancel</button> -->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="AssignTicketToUserDiv" *ngIf="assignTicketToUserDivVisible">
-        <div class="container-fluid " id="MultiAsigneeSection">
-            <div class="row">
-                <div class="col-md-12">
-                    <div id="dataFormDiv">
-                        <form class="row" [formGroup]="leadAssigneeForm">
-                            <div class="col-md-3">
-                                <label>Assign To</label>
-                                <select class="form-control" id="assignToList" formControlName="assignedTo">
-                                    <option value="0">Please Select...</option>
-                                    <option *ngFor="let user of leadResolverList" [value]="user.userId">{{user.name}}
-                                    </option>
-                                </select>
-                                <!-- <div *ngIf="assigneeCrl.invalid && assigneeCrl.touched">
-                                    <p style="color: red;">Required</p>
-                                </div> -->
-                            </div>
-
-                            <div class="col-md-6">
-                                <label>Description</label><br />
-                                <input class="form-control" formControlName="aDesc" />
-                            </div>
-                            <div class="col-md-2">
-                                <br />
-                                <button class="btn btn-primary btn-sm mt-2" (click)="LeadAsigneeSaveAsignee()"
-                                    id="TicketAsigneeSaveUpdateBtn"> Save</button>
-                                <button class="btn btn-sm mt-2 ml-2" (click)="assignTicketToUserDivVisible  = false"
-                                    style="outline:1px solid grey;"> Cancel</button>
-                            </div>
-                        </form>
-                        <div class="row">
-                            <br />
-                        </div>
-                    </div>
-
-                    <div id="dataTableDiv">
-
-                        <table id="TicketAsigneeListTbl" class="table table-bordered com_table" style="width: 100%;">
-                            <thead>
-                                <tr class="text-dark">
-                                    <th style="border-left: 5px solid var(--orange-col);" scope="col">Sr No</th>
-                                    <th scope="col">Assigned To</th>
-                                    <th scope="col">Description</th>
-                                    <th scope="col">Assigned By</th>
-                                    <th scope="col">Current Status</th>
-                                    <th scope="col">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="TicketAsigneeListBody">
-                                <ng-container *ngIf="!LeadAssigneeTableLoading;else loader">
-                                    <ng-container *ngIf="assigneeList.length > 0; else noRecords">
-                                        <tr *ngFor="let leadAsignee of assigneeList; let i = index"
-                                            [style.border-left]="'5px solid #' + WCColors[i % WCColors.length]">
-                                            <td>{{i+1}}</td>
-                                            <td>{{GetUserNameById(leadAsignee.assignedTo)}} </td>
-                                            <td>{{leadAsignee.aDesc}} </td>
-                                            <td>{{GetUserNameById(leadAsignee.createdBy)}} </td>
-                                            <td>
-                                                <button class="btn btn-primary btn-sm mt-2"
-                                                    (click)="LeadAsigneeStartTask(leadAsignee)"
-                                                    *ngIf="leadAsignee.aStatus === 'Open' || leadAsignee.aStatus === 'Hold'">
-                                                    Start</button>
-                                                <button class="btn btn-info btn-sm mt-2"
-                                                    (click)="LeadAsigneeCloseTask(leadAsignee)"
-                                                    *ngIf="leadAsignee.aStatus === 'InProgress'">
-                                                    Close</button>
-                                                <button class="btn btn-success btn-sm mt-2 ml-2"
-                                                    (click)="LeadAsigneeSuccessTask(leadAsignee)"
-                                                    *ngIf="leadAsignee.aStatus === 'InProgress'">
-                                                    Success</button>
-                                                <!-- <button class="btn btn-warning btn-sm mt-2  ml-2"
-                                                (click)="LeadAsigneeHoldTask(leadAsignee)"
-                                                    *ngIf="leadAsignee.aStatus === 'InProgress'">
-                                                    Hold</button> -->
-                                                <ng-container
-                                                    *ngIf="leadAsignee.aStatus === 'Success'">{{leadAsignee.aStatus}}</ng-container>
-                                            </td>
-                                            <td class="text-center">
-                                                <div class="btn-group dots_dropdown">
-                                                    <button type="button" class="dropdown-toggle" data-toggle="dropdown"
-                                                        data-display="static" aria-haspopup="true"
-                                                        aria-expanded="false">
-                                                        <i class="fas fa-ellipsis-v"></i>
-                                                    </button>
-                                                    <div class="dropdown-menu dropdown-menu-right shadow-lg">
-                                                        <!-- <button class="dropdown-item" type="button"
-                                                            onclick="TicketAsignee.UpdateOnClick()">
-                                                            <i class="far fa fa-edit"></i> Update
-                                                        </button> -->
-                                                        <button class="dropdown-item" type="button"
-                                                            (click)="LeadAsigneeDeleteOnClick(leadAsignee)">
-                                                            <i class="far fa fa-trash"></i> Delete
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </td>
-
-                                        </tr>
-                                    </ng-container>
-                                </ng-container>
-                                <ng-template #noRecords>
-                                    <tr>
-                                        <td colspan="7">
-                                            <font style="color:red;">No Records found..</font>
-                                        </td>
-                                    </tr>
-                                </ng-template>
-                                <ng-template #loader>
-                                    <tr *ngFor="let _ of [].constructor(3); let i = index"
-                                        [style.border-left]="'5px solid #' + WCColors[i % WCColors.length]">
-                                        <td><ngx-skeleton-loader></ngx-skeleton-loader></td>
-                                        <td><ngx-skeleton-loader></ngx-skeleton-loader></td>
-                                        <td><ngx-skeleton-loader></ngx-skeleton-loader></td>
-                                        <td><ngx-skeleton-loader></ngx-skeleton-loader></td>
-                                        <td><ngx-skeleton-loader></ngx-skeleton-loader></td>
-                                        <td><ngx-skeleton-loader></ngx-skeleton-loader></td>
-                                        <td><ngx-skeleton-loader></ngx-skeleton-loader></td>
-                                    </tr>
-                                </ng-template>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div>
-        <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="TabularViewDiv" role="tabpanel">
-                <!--Tabs-->
-                <div class="nav nav-tabs tra_tab" id="nav-tab" role="tablist">
-                    <a class="active" data-toggle="tab" href="#tab1" role="tab" aria-selected="true">Activity</a>
-                    <a data-toggle="tab" href="#tab2" role="tab" aria-selected="true">Contact Details</a>
-
-                </div>
-
-                <div class="tab-content" id="nav-tabContent">
-                    <div class="tab-pane fade show active" id="tab1" role="tabpanel" style="padding-bottom: 50px;">
-                        <div id="ticketDetailActivity">
-                            <ng-container *ngIf="!activityLoading;else activityLoader">
-                                <div class="card mb-3" *ngFor="let activity of leadActivity">
-                                    <div class="card-header">
-                                        <div><b>{{GetUserNameById(activity.createdBy)}}</b></div>
-                                        <small class="text-muted">{{activity.createdOn | date:'medium'}}</small>
-                                    </div>
-                                    <div class="card-body" [innerHTML]="returnSanitizedDom(activity.leadComments)">
-
-                                    </div>
-                                </div>
-                            </ng-container>
-                            <ng-template #activityLoader>
-                                <div class="card mb-3" *ngFor="let _ of [].constructor(3); let i = index">
-                                    <div class="card-header">
-                                        <div><b><ngx-skeleton-loader></ngx-skeleton-loader> </b></div>
-                                        <small class="text-muted"><ngx-skeleton-loader></ngx-skeleton-loader> </small>
-                                    </div>
-                                    <div class="card-body">
-                                        <ngx-skeleton-loader></ngx-skeleton-loader>
-                                        <ngx-skeleton-loader></ngx-skeleton-loader>
-                                    </div>
-                                </div>
-                            </ng-template>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="tab2" role="tabpanel">
-                        <div class="d-flex justify-content-end mb-3">
-                            <button class="btn btn-primary btn-sm" (click)="OpenContactForm()">Add Contact</button>
-                        </div>
-                        
-                            <app-color-table [tableData]="ContactList" [columns]="[
-                                {colName: 'Name',colData: 'cName'},
-                                {colName: 'Contact',colData: 'cNumber'},
-                                {colName: 'Email',colData: 'cEmail'},
-                                {colName: 'Designation',colData: 'cDesignation'},
-                                {colName: 'Description',colData: 'cDescription'},
-                                ]">
-                            </app-color-table>
-                        
-                    </div>
-
-                   
-                </div>
-            </div>
-        </div>
-
-
-
-
-    </div>
 </div>
 
 <div style="height:100px;">
