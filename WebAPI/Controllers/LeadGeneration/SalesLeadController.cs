@@ -240,6 +240,29 @@ namespace WebAPI.Controllers.LeadGeneration
             return Ok(response);
         }
 
+
+
+
+        [HttpPost("LeadContactDelete")]
+        public async Task<IActionResult> LeadContactDelete([FromBody] DeleteLeadContact deleteLeadContact)
+        {
+
+            var response = await mediator.Send(new LeadContactDeleteCommand
+            {
+                deleteLeadContact = deleteLeadContact
+            });
+
+            if (response == null)
+                return Ok(APIResponse<string>.Unauthorized("Please check login credentials"));
+
+            return Ok(response);
+        }
+
+
+
+
+
+
         [HttpPost("LeadContactReadByLeadId")]
         public async Task<IActionResult> LeadContactReadByLeadId([FromBody] LeadContactDetailDTO leadContactDetailDTO)
         {

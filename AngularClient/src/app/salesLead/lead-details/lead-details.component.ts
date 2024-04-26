@@ -11,6 +11,7 @@ import { TicketUserDTO } from 'src/app/interface/ticket.interface';
 import { formatDate } from '@angular/common';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { notEqualToZeroValidator } from 'src/app/validators/validators';
+import { ConfirmmodalserviceService } from 'src/app/shared/confirm-delete-modal/confirmmodalservice.service';
 
 @Component({
   selector: 'app-lead-details',
@@ -53,8 +54,8 @@ export class LeadDetailsComponent implements OnInit {
       leadStatus: this.leadDetail.leadStatus,
       category: this.leadDetail.category,
       leadPriority: this.leadDetail.leadPriority,
-      leadDate: formatDate(this.leadDetail.leadDate,'yyyy-MM-dd','en'),
-      nextFollowUpDate: formatDate(this.leadDetail.nextFollowUpDate,'yyyy-MM-dd','en'),
+      leadDate: formatDate(this.leadDetail.leadDate, 'yyyy-MM-dd', 'en'),
+      nextFollowUpDate: formatDate(this.leadDetail.nextFollowUpDate, 'yyyy-MM-dd', 'en'),
       addField1: this.leadDetail.addField1,
       addField2: this.leadDetail.addField2,
       addField3: this.leadDetail.addField3,
@@ -76,7 +77,7 @@ export class LeadDetailsComponent implements OnInit {
     this.detailActivityDivVisible = !this.detailActivityDivVisible
   }
 
-  constructor(private router: Router, private modalService: NgbModal, private route: ActivatedRoute, private _salesleadService: SalesleadService, private sanitizer: DomSanitizer, private _userService: UserService, private toaster: ToastrService, private _ticketService: TicketService) {
+  constructor(private router: Router, private modalService: NgbModal, private route: ActivatedRoute, private _salesleadService: SalesleadService, private sanitizer: DomSanitizer, private _userService: UserService, private toaster: ToastrService, private _ticketService: TicketService, private confirmModal: ConfirmmodalserviceService) {
     this.today = new Date();
     this.startDate = new Date(Date.UTC(this.today.getFullYear(), this.today.getMonth(), 1, 0, 0, 0));
 
@@ -442,7 +443,7 @@ export class LeadDetailsComponent implements OnInit {
   }
 
   contactForm = new FormGroup({
-    contactId : new FormControl(0),
+    contactId: new FormControl(0),
     cName: new FormControl('', [Validators.required]),
     cNumber: new FormControl('', [Validators.required]),
     cEmail: new FormControl(),
@@ -471,7 +472,7 @@ export class LeadDetailsComponent implements OnInit {
       control.markAsTouched()
     })
     if (this.contactForm.valid) {
-      let { contactId,cName, cNumber, cDesignation, cEmail, cDesc } = this.contactForm.value
+      let { contactId, cName, cNumber, cDesignation, cEmail, cDesc } = this.contactForm.value
       let contactDetail: LeadContactDetail = {
         contactId: contactId ? contactId : 0,
         leadId: this.leadDetail.leadId,
@@ -489,16 +490,16 @@ export class LeadDetailsComponent implements OnInit {
         actionUser: this.User.userId
       }
 
-      if(contactDetail.contactId != 0){
-        this._salesleadService.leadContactUpdate(contactDetail).subscribe(res=>{
+      if (contactDetail.contactId != 0) {
+        this._salesleadService.leadContactUpdate(contactDetail).subscribe(res => {
           this.toaster.success('Contact Updated!!')
           this.contactForm.reset()
           this.ContactList = res.items
           this.contactFormModal.close()
         })
-      }else{
+      } else {
         this._salesleadService.leadContactInsert(contactDetail).subscribe((res => {
-  
+
           if (res.items[0].contactId == 0 && res.items[0].cDesc != '') {
             this.toaster.warning(res.items[0].cDesc)
           } else if (res.items.length > 0 && res.items[0].contactId != 0) {
@@ -507,25 +508,38 @@ export class LeadDetailsComponent implements OnInit {
             this.toaster.success('Contact Added!!')
             this.contactFormModal.close()
           }
-  
+
         }))
       }
 
     }
   }
 
-  handleContactActionClick(event:{actionName: string, rowData: LeadContactDetail}){
-    let {actionName,rowData} = event
-    if(actionName == 'Edit'){
+  handleContactActionClick(event: { actionName: string, rowData: LeadContactDetail }) {
+    let { actionName, rowData } = event
+    if (actionName == 'Edit') {
       this.contactForm.patchValue({
-        contactId : rowData.contactId,
-        cNumber : rowData.cNumber,
-        cDesc : rowData.cDesc,
-        cDesignation:rowData.cDesignation,
-        cEmail : rowData.cEmail,
-        cName : rowData.cName
+        contactId: rowData.contactId,
+        cNumber: rowData.cNumber,
+        cDesc: rowData.cDesc,
+        cDesignation: rowData.cDesignation,
+        cEmail: rowData.cEmail,
+        cName: rowData.cName
       })
       this.contactFormModal = this.modalService.open(this.contactFormContent, { size: 'lg' })
+    }
+    else if (actionName == 'Delete') {
+      this.confirmModal.openSwalModal(rowData.cName, rowData).subscribe(i => {
+        if(i){
+          let data: { actionUser: number, contactId: number } = { actionUser: this.User.userId, contactId: rowData.contactId }
+          this._salesleadService.leadContactDelete(data).subscribe(res=>{
+            this.toaster.warning(res)
+            this.getAllLeadContact()
+          })
+        }
+      
+
+      })
     }
   }
 }
