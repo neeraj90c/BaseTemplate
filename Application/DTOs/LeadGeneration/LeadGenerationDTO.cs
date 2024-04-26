@@ -170,5 +170,11 @@ namespace Application.DTOs.LeadGeneration
         public IEnumerable<SalesLeadDTO> FollowUp { get; set; }
     }
 
+    public class DeleteLeadContact
+    {
+        public int ActionUser { set; get; }
+        public int ContactId { set; get; }
+    }
+
 
 }

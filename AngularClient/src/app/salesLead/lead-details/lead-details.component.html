@@ -288,8 +288,10 @@
                                             {colName: 'Contact',colData: 'cNumber'},
                                             {colName: 'Email',colData: 'cEmail'},
                                             {colName: 'Designation',colData: 'cDesignation'},
-                                            {colName: 'Description',colData: 'cDescription'},
-                                            ]">
+                                            {colName: 'Description',colData: 'cDesc'},
+                                            ]" [enableActionColumn]="true" actionColumnLabel="Action" 
+                                            (actionClick)="handleContactActionClick($event)"
+                                            [actionOptions]="[{ actionName: 'Edit',actionIcon: 'fa fa-edit' },{ actionName: 'Delete',actionIcon: 'fa fa-trash' }]">
                                         </app-color-table>
                                     
                                 </div>
@@ -615,7 +617,7 @@
 
 <ng-template #addContactForm>
     <div class="modal-header text-light" style="background-color: #01018f;">
-        <h5 class="modal-title font-weight-bold" id="WorkflowInstructionsModalLabel">Update Lead</h5>
+        <h5 class="modal-title font-weight-bold" id="WorkflowInstructionsModalLabel">Update Lead Contact</h5>
         <button type="button" class="close text-light" aria-label="Close" data-dismiss="modal"
             (click)="contactFormModal.close()">
             <span aria-hidden="true">&times;</span>
@@ -659,12 +661,16 @@
             </div>
             <div class="form-row mt-3">
                 <label>Description</label>
-                    <app-rich-text-editor #ContactRTE (submit)="handleContactsubmit($event)">
-                        <button class="btn btn-sm btn-secondary ml-2" (click)="contactFormModal.close()">Close</button>
-                    </app-rich-text-editor>
+                <textarea class="form-control" formControlName="cDesc" [rows]="5"></textarea>
+                   
             </div>
         </form>
         
 
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-secondary"  
+            (click)="contactFormModal.close()">Close</button>
+        <button type="button" class="btn btn-sm btn-primary" (click)="Contactsubmit()">Save</button>
     </div>
 </ng-template>

@@ -77,6 +77,12 @@ export class SalesleadService {
   leadContactInsert(data:LeadContactDetail):Observable<LeadContactDetailList>{
     return this.http.post<LeadContactDetailList>(`${this.BaseURL}/SalesLead/LeadContactInsert`,data)
   }
+  leadContactDelete(data:{actionUser:number,contactId:number}):Observable<string>{
+    return this.http.post<string>(`${this.BaseURL}/SalesLead/LeadContactDelete`,data)
+  }
+  leadContactUpdate(data:LeadContactDetail):Observable<LeadContactDetailList>{
+    return this.http.post<LeadContactDetailList>(`${this.BaseURL}/SalesLead/LeadContactUpdate`,data)
+  }
   leadContactReadByLeadId(data:LeadContactDetail):Observable<LeadContactDetailList>{
     return this.http.post<LeadContactDetailList>(`${this.BaseURL}/SalesLead/LeadContactReadByLeadId`,data)
   }
