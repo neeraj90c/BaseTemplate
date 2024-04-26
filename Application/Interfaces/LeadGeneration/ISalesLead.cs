@@ -29,6 +29,8 @@ namespace Application.Interfaces.LeadGeneration
         public Task<LeadContactDetailList> LeadContactInsert(LeadContactDetailDTO leadContactDetailDTO);
         public Task<LeadContactDetailList> LeadContactReadByLeadId(LeadContactDetailDTO leadContactDetailDTO);
         public Task<SalesLeadDTO> SalesLead_ReOpen(AssignLeadDTO assignLeadDTO);
+        public Task<LeadContactDetailList> LeadContactUpdate(LeadContactDetailDTO leadContactDetailDTO);
+
 
 
 

@@ -46,6 +46,7 @@ namespace Infrastructure.Persistance.Services.LeadGeneration
 
 
         private const string SP_LeadContact_Insert = "lg.LeadContact_Insert";
+        private const string SP_LeadContact_Update = "lg.LeadContact_Update";
         private const string SP_LeadContact_ReadByLeadId = "lg.LeadContact_ReadByLeadId";
 
 
@@ -472,6 +473,36 @@ namespace Infrastructure.Persistance.Services.LeadGeneration
                 }
             }
             catch(Exception ex)
+            {
+                throw ex;
+            }
+            return response;
+        }
+
+
+        public async Task<LeadContactDetailList> LeadContactUpdate(LeadContactDetailDTO leadContactDetailDTO)
+        {
+            LeadContactDetailList response = new LeadContactDetailList();
+            _logger.LogInformation($"starte updating Contact detail for ContactID : {leadContactDetailDTO.ContactId}");
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(base.ConnectionString))
+                {
+                    response.Items = await connection.QueryAsync<LeadContactDetailDTO>(SP_LeadContact_Update, new
+                    {
+                        ContactId = leadContactDetailDTO.ContactId,
+                        LeadId = leadContactDetailDTO.LeadId,
+                        CName = leadContactDetailDTO.CName,
+                        CNumber = leadContactDetailDTO.CNumber,
+                        CEmail = leadContactDetailDTO.CEmail,
+                        CDesignation = leadContactDetailDTO.CDesignation,
+                        CDesc = leadContactDetailDTO.CDesc,
+                        ActionUser = leadContactDetailDTO.ActionUser
+                    }, commandType: CommandType.StoredProcedure);
+
+                }
+            }
+            catch (Exception ex)
             {
                 throw ex;
             }

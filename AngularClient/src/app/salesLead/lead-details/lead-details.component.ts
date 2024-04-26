@@ -442,6 +442,7 @@ export class LeadDetailsComponent implements OnInit {
   }
 
   contactForm = new FormGroup({
+    contactId : new FormControl(0),
     cName: new FormControl('', [Validators.required]),
     cNumber: new FormControl('', [Validators.required]),
     cEmail: new FormControl(),
@@ -462,17 +463,17 @@ export class LeadDetailsComponent implements OnInit {
 
   OpenContactForm() {
     this.contactForm.reset()
-    this.contactFormModal = this.modalService.open(this.contactFormContent, { size: 'xl' })
+    this.contactFormModal = this.modalService.open(this.contactFormContent, { size: 'lg' })
   }
-  handleContactsubmit(event: { value: string, clearText: () => void, setHtml: (text: string) => void }) {
+  Contactsubmit() {
 
     Object.values(this.contactForm.controls).forEach(control => {
       control.markAsTouched()
     })
     if (this.contactForm.valid) {
-      let { cName, cNumber, cDesignation, cEmail, cDesc } = this.contactForm.value
+      let { contactId,cName, cNumber, cDesignation, cEmail, cDesc } = this.contactForm.value
       let contactDetail: LeadContactDetail = {
-        contactId: 0,
+        contactId: contactId ? contactId : 0,
         leadId: this.leadDetail.leadId,
         cName: cName as string,
         cNumber: cNumber as string,
@@ -487,20 +488,44 @@ export class LeadDetailsComponent implements OnInit {
         modifiedOn: new Date,
         actionUser: this.User.userId
       }
-      this._salesleadService.leadContactInsert(contactDetail).subscribe((res => {
 
-        if (res.items[0].contactId == 0 && res.items[0].cDesc != '') {
-          this.toaster.warning(res.items[0].cDesc)
-        } else if (res.items.length > 0 && res.items[0].contactId != 0) {
-          this.ContactList = res.items
+      if(contactDetail.contactId != 0){
+        this._salesleadService.leadContactUpdate(contactDetail).subscribe(res=>{
+          this.toaster.success('Contact Updated!!')
           this.contactForm.reset()
-          event.clearText()
-          this.toaster.success('Contact Added!!')
+          this.ContactList = res.items
           this.contactFormModal.close()
-        }
+        })
+      }else{
+        this._salesleadService.leadContactInsert(contactDetail).subscribe((res => {
+  
+          if (res.items[0].contactId == 0 && res.items[0].cDesc != '') {
+            this.toaster.warning(res.items[0].cDesc)
+          } else if (res.items.length > 0 && res.items[0].contactId != 0) {
+            this.ContactList = res.items
+            this.contactForm.reset()
+            this.toaster.success('Contact Added!!')
+            this.contactFormModal.close()
+          }
+  
+        }))
+      }
 
-      }))
     }
   }
 
+  handleContactActionClick(event:{actionName: string, rowData: LeadContactDetail}){
+    let {actionName,rowData} = event
+    if(actionName == 'Edit'){
+      this.contactForm.patchValue({
+        contactId : rowData.contactId,
+        cNumber : rowData.cNumber,
+        cDesc : rowData.cDesc,
+        cDesignation:rowData.cDesignation,
+        cEmail : rowData.cEmail,
+        cName : rowData.cName
+      })
+      this.contactFormModal = this.modalService.open(this.contactFormContent, { size: 'lg' })
+    }
+  }
 }
