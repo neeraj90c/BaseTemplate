@@ -10,6 +10,9 @@ export class RichTextEditorComponent implements OnInit {
 
   @Output() submit: EventEmitter<{ value: string, clearText: () => void, setHtml:(text:string) => void }> = new EventEmitter<{ value: string, clearText: () => void, setHtml: (text: string) => void }>();
   @Input() setRTEHtml :string = ''
+
+  @Input() customStyle:{ [key: string]: string } = {};
+
   onSubmit() {
     this.submit.emit({
       value: this.RTE.getHTML(),

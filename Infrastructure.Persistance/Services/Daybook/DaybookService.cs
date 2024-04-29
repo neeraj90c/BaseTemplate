@@ -44,6 +44,7 @@ namespace Infrastructure.Persistance.Services.Daybook
                     }, commandType: CommandType.StoredProcedure);
                     response.FreshLeads = await reader.ReadAsync<SalesLeadDTO>();
                     response.FollowUp = await reader.ReadAsync<SalesLeadDTO>();
+                    response.ScheduledFollowUps = await reader.ReadAsync<SalesLeadDTO>();
                 }
 
             }
