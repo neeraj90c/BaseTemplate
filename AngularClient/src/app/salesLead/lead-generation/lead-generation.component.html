@@ -172,6 +172,7 @@
                 </div>
 
             </div>
+
             <div class="form-row">
                 <!-- <div class="form-group col-md-4"></div>
                 <div class="form-group col-md-4"></div> -->
@@ -181,6 +182,12 @@
                 </div>
             </div>
 
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="tags">Comments</label>
+                    <textarea type="text" class="form-control" id="tags" formControlName="comments" rows="5"></textarea>
+                </div>
+            </div>
             <!-- <div class="form-row">
                 <div class="form-group col-md-4">
                     <label for="AddField1">Lead Owner</label>
@@ -189,7 +196,7 @@
             </div> -->
             <label>Lead Description</label>
             <div class="form-row">
-                <app-rich-text-editor #editor2 (submit)="LeadUpdate($event)">
+                <app-rich-text-editor #editor2 (submit)="LeadUpdate($event)" [customStyle]="{ 'height': '200px'}">
                     <button type="button" class="btn btn-sm btn-secondary my-2 ml-2" id="SupportTicketCloseBtn" data-dismiss="modal"
                     (click)="LeadModal.close()">Close</button>
                 </app-rich-text-editor>

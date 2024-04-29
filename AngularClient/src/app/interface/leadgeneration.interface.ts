@@ -32,6 +32,7 @@ export interface SalesLeadDTO{
   cEmail?: string;
   cDesignation?: string;
   address?: string;
+  comments?:string;
   
 }
 
@@ -180,4 +181,5 @@ export interface LeadContactDetailList {
 export interface DaybookList {
   freshLeads: SalesLeadDTO[];
   followUp: SalesLeadDTO[];
+  scheduledFollowUps: SalesLeadDTO[];
 }

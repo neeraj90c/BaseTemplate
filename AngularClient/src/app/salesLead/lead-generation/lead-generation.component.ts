@@ -11,6 +11,7 @@ import { LoaderService } from 'src/app/services/loader.service';
 import { Router } from '@angular/router';
 import { notEqualToZeroValidator } from 'src/app/validators/validators';
 import { ToastrService } from 'ngx-toastr';
+import { finalize, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-lead-generation',
@@ -81,7 +82,8 @@ export class LeadGenerationComponent implements OnInit {
     cNumber: new FormControl('', [Validators.required]),
     cEmail: new FormControl(),
     cDesignation: new FormControl(),
-    assignToMe: new FormControl()
+    assignToMe: new FormControl(),
+    comments:new FormControl()
   })
 
   get cNameCtrl(): FormControl {
@@ -183,20 +185,97 @@ export class LeadGenerationComponent implements OnInit {
             event.clearText()
           })
           if (formData.assignToMe) {
-
-            let assigneedata: { lAid: number, leadId: number, assignedTo: string, aDesc: string, aStatus: string, actionUser: number } = {
+            const assigneeData = {
               lAid: 0,
               leadId: res.leadId,
               assignedTo: this.User.userId.toString(),
               aDesc: '',
               aStatus: 'Open',
               actionUser: this.User.userId
+            };
+          
+            this._salesleadService.assignLeadToUser(assigneeData).pipe(
+              switchMap(() => {
+                this.toaster.success('Lead assigned to Self!!');
+                if (formData.comments !== '') {
+                  const data = {
+                    leadId: res.leadId,
+                    leadComments: formData.comments,
+                    actionUser: this.User.userId
+                  };
+                  return this._salesleadService.insertLeadActivity(data);
+                } else {
+                  return of(null); // Return a dummy observable
+                }
+              }),
+              finalize(() => {
+                this._salesleadService.navigateToViewLead(res.leadId);
+              })
+            ).subscribe(() => {
+              // Handle success if needed
+            });
+          } else {
+            // If assignToMe is false, just insert the activity
+            if (formData.comments !== '') {
+              const data = {
+                leadId: res.leadId,
+                leadComments: formData.comments,
+                actionUser: this.User.userId
+              };
+          
+              this._salesleadService.insertLeadActivity(data).pipe(
+                finalize(() => {
+                })
+              ).subscribe(() => {
+                // Handle success if needed
+              });
             }
-            this._salesleadService.assignLeadToUser(assigneedata).subscribe(l => {
-              this.toaster.success('Lead assigned to Self!!')
-              this._salesleadService.navigateToViewLead(res.leadId)
-            })
           }
+
+
+          // if (formData.assignToMe) {
+
+          //   let assigneedata: { lAid: number, leadId: number, assignedTo: string, aDesc: string, aStatus: string, actionUser: number } = {
+          //     lAid: 0,
+          //     leadId: res.leadId,
+          //     assignedTo: this.User.userId.toString(),
+          //     aDesc: '',
+          //     aStatus: 'Open',
+          //     actionUser: this.User.userId
+          //   }
+          //   this._salesleadService.assignLeadToUser(assigneedata).subscribe(l => {
+          //     this.toaster.success('Lead assigned to Self!!')
+          //     if(formData.comments != ''){
+
+          //       let data: { leadId: number; leadComments: string; actionUser: number; } = {
+          //         leadId: res.leadId,
+          //         leadComments: formData.comments,
+          //         actionUser: this.User.userId
+          //       }
+          //       this._salesleadService.insertLeadActivity(data).subscribe(result => {
+          //         assignedAndCommentAdded = true
+          //       })
+                
+          //     }
+          //     this._salesleadService.navigateToViewLead(res.leadId)
+          //   })
+          // }
+
+          // if(formData.comments != '' ){
+
+          //   let data: { leadId: number; leadComments: string; actionUser: number; } = {
+          //     leadId: res.leadId,
+          //     leadComments: formData.comments,
+          //     actionUser: this.User.userId
+          //   }
+          //   this._salesleadService.insertLeadActivity(data).subscribe(res => {
+          //   })
+
+          // }
+
+
+
+       
           this.toaster.success('Lead Created Successfully!!')
           this.LeadModal.close()
           this.reloadCurrentRoute()

@@ -21,6 +21,7 @@ export class DaybookComponent implements OnInit {
   User = this._userService.User()
   FreshLeads: SalesLeadDTO[] = []
   FollowUpLeads: SalesLeadDTO[] = []
+  FollowUpsScheduled: SalesLeadDTO[] = []
 
   DayBookSendModal!: NgbModalRef
 
@@ -48,6 +49,7 @@ export class DaybookComponent implements OnInit {
     this._salesLeadService.Daybook_ByUserId(data).subscribe(res => {
       this.FreshLeads = res.freshLeads
       this.FollowUpLeads = res.followUp
+      this.FollowUpsScheduled = res.scheduledFollowUps
     })
   }
 

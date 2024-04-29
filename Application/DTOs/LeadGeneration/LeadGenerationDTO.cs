@@ -42,6 +42,7 @@ namespace Application.DTOs.LeadGeneration
         public string ?CEmail { get; set; }
         public string ?CDesignation { get; set; }
         public string ?Address { get; set; }
+        public string ?Comments {  get; set; }
     }
 
     // LeadActivity DTO
@@ -168,6 +169,7 @@ namespace Application.DTOs.LeadGeneration
     {
         public IEnumerable<SalesLeadDTO> FreshLeads { get; set; }
         public IEnumerable<SalesLeadDTO> FollowUp { get; set; }
+        public IEnumerable<SalesLeadDTO> ScheduledFollowUps { get; set; }
     }
 
     public class DeleteLeadContact
