@@ -87,7 +87,8 @@ export class CreateTicketComponent implements OnInit {
     addField3: new FormControl('', [Validators.required]),
     category: new FormControl(''),
     projectId: new FormControl(0),
-    companyId: new FormControl(0, [Validators.required, Validators.pattern(/^[1-9]\d*$/)])
+    companyId: new FormControl(0, [Validators.required, Validators.pattern(/^[1-9]\d*$/)]),
+    ticketDesc : new FormControl('',[Validators.required])
   })
 
   get titleCtrl(): FormControl {
@@ -104,6 +105,9 @@ export class CreateTicketComponent implements OnInit {
   }
   get companyIdCtrl(): FormControl {
     return this.updateTicketForm.controls.companyId as FormControl
+  }
+  get ticketDescCtrl(): FormControl{
+    return this.updateTicketForm.controls.ticketDesc as FormControl
   }
 
 
@@ -137,14 +141,14 @@ export class CreateTicketComponent implements OnInit {
   }
 
   TicketUpdate(event: { value: string, clearText: () => void, setHtml: (text: string) => void }) {
-    console.log(event.value);
+    this.updateTicketForm.patchValue({
+      ticketDesc : event.value
+    })
     Object.values(this.updateTicketForm.controls).forEach(control => {
       control.markAsTouched()
     })
     if (this.updateTicketForm.valid) {
       let formData = { ...this.updateTicketForm.value }
-
-console.log(this.updateTicketForm.value);
 
       let data: SupportTicketDTO = {
         title: formData.title as string,
@@ -159,7 +163,7 @@ console.log(this.updateTicketForm.value);
         targetDate: formData.targetDate,
         ticketPriority: formData.ticketPriority as string,
         ticketType: formData.ticketType as string,
-        ticketDesc: event.value as string,
+        ticketDesc: formData.ticketDesc as string,
         ticketId: 0,
         assignedTo: '',
         ticketStatus: '',
