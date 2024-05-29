@@ -43,7 +43,7 @@ namespace WebAPI.Controllers.Common
         }
 
         [HttpPost("UploadFiles")]
-        public async Task<IActionResult> UploadFiles(string type, string name)
+        public async Task<IActionResult> UploadFiles([FromQuery] string type, [FromQuery] string name)
         {
             if (Request.ContentLength > 4000000)
             {
