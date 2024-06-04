@@ -6,6 +6,8 @@ using Microsoft.Extensions.Options;
 using System.IO;
 using System.Threading.Tasks;
 using System;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
 
 namespace WebAPI.Controllers.Common
 {
@@ -15,11 +17,14 @@ namespace WebAPI.Controllers.Common
         APISettings _settings;
         private readonly ILogger<RTEUploadController> _logger;
         private readonly IWebHostEnvironment _env;
-        public RTEUploadController(IOptions<APISettings> settings, IWebHostEnvironment env, ILogger<RTEUploadController> logger)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public RTEUploadController(IOptions<APISettings> settings, IWebHostEnvironment env, ILogger<RTEUploadController> logger, IHttpContextAccessor httpContextAccessor)
         {
             _settings = settings.Value;
             _env = env;
             _logger = logger;
+            _httpContextAccessor = httpContextAccessor;
         }
         IActionResult ReportError(string msg)
         {
@@ -112,6 +117,40 @@ namespace WebAPI.Controllers.Common
 
 
             }
+        }
+        [HttpPost("upload")]
+        public async Task<IActionResult> UploadDocument([FromForm] IFormFile file)
+        {
+            if (file == null || file.Length <= 0)
+            {
+                return BadRequest("Invalid file");
+            }
+
+            string YearStr = DateTime.Now.Year.ToString();
+            string MonthStr = DateTime.Now.Month.ToString();
+            string DayStr = DateTime.Now.Day.ToString();
+
+            var baseUrl = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host.Value}";
+            string RootPath = (_env.WebRootPath != null) ? _env.WebRootPath : _env.ContentRootPath;
+
+            var uploadsFolder = Path.Combine(RootPath, $"CommonUploads\\{YearStr}\\{MonthStr}\\{DayStr}");
+            var uploadPathUrl = (baseUrl + $"/CommonUploads/{YearStr}/{MonthStr}/{DayStr}");
+
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+
+            var uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName.Replace(" ", "");
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+            var filePathUrl = (uploadPathUrl + "/" + uniqueFileName);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(fileStream);
+            }
+
+            return Ok(new { filePathUrl });
         }
     }
 }
