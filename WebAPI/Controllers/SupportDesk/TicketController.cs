@@ -106,6 +106,23 @@ namespace WebAPI.Controllers.SupportDesk
             return Ok(response);
         }
 
+        [HttpPost("ClientUserTicketListPaginated")]
+        public async Task<IActionResult> ClientUserTicketListPaginated([FromBody] GetTicketByUserIdDTO getTicketByUserIdDTO)
+        {
+            TicketList response = new TicketList();
+
+
+            response = await mediator.Send(new ClientUserTicketListPaginatedCommand
+            {
+                getTicketByUserIdDTO = getTicketByUserIdDTO
+            });
+
+            if (response == null)
+                return Ok(APIResponse<string>.Unauthorized("Please check login credentials"));
+
+            return Ok(response);
+        }
+
         [HttpPost("TicketDetails")]
         public async Task<IActionResult> TicketDetails([FromBody] SupportTicketDTO supportTicketDTO)
         {

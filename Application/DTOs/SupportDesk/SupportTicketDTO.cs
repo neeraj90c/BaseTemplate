@@ -1,6 +1,7 @@
 ﻿using Application.DTOs.User;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,6 +53,10 @@ namespace Application.DTOs.SupportDesk
         public string CreatedByName { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public int PageSize { get; set; }
+        public int TotalCount { get; set; }
+        public int PageNo { get; set; }
+        public int RowNum { get; set; }
 
     }
 
@@ -96,6 +101,15 @@ namespace Application.DTOs.SupportDesk
         public IEnumerable<ProjectListDTO> Items { get; set;}
     }
 
-
+    public class GetTicketByUserIdDTO
+    { 
+        public string ActionUser { get; set; }
+        public int CompanyId { get; set; }
+        public int PageSize { get; set; }
+        public int PageNo { get; set; }
+        public string Status { get; set; }
+        public string OrderBy { get; set; }
+        public string SearchByTitle { get; set; }
+    }
 
 }
