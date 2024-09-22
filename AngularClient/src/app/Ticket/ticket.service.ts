@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { ClientUserTicketList, ClientWorkListDTO, DashboardDTO, DashboardInputParams, SupportTicketDTO, TicketActivityList, TicketAsigneeDTO, TicketAsigneeList, TicketCommentDTO, TicketList, UserList } from '../interface/ticket.interface';
+import { GetTicketByUserIdDTO, TicketListResponse } from './ticketPaginated.interface';
 @Injectable({
   providedIn: 'root'
 })
@@ -60,6 +61,12 @@ export class TicketService {
   getClientUserTicketList(data: { actionUser: number, companyId: number }): Observable<ClientUserTicketList> {
     return this.http.post<ClientUserTicketList>(`${this.BaseURL}/Ticket/ClientUserTicketList`, data)
   }
+
+  getClientUserTicketListPaginated(data: GetTicketByUserIdDTO): Observable<TicketListResponse> {
+    return this.http.post<TicketListResponse>(`${this.BaseURL}/Ticket/ClientUserTicketListPaginated`, data)
+  }
+
+
   getAdminDashboard(data: DashboardInputParams): Observable<DashboardDTO> {
     return this.http.post<DashboardDTO>(`${this.BaseURL}/ticket/GetAdminDashboardData`, data)
   }

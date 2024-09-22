@@ -3,6 +3,7 @@ import { SupportTicketDTO } from 'src/app/interface/ticket.interface';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
 import { TicketService } from '../../ticket.service';
+import { GetTicketByUserIdDTO } from '../../ticketPaginated.interface';
 
 
 @Component({
@@ -27,6 +28,19 @@ export class ActiveTicketsComponent {
     let data = { actionUser: this.User.userId, companyId: parseInt(this.User.companyId) }
     this._ticketService.getClientUserTicketList(data).subscribe(res => {
       this.activeTickets = res.activeTickets
+    })
+
+    let ticketData :GetTicketByUserIdDTO = {
+      actionUser: this.User.userId.toString(),
+      companyId: parseInt(this.User.companyId),
+      PageSize: 10,
+      PageNo: 1,
+      Status: 'Active',
+      OrderBy: '',
+      SearchByTitle: ''
+    }
+    this._ticketService.getClientUserTicketListPaginated(ticketData).subscribe(res => {
+      this.activeTickets = res.tickets
     })
   }
 
