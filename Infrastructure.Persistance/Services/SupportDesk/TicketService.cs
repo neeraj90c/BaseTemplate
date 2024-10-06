@@ -25,6 +25,7 @@ namespace Infrastructure.Persistance.Services.SupportDesk
         private const string SP_ManageTicket_CRUD = "spd.ManageTicket_CRUD";
         private const string SP_SupportTickets_GetTicketDetails = "spd.SupportTickets_GetTicketDetails";
         private const string SP_SupportTickets_GetByUserId = "spd.SupportTickets_GetByUserId";
+        private const string SP_SupportTickets_GetByUserIdPaginated = "spd.SupportTickets_GetByUserIdPaginated";
         private const string SP_SupportTicket_TicketWorkList = "spd.SupportTicket_TicketWorkList";
         private const string SP_SupportTicket_ForceClose = "spd.SupportTicket_ForceClose";
         private const string SP_SupportTicket_ReOpen = "spd.SupportTicket_ReOpen";
@@ -103,6 +104,35 @@ namespace Infrastructure.Persistance.Services.SupportDesk
                     response.ActiveTickets = await reader.ReadAsync<SupportTicketDTO>();
                     response.InprogressTickets = await reader.ReadAsync<SupportTicketDTO>();
                     response.ClosedTickets = await reader.ReadAsync<SupportTicketDTO>();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
+        }
+
+        public async Task<TicketList> SupportTickets_GetByUserIdPaginated(GetTicketByUserIdDTO getTicketByUserIdDTO)
+        {
+            TicketList response = new TicketList();
+
+            _logger.LogInformation($"Started fetching all support tickets for the logged in user {getTicketByUserIdDTO.ActionUser}");
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(base.ConnectionString))
+                {
+                    response.Tickets = await connection.QueryAsync<SupportTicketDTO>(SP_SupportTickets_GetByUserIdPaginated, new
+                    {
+                        ActionUser = getTicketByUserIdDTO.ActionUser,
+                        CompanyId = getTicketByUserIdDTO.CompanyId,
+                        PageSize = getTicketByUserIdDTO.PageSize,
+                        PageNo = getTicketByUserIdDTO.PageNo,
+                        Status = getTicketByUserIdDTO.Status,
+                        SearchByTitle = getTicketByUserIdDTO.SearchByTitle
+
+                    }, commandType: CommandType.StoredProcedure);
 
                 }
             }
