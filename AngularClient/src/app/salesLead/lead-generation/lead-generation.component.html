@@ -196,10 +196,10 @@
             </div> -->
             <label>Lead Description</label>
             <div class="form-row">
-                <app-rich-text-editor #editor2 (submit)="LeadUpdate($event)" [customStyle]="{ 'height': '200px'}">
+                <app-quill-editor #editor2 (submit)="LeadUpdate($event)">
                     <button type="button" class="btn btn-sm btn-secondary my-2 ml-2" id="SupportTicketCloseBtn" data-dismiss="modal"
                     (click)="LeadModal.close()">Close</button>
-                </app-rich-text-editor>
+                </app-quill-editor>
             </div>
 
 
