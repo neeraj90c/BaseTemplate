@@ -18,6 +18,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { ColorDatatableComponent } from './color-datatable/color-datatable.component';
 import { PdfGeneratorService } from './pdf-generator/pdf-generator';
 import { PdfGeneratorComponent } from './pdf-generator/pdf-generator.component';
+import { QuillEditorComponent } from './quill-editor/quill-editor.component';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import { PdfGeneratorComponent } from './pdf-generator/pdf-generator.component';
     PaginationComponent,
     ExpandingTableSkeletonLoaderComponent,
     ColorDatatableComponent,
-    PdfGeneratorComponent
+    PdfGeneratorComponent,
+    QuillEditorComponent
 
   ],
   imports: [
@@ -63,7 +65,8 @@ import { PdfGeneratorComponent } from './pdf-generator/pdf-generator.component';
     ExpandingTableSkeletonLoaderComponent,
     ToastrModule,
     ColorDatatableComponent,
-    PdfGeneratorComponent
+    PdfGeneratorComponent,
+    QuillEditorComponent
   ],
   providers: [PdfGeneratorService],
 })

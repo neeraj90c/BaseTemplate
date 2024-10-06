@@ -91,11 +91,11 @@
                                                             <div class="form-group" [formGroup]="commentForm">
                                                                 <label><Strong>Add Comment </Strong></label>
                                                                 <div id="ActivityDetailEditor">
-                                                                    <app-rich-text-editor #editor1
+                                                                    <app-quill-editor #editor1
                                                                         (submit)="handleRTEsubmit($event)">
                                                                         <button class="btn btn-sm btn-secondary my-2 ml-2"
                                                                             (click)="detailActivityDivVisible = false">Close</button>
-                                                                    </app-rich-text-editor>
+                                                                    </app-quill-editor>
                                                                 </div>
             
                                                                 <!-- <button class="btn btn-primary btn-sm mt-2" (click)="InsertTicketActivity()"> AddComment</button>
@@ -597,10 +597,10 @@
             </div> -->
             <label>Lead Description</label>
             <div class="form-row">
-                <app-rich-text-editor #editor2 (submit)="LeadUpdate($event)" [setRTEHtml]="leadDetail.lDesc">
+                <app-quill-editor #editor2 (submit)="LeadUpdate($event)" [setRTEHtml]="leadDetail.lDesc">
                     <button type="button" class="btn btn-sm btn-secondary my-2 ml-2" id="SupportTicketCloseBtn"
                         data-dismiss="modal" (click)="LeadModal.close()">Close</button>
-                </app-rich-text-editor>
+                </app-quill-editor>
             </div>
 
 

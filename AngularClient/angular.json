@@ -41,7 +41,8 @@
               "node_modules/ngx-toastr/toastr.css",
               "src/assets/css/Bootstrap.min.css",
               "src/assets/richtexteditor/rte_theme_default.css",
-              "node_modules/bootstrap-icons/font/bootstrap-icons.css"
+              "node_modules/bootstrap-icons/font/bootstrap-icons.css",
+              "node_modules/quill/dist/quill.snow.css"
 
             ],
             "scripts": [
