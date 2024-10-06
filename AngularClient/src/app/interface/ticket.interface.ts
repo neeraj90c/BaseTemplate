@@ -43,6 +43,10 @@ export interface SupportTicketDTO {
     createdByName: string;
     startDate: Date;
     endDate: Date;
+    pageSize?: number;
+    pageNo?: number;
+    totalCount?: number;
+    rowNum?: number;
 }
 export interface ClientWorkListDTO {
     workInProgress: SupportTicketDTO[];
