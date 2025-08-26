@@ -55,8 +55,8 @@
               "src/assets/js/wow.min.js",
               "src/assets/js/jquery-ui-1.13.2.js",
               "src/assets/richtexteditor/rte.js",
+              "src/assets/richtexteditor/plugins/all_plugins.js",
               "src/assets/richtexteditor/rte-upload.js"
-
             ]
             
           },
