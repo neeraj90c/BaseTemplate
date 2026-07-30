@@ -338,6 +338,15 @@
         </div>
     </div>
 
+    <div class="mb-4">
+        <div class="font-b h5 mb-3">Attachments</div>
+        <app-attachment-list
+            [masterId]="ticketId"
+            masterType="SupportTickets"
+            [actionUser]="User.userId.toString()">
+        </app-attachment-list>
+    </div>
+
     <div>
         <div class="font-b h5 mb-3">Activity</div>
         <div id="ticketDetailActivity">

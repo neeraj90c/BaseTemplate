@@ -16,19 +16,6 @@ namespace WebAPI.Controllers.Common
     /// LeadActivity, TicketActivity, ...) via masterId + masterType - see
     /// DB.SQL/Attachment/AttachmentMaster.sql for the schema this backs.
     /// </summary>
-    // Bound as a single model rather than several scattered [FromForm] scalar
-    // parameters on the action - mixing IFormFile with independent [FromForm]
-    // primitives on one method signature is a known Swashbuckle schema-generation
-    // trip-up (throws when /swagger/v1/swagger.json is first requested).
-    public class UploadAttachmentRequest
-    {
-        public IFormFile File { get; set; }
-        public long MasterId { get; set; }
-        public string MasterType { get; set; }
-        public string Description { get; set; }
-        public string ActionUser { get; set; }
-    }
-
     [Route("attachment")]
     public class AttachmentController : BaseApiController
     {
@@ -43,31 +30,56 @@ namespace WebAPI.Controllers.Common
 
         [HttpPost("Upload")]
         [RequestSizeLimit(50_000_000)]
-        public async Task<IActionResult> Upload([FromForm] UploadAttachmentRequest request)
+        public async Task<IActionResult> Upload()
         {
-            var file = request?.File;
+            // Reading Request.Form directly instead of relying on [FromForm]
+            // complex-object model binding - the latter kept returning "Invalid
+            // file." with request.File null despite the browser sending a real
+            // file (see conversation history: ruled out ErrorHandlerMiddleware's
+            // body buffering as the cause after fixing it and still hitting this).
+            // Request.Form/Request.Form.Files reads the multipart body directly
+            // via ASP.NET Core's own form feature, sidestepping whatever the
+            // complex-type binder was doing wrong. The error message below is
+            // temporarily verbose on purpose - it reports exactly what the server
+            // parsed so the next failure (if any) is diagnosable from the browser
+            // Network tab alone, without needing server log access.
+            if (!Request.HasFormContentType)
+                return BadRequest($"Expected multipart/form-data, got Content-Type: '{Request.ContentType}'.");
+
+            var form = await Request.ReadFormAsync();
+            var file = form.Files["File"];
 
             if (file == null || file.Length <= 0)
-                return BadRequest("Invalid file.");
+            {
+                return BadRequest(
+                    $"Invalid file. [debug: filesInForm={form.Files.Count}, " +
+                    $"fileKeys=[{string.Join(",", form.Files.Select(f => f.Name))}], " +
+                    $"formFieldKeys=[{string.Join(",", form.Keys)}]]");
+            }
 
-            if (string.IsNullOrWhiteSpace(request.MasterType))
+            string masterType = form["MasterType"];
+            if (string.IsNullOrWhiteSpace(masterType))
                 return BadRequest("masterType is required.");
 
-            long masterId = request.MasterId;
-            string masterType = request.MasterType;
-            string description = request.Description;
-            string actionUser = request.ActionUser;
+            long masterId = long.TryParse(form["MasterId"], out var parsedMasterId) ? parsedMasterId : 0;
+            string description = form["Description"];
+            string actionUser = form["ActionUser"];
 
             string extension = Path.GetExtension(file.FileName)?.ToLowerInvariant();
 
+            // No server-side extension filtering, by request - not a whitelist,
+            // not a denylist, nothing. AttachmentPickerComponent on the Angular
+            // side is the only place any extension check happens now (it calls
+            // GetAllowedExtensionsCommand to build its accept-list/limits, purely
+            // for UX). Anyone hitting this endpoint directly (Postman, a script,
+            // curl, etc.) can upload literally any file type - including
+            // executables/scripts - up to the [RequestSizeLimit] above. That is
+            // a deliberate, explicit tradeoff made in conversation, not an
+            // oversight - revisit if this endpoint is ever exposed beyond
+            // trusted internal users.
             var allowedExtensions = await mediator.Send(new GetAllowedExtensionsCommand());
             var allowed = allowedExtensions?.Items?.FirstOrDefault(x => x.Extension == extension);
-
-            if (allowed == null)
-                return BadRequest($"File extension '{extension}' is not allowed.");
-
-            if (file.Length > allowed.MaxSizeBytes)
-                return BadRequest($"File exceeds the maximum allowed size of {allowed.MaxSizeBytes} bytes for '{extension}' files.");
+            string fileType = allowed?.FileType ?? (string.IsNullOrEmpty(extension) ? "Other" : extension.TrimStart('.').ToUpperInvariant());
 
             byte[] content;
             using (var memoryStream = new MemoryStream())
@@ -88,7 +100,7 @@ namespace WebAPI.Controllers.Common
                     MasterType = masterType,
                     FileName = file.FileName,
                     GUID = stored.GUID,
-                    FileType = allowed.FileType,
+                    FileType = fileType,
                     Extension = stored.Extension,
                     FileSizeBytes = stored.FileSizeBytes,
                     Description = description,
@@ -117,15 +129,30 @@ namespace WebAPI.Controllers.Common
             return Ok(response);
         }
 
+        // ?inline=true renders the file in-browser (images/PDFs open in a new
+        // tab instead of triggering Save As) by setting Content-Disposition:
+        // inline instead of the default attachment. Types with no browser-native
+        // viewer (docx, xlsx, zip, ...) still fall back to a download even with
+        // inline=true - that's the browser's own behavior, not this endpoint's.
+        // Plain Download (no query param, or inline=false) is unchanged - still
+        // forces Save As via the File(..., fileDownloadName) overload below.
         [HttpGet("Download/{guid}")]
-        public async Task<IActionResult> Download(string guid)
+        public async Task<IActionResult> Download(string guid, [FromQuery] bool inline = false)
         {
             var attachment = await mediator.Send(new GetAttachmentByGUIDCommand { GUID = guid });
             if (attachment == null)
                 return NotFound("Attachment not found.");
 
             byte[] content = await _fileStorage.ReadAsync(attachment.Path);
-            return File(content, GetContentType(attachment.Extension), attachment.FileName);
+            string contentType = GetContentType(attachment.Extension);
+
+            if (inline)
+            {
+                Response.Headers["Content-Disposition"] = $"inline; filename=\"{attachment.FileName}\"";
+                return File(content, contentType);
+            }
+
+            return File(content, contentType, attachment.FileName);
         }
 
         [HttpPost("UpdateAttachment")]

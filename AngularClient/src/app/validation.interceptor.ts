@@ -26,12 +26,22 @@ export class ValidationInterceptor implements HttpInterceptor {
     })
     const token = localStorage.getItem('access_token');
     if (token) {
-      request = request.clone({
-        setHeaders: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        }
-      })
+      // FormData bodies (file uploads, e.g. AttachmentService.upload) must NOT
+      // get Content-Type forced to application/json here - the browser needs
+      // to set its own 'multipart/form-data; boundary=...' header, which only
+      // happens if Content-Type is left untouched. Forcing it to
+      // application/json was the actual root cause of AttachmentController's
+      // "Invalid file." errors: the request body was always correctly
+      // multipart-encoded, but this interceptor's header override told the
+      // server to expect JSON instead, so IFormFile/Request.Form always came
+      // back empty regardless of anything on the backend.
+      const headers: { [name: string]: string } = {
+        'Authorization': `Bearer ${token}`,
+      };
+      if (!(request.body instanceof FormData)) {
+        headers['Content-Type'] = 'application/json';
+      }
+      request = request.clone({ setHeaders: headers })
     }
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {

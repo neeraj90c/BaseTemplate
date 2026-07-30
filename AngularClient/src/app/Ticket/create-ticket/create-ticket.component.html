@@ -109,12 +109,19 @@
                     <input type="text" class="form-control" id="raisedByContactNo" formControlName="addField3">
                 </div>
             </div>
+            <div class="form-row mt-2">
+                <div class="col-md-12">
+                    <label>Attachments (optional)</label>
+                    <app-attachment-picker></app-attachment-picker>
+                </div>
+            </div>
+
             <label>Ticket Description</label>
             <div *ngIf="ticketDescCtrl.invalid && ticketDescCtrl.touched">
                 <p style="color: red;">Description is Required</p>
             </div>
             <div class="form-row">
-            
+
                 <app-quill-editor #editor2 (submit)="TicketUpdate($event)">
                     <button type="button" class="btn btn-sm btn-secondary my-2 ml-2" id="SupportTicketCloseBtn" data-dismiss="modal"
                     (click)="ticketModal.close()">Close</button>
@@ -122,7 +129,6 @@
 
                 <!-- <app-rich-text-editor [control]="ticketDescCtrl"></app-rich-text-editor> -->
             </div>
-
 
         </form>
     </div>

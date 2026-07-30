@@ -19,6 +19,8 @@ import { ColorDatatableComponent } from './color-datatable/color-datatable.compo
 import { PdfGeneratorService } from './pdf-generator/pdf-generator';
 import { PdfGeneratorComponent } from './pdf-generator/pdf-generator.component';
 import { QuillEditorComponent } from './quill-editor/quill-editor.component';
+import { AttachmentPickerComponent } from './attachment-picker/attachment-picker.component';
+import { AttachmentListComponent } from './attachment-list/attachment-list.component';
 
 
 @NgModule({
@@ -33,7 +35,9 @@ import { QuillEditorComponent } from './quill-editor/quill-editor.component';
     ExpandingTableSkeletonLoaderComponent,
     ColorDatatableComponent,
     PdfGeneratorComponent,
-    QuillEditorComponent
+    QuillEditorComponent,
+    AttachmentPickerComponent,
+    AttachmentListComponent
 
   ],
   imports: [
@@ -66,7 +70,9 @@ import { QuillEditorComponent } from './quill-editor/quill-editor.component';
     ToastrModule,
     ColorDatatableComponent,
     PdfGeneratorComponent,
-    QuillEditorComponent
+    QuillEditorComponent,
+    AttachmentPickerComponent,
+    AttachmentListComponent
   ],
   providers: [PdfGeneratorService],
 })

@@ -6,6 +6,8 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonService } from 'src/app/Common/services/common.service';
 import { CompanyMasterDTO } from 'src/app/interface/CompanyMasterDTO';
 import { UserService } from 'src/app/services/user.service';
+import { AttachmentService } from 'src/app/services/attachment.service';
+import { AttachmentPickerComponent } from 'src/app/shared/attachment-picker/attachment-picker.component';
 import { environment } from 'src/environments/environment';
 import { SupportTicketDTO } from '../../interface/ticket.interface';
 import { TicketService } from '../ticket.service';
@@ -39,6 +41,8 @@ export class CreateTicketComponent implements OnInit {
     actionUser: ''
   }
   CompanyList: CompanyMasterDTO[] = [];
+  @ViewChild(AttachmentPickerComponent) attachmentPicker!: AttachmentPickerComponent;
+
   constructor(private _ticketService: TicketService,
     private userService: UserService,
     private modalService: NgbModal,
@@ -46,6 +50,7 @@ export class CreateTicketComponent implements OnInit {
     private _commonService: CommonService,
     private router: Router,
     private route: ActivatedRoute,
+    private _attachmentService: AttachmentService,
   ) { }
   User = this.userService.User()
 
@@ -199,6 +204,13 @@ export class CreateTicketComponent implements OnInit {
       this._ticketService.manageTicket(data).subscribe(res => {
         this.ticketModal.close();
         this.toaster.success('Ticket Created!')
+
+        // Ticket is already saved successfully at this point - a failed
+        // attachment upload below must never make it look like the ticket
+        // itself failed to save.
+        const newTicketId = res.tickets?.[0]?.ticketId;
+        this.uploadStagedAttachments(newTicketId);
+
         this.GetAllTicketData()
         this.updateTicketForm.reset()
         this.reloadCurrentRoute()
@@ -206,6 +218,33 @@ export class CreateTicketComponent implements OnInit {
     }
 
 
+  }
+
+  private uploadStagedAttachments(ticketId: number | undefined): void {
+    const files = this.attachmentPicker?.getFiles() ?? [];
+    if (files.length === 0) return;
+
+    if (!ticketId) {
+      // Ticket saved, but the server didn't hand back a TicketId to attach
+      // to - surface this loudly instead of quietly dropping the files,
+      // since that's exactly what happened before this check existed.
+      this.toaster.error(`Ticket saved, but ${files.length} attachment(s) could not be uploaded - no ticket ID was returned. Attach them manually from the ticket's Attachments section.`);
+      return;
+    }
+
+    let failedCount = 0;
+
+    files.forEach(file => {
+      this._attachmentService.upload(file, ticketId, 'SupportTickets', '', this.User.userId.toString()).subscribe({
+        next: () => { /* silent - ticket-created toast already shown */ },
+        error: () => {
+          failedCount++;
+          this.toaster.error(`Ticket saved, but "${file.name}" failed to upload. Attach it again from the ticket's Attachments section.`);
+        }
+      });
+    });
+
+    this.attachmentPicker?.clear();
   }
   private reloadCurrentRoute() {
     const currentUrl = this.router.url;

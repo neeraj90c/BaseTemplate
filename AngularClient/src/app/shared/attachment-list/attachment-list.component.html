@@ -1,0 +1,38 @@
+<div class="attachment-list">
+  <div class="custom-file mb-2">
+    <input type="file" class="form-control" multiple [accept]="acceptAttribute" (change)="onFileSelected($event)">
+  </div>
+
+  <div *ngIf="uploadingCount > 0" class="text-muted mb-2">
+    <i class="fa fa-spinner fa-spin mr-1"></i> Uploading {{ uploadingCount }} file(s)...
+  </div>
+
+  <div *ngIf="isLoading" class="text-muted">Loading attachments...</div>
+
+  <table class="table table-bordered table-sm" *ngIf="!isLoading && attachments.length">
+    <thead>
+      <tr>
+        <th>File</th>
+        <th>Size</th>
+        <th>Uploaded</th>
+        <th style="width: 60px;"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let attachment of attachments">
+        <td>
+          <i class="fa fa-paperclip mr-1"></i>{{ attachment.fileName }}
+        </td>
+        <td>{{ formatSize(attachment.fileSizeBytes) }}</td>
+        <td>{{ attachment.createdOn | date:'short' }}</td>
+        <td>
+          <i class="fa mr-2" [ngClass]="isViewableInline(attachment) ? 'fa-eye text-primary' : 'fa-download text-primary'"
+             (click)="openAttachment(attachment)" [title]="isViewableInline(attachment) ? 'View' : 'Download'" role="button"></i>
+          <i class="fa fa-trash text-danger" (click)="delete(attachment)" title="Delete" role="button"></i>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!isLoading && !attachments.length" class="text-muted">No attachments yet.</div>
+</div>

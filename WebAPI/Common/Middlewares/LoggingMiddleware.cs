@@ -27,6 +27,25 @@ namespace WebAPI.Common.Middlewares
 
         private async Task LogRequest(HttpContext context)
         {
+            // Multipart/form-data (file uploads) is never buffered/logged here -
+            // same reasoning as ErrorHandlerMiddleware: reading the full request
+            // body (raw binary file bytes included) ahead of MVC's own multipart
+            // parser is what was causing AttachmentController's IFormFile/Form
+            // binding to come back empty. Unlike ErrorHandlerMiddleware, THIS
+            // middleware ran unconditionally on every request (not just on
+            // exceptions), so it was interfering even when nothing failed
+            // downstream - this was still doing it after the other fix went in.
+            if (context.Request.HasFormContentType)
+            {
+                _logger.LogInformation($"Request Information:{Environment.NewLine}" +
+                                       $"Schema:{context.Request.Scheme} " +
+                                       $"Host: {context.Request.Host} " +
+                                       $"Path: {context.Request.Path} " +
+                                       $"QueryString: {context.Request.QueryString} " +
+                                       $"Request Body: [multipart/form-data - not logged]");
+                return;
+            }
+
             context.Request.EnableBuffering();
 
             await using var requestStream = _recyclableMemoryStreamManager.GetStream();

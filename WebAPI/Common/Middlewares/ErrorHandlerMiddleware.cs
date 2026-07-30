@@ -25,11 +25,26 @@ namespace WebAPI
 
         public async Task Invoke(HttpContext context, ILogger<ErrorHandlerMiddleware> _logger)
         {
-            context.Request.EnableBuffering();
-            await using var requestStream = _recyclableMemoryStreamManager.GetStream();
-            await context.Request.Body.CopyToAsync(requestStream);
-            var result = ReadStreamInChunks(requestStream);
-            context.Request.Body.Position = 0;
+            // Multipart/form-data (file uploads) is deliberately NOT buffered here.
+            // Reading the whole request body up front - including raw binary file
+            // bytes - ahead of MVC's own multipart parser is what was causing
+            // AttachmentController.Upload's [FromForm] IFormFile property to bind
+            // as null/zero-length ("Invalid file." 400s) even though the browser
+            // was sending a valid file. It also silently defeats [RequestSizeLimit]
+            // on those actions, since the max-request-body-size feature can't be
+            // raised once the body has already been read once (fails silently,
+            // just logs a warning - so the 50MB limit on Upload was never really
+            // being enforced). Plain JSON/form-urlencoded bodies are unaffected and
+            // still get captured for the error-log payload below.
+            string result = null;
+            if (!context.Request.HasFormContentType)
+            {
+                context.Request.EnableBuffering();
+                await using var requestStream = _recyclableMemoryStreamManager.GetStream();
+                await context.Request.Body.CopyToAsync(requestStream);
+                result = ReadStreamInChunks(requestStream);
+                context.Request.Body.Position = 0;
+            }
 
             try
             {

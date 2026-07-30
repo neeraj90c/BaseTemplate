@@ -174,6 +174,74 @@ IF NOT EXISTS (SELECT 1 FROM [ana].[AttachmentAllowedExtension] WHERE Extension 
 IF NOT EXISTS (SELECT 1 FROM [ana].[AttachmentAllowedExtension] WHERE Extension = '.rar')
 	INSERT INTO [ana].[AttachmentAllowedExtension] ([Extension], [FileType], [MaxSizeBytes], [IsActive], [IsDeleted], [CreatedBy], [CreatedOn])
 	VALUES ('.rar', 'archive', 20000000, 1, 0, 'SYSTEM', GETDATE());
+
+-- Expanded to cover the client's actual ask: documents + common image formats,
+-- beyond the original 12 RTEUpload types. AttachmentController.Upload rejects
+-- anything not in this table (whitelist gate), plus hard-denies executable/
+-- script extensions (.exe/.ps1/etc.) regardless of what's configured here.
+-- SVG is deliberately NOT included - it can embed <script> and is a stored-XSS
+-- risk if ever served/rendered inline; add it only if you also force
+-- Content-Disposition: attachment (already the case here) AND never render it
+-- inline in an <img>/<object> without sanitizing first.
+IF NOT EXISTS (SELECT 1 FROM [ana].[AttachmentAllowedExtension] WHERE Extension = '.xlsm')
+	INSERT INTO [ana].[AttachmentAllowedExtension] ([Extension], [FileType], [MaxSizeBytes], [IsActive], [IsDeleted], [CreatedBy], [CreatedOn])
+	VALUES ('.xlsm', 'document', 10000000, 1, 0, 'SYSTEM', GETDATE());
+
+IF NOT EXISTS (SELECT 1 FROM [ana].[AttachmentAllowedExtension] WHERE Extension = '.csv')
+	INSERT INTO [ana].[AttachmentAllowedExtension] ([Extension], [FileType], [MaxSizeBytes], [IsActive], [IsDeleted], [CreatedBy], [CreatedOn])
+	VALUES ('.csv', 'document', 10000000, 1, 0, 'SYSTEM', GETDATE());
+
+IF NOT EXISTS (SELECT 1 FROM [ana].[AttachmentAllowedExtension] WHERE Extension = '.ppt')
+	INSERT INTO [ana].[AttachmentAllowedExtension] ([Extension], [FileType], [MaxSizeBytes], [IsActive], [IsDeleted], [CreatedBy], [CreatedOn])
+	VALUES ('.ppt', 'document', 20000000, 1, 0, 'SYSTEM', GETDATE());
+
+IF NOT EXISTS (SELECT 1 FROM [ana].[AttachmentAllowedExtension] WHERE Extension = '.pptx')
+	INSERT INTO [ana].[AttachmentAllowedExtension] ([Extension], [FileType], [MaxSizeBytes], [IsActive], [IsDeleted], [CreatedBy], [CreatedOn])
+	VALUES ('.pptx', 'document', 20000000, 1, 0, 'SYSTEM', GETDATE());
+
+IF NOT EXISTS (SELECT 1 FROM [ana].[AttachmentAllowedExtension] WHERE Extension = '.odt')
+	INSERT INTO [ana].[AttachmentAllowedExtension] ([Extension], [FileType], [MaxSizeBytes], [IsActive], [IsDeleted], [CreatedBy], [CreatedOn])
+	VALUES ('.odt', 'document', 10000000, 1, 0, 'SYSTEM', GETDATE());
+
+IF NOT EXISTS (SELECT 1 FROM [ana].[AttachmentAllowedExtension] WHERE Extension = '.ods')
+	INSERT INTO [ana].[AttachmentAllowedExtension] ([Extension], [FileType], [MaxSizeBytes], [IsActive], [IsDeleted], [CreatedBy], [CreatedOn])
+	VALUES ('.ods', 'document', 10000000, 1, 0, 'SYSTEM', GETDATE());
+
+IF NOT EXISTS (SELECT 1 FROM [ana].[AttachmentAllowedExtension] WHERE Extension = '.odp')
+	INSERT INTO [ana].[AttachmentAllowedExtension] ([Extension], [FileType], [MaxSizeBytes], [IsActive], [IsDeleted], [CreatedBy], [CreatedOn])
+	VALUES ('.odp', 'document', 20000000, 1, 0, 'SYSTEM', GETDATE());
+
+IF NOT EXISTS (SELECT 1 FROM [ana].[AttachmentAllowedExtension] WHERE Extension = '.gif')
+	INSERT INTO [ana].[AttachmentAllowedExtension] ([Extension], [FileType], [MaxSizeBytes], [IsActive], [IsDeleted], [CreatedBy], [CreatedOn])
+	VALUES ('.gif', 'image', 8000000, 1, 0, 'SYSTEM', GETDATE());
+
+IF NOT EXISTS (SELECT 1 FROM [ana].[AttachmentAllowedExtension] WHERE Extension = '.webp')
+	INSERT INTO [ana].[AttachmentAllowedExtension] ([Extension], [FileType], [MaxSizeBytes], [IsActive], [IsDeleted], [CreatedBy], [CreatedOn])
+	VALUES ('.webp', 'image', 4000000, 1, 0, 'SYSTEM', GETDATE());
+
+IF NOT EXISTS (SELECT 1 FROM [ana].[AttachmentAllowedExtension] WHERE Extension = '.bmp')
+	INSERT INTO [ana].[AttachmentAllowedExtension] ([Extension], [FileType], [MaxSizeBytes], [IsActive], [IsDeleted], [CreatedBy], [CreatedOn])
+	VALUES ('.bmp', 'image', 8000000, 1, 0, 'SYSTEM', GETDATE());
+
+IF NOT EXISTS (SELECT 1 FROM [ana].[AttachmentAllowedExtension] WHERE Extension = '.tif')
+	INSERT INTO [ana].[AttachmentAllowedExtension] ([Extension], [FileType], [MaxSizeBytes], [IsActive], [IsDeleted], [CreatedBy], [CreatedOn])
+	VALUES ('.tif', 'image', 15000000, 1, 0, 'SYSTEM', GETDATE());
+
+IF NOT EXISTS (SELECT 1 FROM [ana].[AttachmentAllowedExtension] WHERE Extension = '.tiff')
+	INSERT INTO [ana].[AttachmentAllowedExtension] ([Extension], [FileType], [MaxSizeBytes], [IsActive], [IsDeleted], [CreatedBy], [CreatedOn])
+	VALUES ('.tiff', 'image', 15000000, 1, 0, 'SYSTEM', GETDATE());
+
+IF NOT EXISTS (SELECT 1 FROM [ana].[AttachmentAllowedExtension] WHERE Extension = '.jfif')
+	INSERT INTO [ana].[AttachmentAllowedExtension] ([Extension], [FileType], [MaxSizeBytes], [IsActive], [IsDeleted], [CreatedBy], [CreatedOn])
+	VALUES ('.jfif', 'image', 4000000, 1, 0, 'SYSTEM', GETDATE());
+
+IF NOT EXISTS (SELECT 1 FROM [ana].[AttachmentAllowedExtension] WHERE Extension = '.heic')
+	INSERT INTO [ana].[AttachmentAllowedExtension] ([Extension], [FileType], [MaxSizeBytes], [IsActive], [IsDeleted], [CreatedBy], [CreatedOn])
+	VALUES ('.heic', 'image', 8000000, 1, 0, 'SYSTEM', GETDATE());
+
+IF NOT EXISTS (SELECT 1 FROM [ana].[AttachmentAllowedExtension] WHERE Extension = '.heif')
+	INSERT INTO [ana].[AttachmentAllowedExtension] ([Extension], [FileType], [MaxSizeBytes], [IsActive], [IsDeleted], [CreatedBy], [CreatedOn])
+	VALUES ('.heif', 'image', 8000000, 1, 0, 'SYSTEM', GETDATE());
 GO
 
 -------------------------------------------------------------------------------

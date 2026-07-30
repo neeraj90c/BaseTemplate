@@ -12,6 +12,8 @@ import { Router } from '@angular/router';
 import { notEqualToZeroValidator } from 'src/app/validators/validators';
 import { ToastrService } from 'ngx-toastr';
 import { finalize, of, switchMap } from 'rxjs';
+import { AttachmentService } from 'src/app/services/attachment.service';
+import { AttachmentPickerComponent } from 'src/app/shared/attachment-picker/attachment-picker.component';
 
 @Component({
   selector: 'app-lead-generation',
@@ -20,7 +22,9 @@ import { finalize, of, switchMap } from 'rxjs';
 })
 export class LeadGenerationComponent implements OnInit {
 
-  constructor(private _salesleadService: SalesleadService, private modalService: NgbModal, private _commonService: CommonService, private _userService: UserService, private loaderService: LoaderService, private router: Router, private toaster: ToastrService) {
+  @ViewChild(AttachmentPickerComponent) attachmentPicker!: AttachmentPickerComponent;
+
+  constructor(private _salesleadService: SalesleadService, private modalService: NgbModal, private _commonService: CommonService, private _userService: UserService, private loaderService: LoaderService, private router: Router, private toaster: ToastrService, private _attachmentService: AttachmentService) {
     this.today = new Date();
     this.startDate = new Date(Date.UTC(this.today.getFullYear(), this.today.getMonth(), 1, 0, 0, 0));
 
@@ -164,6 +168,10 @@ export class LeadGenerationComponent implements OnInit {
       this._salesleadService.createSalesLead(leadData).subscribe(res => {
 
         if (res.leadId != 0) {
+          // Lead is already saved at this point - a failed attachment
+          // upload must never make it look like the lead itself failed.
+          this.uploadStagedAttachments(res.leadId);
+
           let contactDetail: LeadContactDetail = {
             contactId: 0,
             leadId: res.leadId,
@@ -294,6 +302,27 @@ export class LeadGenerationComponent implements OnInit {
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
       this.router.navigate([currentUrl]);
     });
+  }
+
+  private uploadStagedAttachments(leadId: number | undefined): void {
+    const files = this.attachmentPicker?.getFiles() ?? [];
+    if (files.length === 0) return;
+
+    if (!leadId) {
+      this.toaster.error(`Lead saved, but ${files.length} attachment(s) could not be uploaded - no lead ID was returned. Attach them manually from the lead's Attachments section.`);
+      return;
+    }
+
+    files.forEach(file => {
+      this._attachmentService.upload(file, leadId, 'SalesLead', '', this.User.userId.toString()).subscribe({
+        next: () => { /* silent - lead-created toast already shown */ },
+        error: () => {
+          this.toaster.error(`Lead saved, but "${file.name}" failed to upload. Attach it again from the lead's Attachments section.`);
+        }
+      });
+    });
+
+    this.attachmentPicker?.clear();
   }
 
   leadDateChanged(event: any) {
