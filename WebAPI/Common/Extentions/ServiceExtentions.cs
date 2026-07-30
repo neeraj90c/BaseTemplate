@@ -50,8 +50,22 @@ namespace WebAPI
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Traveller API", Version = "v1" });
-                c.IncludeXmlComments(XmlCommentsFilePath("WebAPI.xml"));
-                c.IncludeXmlComments(XmlCommentsFilePath("Application.xml"));
+
+                // Application.csproj/WebAPI.csproj only emit these .xml doc-comment
+                // files in Debug builds (<DocumentationFile> is scoped to that
+                // config). A Release publish - the normal way this gets deployed -
+                // never produces them, so IncludeXmlComments would throw
+                // FileNotFoundException on the very first request that reaches
+                // this middleware, taking down every route in the app, not just
+                // Swagger's. Guard on existence so a missing doc file just means
+                // "no XML comments in the UI," not a dead API.
+                string webApiXmlPath = XmlCommentsFilePath("WebAPI.xml");
+                if (File.Exists(webApiXmlPath))
+                    c.IncludeXmlComments(webApiXmlPath);
+
+                string applicationXmlPath = XmlCommentsFilePath("Application.xml");
+                if (File.Exists(applicationXmlPath))
+                    c.IncludeXmlComments(applicationXmlPath);
             });
 
         }

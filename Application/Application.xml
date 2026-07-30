@@ -9,5 +9,14 @@
             This Model Represents Details of User Groups
             </summary>
         </member>
+        <member name="T:Application.Interfaces.Common.IFileStorageService">
+            <summary>
+            Abstraction over "where attachment bytes physically live". Everything
+            upstream (AttachmentController, AttachmentService/DB metadata) only ever
+            deals with the GUID/Path/URL this returns - none of it knows the storage
+            is local disk today. Swapping to S3/Blob later means implementing this
+            interface again, not touching every caller.
+            </summary>
+        </member>
     </members>
 </doc>

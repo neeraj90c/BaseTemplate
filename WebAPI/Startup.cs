@@ -73,6 +73,7 @@ namespace WebAPI
             services.AddTransient<ISalesLead, LeadGenerationService>();
             services.AddTransient<ILeadActivity, LeadActivityService>();
             services.AddTransient<IDaybook, DaybookService>();
+            services.AddTransient<IAttachment, AttachmentService>();
 
 
 

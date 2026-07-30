@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Application.Interfaces.Common;
 using Domain.Settings;
 using Infrastructure.Shared.Services;
 using Microsoft.Extensions.Configuration;
@@ -14,6 +15,7 @@ namespace Infrastructure.Shared
             services.Configure<APISettings>(_config.GetSection("Settings"));
             services.Configure<JWTSettings>(_config.GetSection("JWT"));
             services.AddSingleton<IEncryptDecrypt, EncryptDecryptService>();
-        }        
+            services.AddSingleton<IFileStorageService, LocalDiskFileStorageService>();
+        }
     }
 }

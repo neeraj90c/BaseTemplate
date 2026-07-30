@@ -11,5 +11,12 @@
             <param name="app"></param>
             <returns></returns>
         </member>
+        <member name="T:WebAPI.Controllers.Common.AttachmentController">
+            <summary>
+            Generic attachment endpoints usable by any module (SalesLead, SupportTickets,
+            LeadActivity, TicketActivity, ...) via masterId + masterType - see
+            DB.SQL/Attachment/AttachmentMaster.sql for the schema this backs.
+            </summary>
+        </member>
     </members>
 </doc>
