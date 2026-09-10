@@ -106,15 +106,19 @@ export class ViewTicketComponent {
     })
   }
 
+  ticketDescSafe: SafeHtml = ''
+
   getTicketDetail(id: number) {
     let data = {
       ticketId: id
     }
     this._ticketService.getTicketDetailsById(data).subscribe(res => {
       this.ticketInfo = res.tickets[0]
+      this.ticketDescSafe = this.returnSanitizedDom(this.ticketInfo.ticketDesc)
       this._ticketService.getTicketComments({ ticketId: this.ticketInfo.ticketId }).subscribe({
         next: (res) => {
           this.ticketComments = res.ticketActivities
+          this.ticketComments.forEach(activity => activity.safeComments = this.returnSanitizedDom(activity.ticketComments))
         }, complete: () => {
           this.activityLoading = false
         }
@@ -258,6 +262,7 @@ export class ViewTicketComponent {
     this._ticketService.getTicketComments(data).subscribe(res => {
       this.commentForm.reset()
       this.ticketComments = res.ticketActivities
+      this.ticketComments.forEach(activity => activity.safeComments = this.returnSanitizedDom(activity.ticketComments))
       event.clearText();
       this.toaster.success("Comment Added!")
 

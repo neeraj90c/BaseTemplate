@@ -78,6 +78,7 @@ export interface TicketActivityDTO {
     createdOn?: Date;
     modifiedOn?: Date;
     modifiedBy: string;
+    safeComments?: import('@angular/platform-browser').SafeHtml;
 }
 
 // TicketActivityList.ts

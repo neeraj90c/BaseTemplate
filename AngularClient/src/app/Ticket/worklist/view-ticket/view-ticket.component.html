@@ -36,7 +36,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="p-3" id="detailTicketDesc" [innerHTML]="returnSanitizedDom(ticketInfo.ticketDesc)">
+                <div class="p-3" id="detailTicketDesc" [innerHTML]="ticketDescSafe">
 
                 </div>
             </div>
@@ -356,7 +356,7 @@
                         <div><b>{{GetUserNameById(activity.createdBy)}}</b></div>
                         <small class="text-muted">{{activity.createdOn | date:'medium'}}</small>
                     </div>
-                    <div class="card-body" [innerHTML]="returnSanitizedDom(activity.ticketComments)">
+                    <div class="card-body" [innerHTML]="activity.safeComments">
 
                     </div>
                 </div>
