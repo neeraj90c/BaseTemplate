@@ -7,7 +7,7 @@ import { CommonService } from 'src/app/Common/services/common.service';
 import { CompanyMasterDTO } from 'src/app/interface/CompanyMasterDTO';
 import { UserService } from 'src/app/services/user.service';
 import { AttachmentService } from 'src/app/services/attachment.service';
-import { AttachmentPickerComponent } from 'src/app/shared/attachment-picker/attachment-picker.component';
+import { Observable, catchError, finalize, forkJoin, of, switchMap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { SupportTicketDTO } from '../../interface/ticket.interface';
 import { TicketService } from '../ticket.service';
@@ -41,7 +41,10 @@ export class CreateTicketComponent implements OnInit {
     actionUser: ''
   }
   CompanyList: CompanyMasterDTO[] = [];
-  @ViewChild(AttachmentPickerComponent) attachmentPicker!: AttachmentPickerComponent;
+  // Kept in sync via the picker's (selectionChange) output, instead of
+  // reading the picker through @ViewChild at submit time.
+  stagedFiles: File[] = [];
+  isSubmitting = false;
 
   constructor(private _ticketService: TicketService,
     private userService: UserService,
@@ -118,6 +121,7 @@ export class CreateTicketComponent implements OnInit {
 
 
   TicketOpenCreateTicketModal() {
+    this.stagedFiles = [];
 
     this.updateTicketForm.patchValue({
       companyId:this.User.companyId == this.User.defaultCompanyId ? 0 : parseInt(this.User.companyId),
@@ -201,16 +205,24 @@ export class CreateTicketComponent implements OnInit {
         endDate: new Date
       }
 
-      this._ticketService.manageTicket(data).subscribe(res => {
+      if (this.isSubmitting) return;
+      this.isSubmitting = true;
+
+      // Snapshot now: the picker lives inside the modal and must not be read
+      // after the modal closes / the route reloads.
+      const files = [...this.stagedFiles];
+
+      this._ticketService.manageTicket(data).pipe(
+        // Wait for every upload before closing the modal and reloading the
+        // route, so nothing is left in flight when the page navigates.
+        switchMap(res => {
+          const ticketId = res.tickets?.[0]?.ticketId;
+          return this.uploadStagedAttachments(files, ticketId);
+        }),
+        finalize(() => this.isSubmitting = false)
+      ).subscribe(() => {
         this.ticketModal.close();
         this.toaster.success('Ticket Created!')
-
-        // Ticket is already saved successfully at this point - a failed
-        // attachment upload below must never make it look like the ticket
-        // itself failed to save.
-        const newTicketId = res.tickets?.[0]?.ticketId;
-        this.uploadStagedAttachments(newTicketId);
-
         this.GetAllTicketData()
         this.updateTicketForm.reset()
         this.reloadCurrentRoute()
@@ -220,31 +232,26 @@ export class CreateTicketComponent implements OnInit {
 
   }
 
-  private uploadStagedAttachments(ticketId: number | undefined): void {
-    const files = this.attachmentPicker?.getFiles() ?? [];
-    if (files.length === 0) return;
+  // Ticket is already saved at this point - a failed attachment upload must
+  // never make it look like the ticket itself failed. Errors are persistent
+  // toasts so they can't be missed, and one failed file doesn't cancel the rest.
+  private uploadStagedAttachments(files: File[], ticketId: number | undefined): Observable<unknown> {
+    if (files.length === 0) return of(null);
 
     if (!ticketId) {
-      // Ticket saved, but the server didn't hand back a TicketId to attach
-      // to - surface this loudly instead of quietly dropping the files,
-      // since that's exactly what happened before this check existed.
-      this.toaster.error(`Ticket saved, but ${files.length} attachment(s) could not be uploaded - no ticket ID was returned. Attach them manually from the ticket's Attachments section.`);
-      return;
+      this.toaster.error(`Ticket saved, but ${files.length} attachment(s) could not be uploaded - no ticket ID was returned. Attach them manually from the ticket's Attachments section.`, '', { disableTimeOut: true, closeButton: true });
+      return of(null);
     }
 
-    let failedCount = 0;
-
-    files.forEach(file => {
-      this._attachmentService.upload(file, ticketId, 'SupportTickets', '', this.User.userId.toString()).subscribe({
-        next: () => { /* silent - ticket-created toast already shown */ },
-        error: () => {
-          failedCount++;
-          this.toaster.error(`Ticket saved, but "${file.name}" failed to upload. Attach it again from the ticket's Attachments section.`);
-        }
-      });
-    });
-
-    this.attachmentPicker?.clear();
+    return forkJoin(files.map(file =>
+      this._attachmentService.upload(file, ticketId, 'SupportTickets', '', this.User.userId.toString()).pipe(
+        catchError(err => {
+          console.error('Attachment upload failed', file.name, err);
+          this.toaster.error(`Ticket saved, but "${file.name}" failed to upload. Attach it again from the ticket's Attachments section.`, '', { disableTimeOut: true, closeButton: true });
+          return of(null);
+        })
+      )
+    ));
   }
   private reloadCurrentRoute() {
     const currentUrl = this.router.url;
