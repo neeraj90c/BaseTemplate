@@ -112,7 +112,7 @@
             <div class="form-row mt-2">
                 <div class="col-md-12">
                     <label>Attachments (optional)</label>
-                    <app-attachment-picker></app-attachment-picker>
+                    <app-attachment-picker (selectionChange)="stagedFiles = [...$event]"></app-attachment-picker>
                 </div>
             </div>
 
